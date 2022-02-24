@@ -8,6 +8,4 @@ Author:       Authress
 Author URI:   https://authress.io
 License:      Apache-2.0
 License URI:  https://www.apache.org/licenses/LICENSE-2.0
-Text Domain:  wpb-tutorial
-Domain Path:  /languages
 */
