@@ -8,7 +8,7 @@ Stable tag: 0.1
 License: Apache-2.0
 License URI: https://github.com/Authress/wordpress-plugin/blob/main/LICENSE
 
-Login by Authress provides user login, business authentication, SSO, Social login, and Single Sign-On for all sites.
+SSO Login provides user login, business authentication, SSO, Social login, and Single Sign-On for all sites.
 
 == Description ==
 
@@ -67,9 +67,6 @@ Example:
 
 The Authress login widget is completely configurable and it's [open source on GitHub](https://github.com/Authress/wordpress-plugin). You can style the form like any of your site components by enqueuing a stylesheet in your theme. Use the [`login_enqueue_scripts`](https://developer.wordpress.org/reference/hooks/login_enqueue_scripts/) hook to style the form on wp-login.php, [`wp_enqueue_scripts`](https://developer.wordpress.org/reference/hooks/wp_enqueue_scripts/) to style widgets and shortcodes, or both to affect the form in all locations.
 
-= Can I access the user profile information? =
-
-The Authress plugin transparently handles login information for your WordPress site and the plugins you use, so that it looks like any other login. User profile data changes in WordPress **are not** currently sent to Auth0 but changes to the Auth0 user account **are** stored in WordPress user meta (under the key `auth0_obj` prefixed with `$wpdb->prefix`).
 
 = Which authentication providers are supported? =
 

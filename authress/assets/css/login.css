@@ -1,0 +1,93 @@
+#extra-options {
+  width: 272px;
+  margin: 15px auto;
+  padding: 0px 24px;
+}
+#extra-options a {
+  text-decoration: none;
+  color: #999;
+}
+#extra-options a:hover {
+  color: #2ea2cc;
+}
+body.a0-widget-open > * {
+  display: inherit;
+}
+#a0-widget .a0-panel {
+  margin: auto;
+}
+#authress-login-form {
+  min-height: 400px;
+  margin: 0 auto;
+}
+.authress-login {
+  margin-bottom: 20px;
+}
+.login form.authress-lock-widget {
+  padding: 0;
+  overflow: visible;
+}
+.authress-lock-center {
+  padding: 0 !important;
+}
+
+.login form.authress-lock-widget input[type="text"],
+.login form.authress-lock-widget input[type="search"],
+.login form.authress-lock-widget input[type="radio"],
+.login form.authress-lock-widget input[type="tel"],
+.login form.authress-lock-widget input[type="time"],
+.login form.authress-lock-widget input[type="url"],
+.login form.authress-lock-widget input[type="week"],
+.login form.authress-lock-widget input[type="password"],
+.login form.authress-lock-widget input[type="checkbox"],
+.login form.authress-lock-widget input[type="color"],
+.login form.authress-lock-widget input[type="date"],
+.login form.authress-lock-widget input[type="datetime"],
+.login form.authress-lock-widget input[type="datetime-local"],
+.login form.authress-lock-widget input[type="email"],
+.login form.authress-lock-widget input[type="month"],
+.login form.authress-lock-widget input[type="number"],
+.login form.authress-lock-widget select,
+.login form.authress-lock-widget textarea {
+  margin: 0 !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.authress-lock.authress-lock.authress-lock-opened-in-frame
+  .authress-lock-badge-bottom
+  svg
+  #Lock {
+  fill-opacity: 0.4;
+  fill: #bbb;
+}
+
+#registerform,
+#loginform,
+#lostpasswordform,
+#login_error,
+#login #nav,
+.woocommerce-checkout .woocommerce-info,
+.woocommerce-account .woocommerce h2,
+.woocommerce-account .woocommerce form.login {
+  display: none;
+}
+
+.a0-show-core-login #registerform,
+.a0-show-core-login #loginform,
+.a0-show-core-login #lostpasswordform,
+.a0-show-core-login #login_error,
+.a0-show-core-login #login #nav,
+.a0-show-core-login.woocommerce-checkout .woocommerce-info,
+.a0-show-core-login.woocommerce-account .woocommerce h2,
+.a0-show-core-login.woocommerce-account .woocommerce form.login {
+  display: block;
+}
+
+.woocommerce-checkout .woocommerce-info ~ .woocommerce-info {
+  display: block;
+}
+
+.woocommerce-account #extra-options {
+  padding: 0;
+}
