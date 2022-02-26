@@ -35,7 +35,7 @@ class WP_Authress_Api_Client_Credentials extends WP_Authress_Api_Abstract {
 	public function __construct( WP_Authress_Options $options ) {
 		parent::__construct( $options );
 		$this->set_path( 'oauth/token' )
-			->send_client_id()
+			->send_access_key()
 			->send_client_secret()
 			->send_audience()
 			->add_body( 'grant_type', 'client_credentials' );

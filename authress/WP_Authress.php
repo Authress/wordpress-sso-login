@@ -103,7 +103,7 @@ function wp_authress_activated_plugin_redirect( $plugin ) {
 		return;
 	}
 
-	$redirect_query = wp_authress_is_ready() ? 'page=authress' : 'page=authress_setup&activation=1';
+	$redirect_query = wp_authress_is_ready() ? 'page=authress' : 'page=authress_introduction&activation=1';
 	wp_safe_redirect( admin_url( 'admin.php?' . $redirect_query ) );
 	exit;
 }
@@ -114,7 +114,7 @@ add_action( 'activated_plugin', 'wp_authress_activated_plugin_redirect' );
  */
 
 function wp_authress_add_allowed_redirect_hosts( $hosts ) {
-	$hosts[] = 'authress.authress.com';
+	$hosts[] = 'authress.io';
 	$hosts[] = wp_authress_get_option( 'domain' );
 	$hosts[] = wp_authress_get_option( 'custom_domain' );
 	$hosts[] = wp_authress_get_option( 'authress_server_domain' );
@@ -175,24 +175,15 @@ add_filter( 'login_message', 'wp_authress_render_lock_form', 5 );
  * Add settings link on plugin page.
  */
 function wp_authress_plugin_action_links( $links ) {
-
 	array_unshift(
 		$links,
-		sprintf(
-			'<a href="%s">%s</a>',
-			admin_url( 'admin.php?page=authress' ),
-			__( 'Settings', 'wp-authress' )
-		)
+		sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Settings', 'wp-authress' ))
 	);
 
 	if ( ! wp_authress_is_ready() ) {
 		array_unshift(
 			$links,
-			sprintf(
-				'<a href="%s">%s</a>',
-				admin_url( 'admin.php?page=authress_setup' ),
-				__( 'Setup Wizard', 'wp-authress' )
-			)
+			sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress_introduction' ), __( 'Setup Wizard', 'wp-authress' ))
 		);
 	}
 
@@ -255,7 +246,7 @@ function wp_authress_filter_get_avatar( $avatar, $id_or_email, $size, $default, 
 }
 add_filter( 'get_avatar', 'wp_authress_filter_get_avatar', 1, 5 );
 
-function wp_authress_setup_error_admin_notices() {
+function wp_authress_introduction_error_admin_notices() {
 	// Not processing form data, just using a redirect parameter if present.
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -297,19 +288,20 @@ function wp_authress_setup_error_admin_notices() {
 
 	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 }
-add_action( 'admin_notices', 'wp_authress_setup_error_admin_notices' );
+add_action( 'admin_notices', 'wp_authress_introduction_error_admin_notices' );
 
-function wp_authress_setup_callback_step1() {
-	$setup_conn = new WP_Authress_InitialSetup_ConnectionProfile( WP_Authress_Options::Instance() );
-	$setup_conn->callback();
+function wp_authress_introduction_callback_step1() {
+	$consent_url = sprintf('https://authress.io/app/#/wordpress?hostedUrl=%s', urlencode(admin_url( 'admin.php?page=authress_introduction')));
+	wp_safe_redirect( $consent_url );
+	exit();
 }
-add_action( 'admin_action_wp_authress_callback_step1', 'wp_authress_setup_callback_step1' );
+add_action( 'admin_action_wp_authress_callback_step1', 'wp_authress_introduction_callback_step1' );
 
-function wp_authress_setup_callback_step3_social() {
+function wp_authress_introduction_callback_step3_social() {
 	$setup_admin = new WP_Authress_InitialSetup_AdminUser( WP_Authress_Options::Instance() );
 	$setup_admin->callback();
 }
-add_action( 'admin_action_wp_authress_callback_step3_social', 'wp_authress_setup_callback_step3_social' );
+add_action( 'admin_action_wp_authress_callback_step3_social', 'wp_authress_introduction_callback_step3_social' );
 
 /**
  * Function to call the method that clears out the error log.
@@ -331,7 +323,7 @@ function wp_authress_errorlog_clear_error_log() {
 	$error_log = new WP_Authress_ErrorLog();
 	$error_log->clear();
 
-	wp_safe_redirect( admin_url( 'admin.php?page=authress-errors&cleared=1' ) );
+	wp_safe_redirect( admin_url( 'admin.php?page=authress_errors&cleared=1' ) );
 	exit;
 }
 add_action( 'admin_action_wp_authress_clear_error_log', 'wp_authress_errorlog_clear_error_log' );
@@ -342,21 +334,21 @@ function wp_authress_initial_setup_init() {
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	if ( 'authress_setup' !== ( $_REQUEST['page'] ?? null ) || ! isset( $_REQUEST['callback'] ) ) {
+	if ( 'authress_introduction' !== ( $_REQUEST['page'] ?? null ) || ! isset( $_REQUEST['callback'] ) ) {
 		return false;
 	}
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	if ( 'rejected' === ( $_REQUEST['error'] ?? null ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&error=rejected' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=rejected' ) );
 		exit;
 	}
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	if ( 'access_denied' === ( $_REQUEST['error'] ?? null ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&error=access_denied' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=access_denied' ) );
 		exit;
 	}
 
@@ -417,11 +409,11 @@ function wp_authress_init_admin_menu() {
 	$routes        = new WP_Authress_Routes( $options );
 	$admin         = new WP_Authress_Admin( $options, $routes );
 
-	$setup_slug  = 'authress_setup';
+	$setup_slug  = 'authress_introduction';
 	$setup_title = __( 'Setup Wizard', 'wp-authress' );
 	$setup_func  = [ $initial_setup, 'render_setup_page' ];
 
-	$settings_slug  = 'wp_authress';
+	$settings_slug  = 'authress_configuration';
 	$settings_title = __( 'Settings', 'wp-authress' );
 	$settings_func  = [ $admin, 'render_settings_page' ];
 
@@ -438,28 +430,28 @@ function wp_authress_init_admin_menu() {
 		86
 	);
 
-	// if ( ! wp_authress_is_ready() ) {
+	if ( ! wp_authress_is_ready() ) {
 		add_submenu_page( $menu_parent, $setup_title, $setup_title, $cap, $setup_slug, $setup_func );
 		add_submenu_page( $menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
-	// } else {
-	// 	add_submenu_page( $menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
-	// 	add_submenu_page(
-	// 		$menu_parent,
-	// 		__( 'Help', 'wp-authress' ),
-	// 		__( 'Help', 'wp-authress' ),
-	// 		$cap,
-	// 		'wp_authress-help',
-	// 		'__return_false'
-	// 	);
-	// 	add_submenu_page( null, $setup_title, $setup_title, $cap, 'authress_setup', $setup_func );
-	// }
+	} else {
+		add_submenu_page( $menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
+		// add_submenu_page(
+		// 	$menu_parent,
+		// 	__( 'Help', 'wp-authress' ),
+		// 	__( 'Help', 'wp-authress' ),
+		// 	$cap,
+		// 	'wp_authress-help',
+		// 	'__return_false'
+		// );
+		add_submenu_page( null, $setup_title, $setup_title, $cap, 'authress_introduction', $setup_func );
+	}
 
 	add_submenu_page(
 		$menu_parent,
 		__( 'Error Log', 'wp-authress' ),
 		__( 'Error Log', 'wp-authress' ),
 		$cap,
-		'wp_authress-errors',
+		'authress_errors',
 		[ new WP_Authress_ErrorLog(), 'render_settings_page' ]
 	);
 }
@@ -472,7 +464,7 @@ function wp_authress_create_account_message() {
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	$current_page     = $_GET['page'] ?? null;
-	$is_correct_admin = in_array( $current_page, [ 'wp_authress', 'wp_authress-errors' ] );
+	$is_correct_admin = in_array( $current_page, [ 'authress_introduction', 'authress_configuration', 'authress_errors' ] );
 	if ( wp_authress_is_ready() || ! $is_correct_admin ) {
 		return false;
 	}
@@ -480,7 +472,7 @@ function wp_authress_create_account_message() {
 	printf(
 		'<div class="update-nag">%s<strong><a href="%s">%s</a></strong>.</div>',
 		__( 'SSO Login is not yet configured. Please use the ', 'wp-authress' ),
-		admin_url( 'admin.php?page=authress_setup' ),
+		admin_url( 'admin.php?page=authress_introduction' ),
 		__( 'Setup Wizard', 'wp-authress' )
 	);
 	return true;

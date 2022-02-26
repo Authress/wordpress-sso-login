@@ -20,7 +20,7 @@
 				</li>
 				<li><?php _e( 'Delete the Domain, Client ID, and Client Secret and save changes.', 'wp-authress' ); ?></li>
 				<li><?php _e( 'Delete the created Application ', 'wp-authress' ); ?>
-					<a target="_blank" href="https://manage.authress.com/#/applications/<?php echo esc_attr( wp_authress_get_option( 'client_id' ) ); ?>/settings" >
+					<a target="_blank" href="https://manage.authress.com/#/applications/<?php echo esc_attr( wp_authress_get_option( 'access_key' ) ); ?>/settings" >
 						<?php _e( 'here', 'wp-authress' ); ?>
 					</a>
 				</li>
@@ -33,44 +33,21 @@
 		  </div>
 
 		<?php else : ?> -->
-		<div class="notice notice-info settings-error"><p>
+		<!-- <div class="notice notice-info settings-error"><p>
 			<b>Important:</b><?php _e( 'To continue you need an Authress account. If you do not already have one: ', 'wp-authress' ); ?>
 
 			<a class="button button-secondary" target="_blank" href="https://authress.io/app/#/signup">Create an Account</a>
-		</p></div>
+		</p></div> -->
 
 		<form action="options.php" method="POST">
-			<?php wp_nonce_field( WP_Authress_InitialSetup_ConnectionProfile::SETUP_NONCE_ACTION ); ?>
 			<input type="hidden" name="action" value="wp_authress_callback_step1" />
-			<h3><?php _e( 'Standard Setup', 'wp-authress' ); ?></h3>
+			<h3><?php _e( 'Automated Setup', 'wp-authress' ); ?></h3>
 
 			<p>
-				<?php _e( 'Authress Account ID', 'wp-authress' ); ?>
-				(<a href="https://authress.io/app/#/setup?focus=general" target="_blank"><?php _e( 'Create an account', 'wp-authress' ); ?></a>):
+				<?php _e( 'This is the automated setup wizard. Clicking continue below will direct you to Authress to create an account and generate the necessary integration resources. Just follow the instructions.', 'wp-authress' ); ?>
 			</p>
-			<input type="text" name="accountId" class="js-a0-setup-input" placeholder="AuthressAccountId" required>
 
-			<p>
-				<?php _e( 'Create an Authress application and copy the ID here:', 'wp-authress' ); ?>
-				(<a href="https://authress.io/app/#/setup?focus=applications" target="_blank"><?php _e( 'Create an application', 'wp-authress' ); ?></a>):
-			</p>
-			<input type="text" name="applicationId" class="js-a0-setup-input" placeholder="ApplicationId" required>
-			
-			<!-- <p>
-				<a href="https://authress.com/docs/api/management/v2/get-access-tokens-for-test#get-access-tokens-manually"
-					target="_blank">
-					<?php _e( 'Create a Management API token using these steps', 'wp-authress' ); ?>
-				</a>
-				<?php _e( ' and paste it below:', 'wp-authress' ); ?>
-			</p>
-			<input type="text" name="apitoken" class="js-a0-setup-input" autocomplete="off" required>
-
-			<p>
-				<?php _e( 'Scopes required', 'wp-authress' ); ?>:
-				<code><?php echo implode( '</code> <code>', WP_Authress_Api_Client::ConsentRequiredScopes() ); ?></code>
-			</p> -->
-
-			<p><input type="submit" class="button button-primary" value="<?php _e( 'Continue', 'wp-authress' ); ?>"/></p>
+			<p><input type="submit" class="button button-primary" value="<?php _e( 'Continue Setup', 'wp-authress' ); ?>"/></p>
 		</form>
 
 		<hr>

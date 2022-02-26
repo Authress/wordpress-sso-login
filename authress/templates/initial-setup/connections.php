@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="a0-buttons">
 			<a href="https://manage.authress.com/#/applications/
-			<?php echo esc_attr( wp_authress_get_option( 'client_id' ) ); ?>
+			<?php echo esc_attr( wp_authress_get_option( 'access_key' ) ); ?>
 			/connections" class="button button-secondary" target="_blank">
 			<?php
 			  _e( 'Configure Connections', 'wp-authress' );
@@ -21,7 +21,7 @@
 			  </a>
 			<a class="button button-primary" href="
 			<?php
-			echo admin_url( 'admin.php?page=authress_setup&step=' . ( wp_authress_get_option( 'migration_ws' ) ? 4 : 3 ) );
+			echo admin_url( 'admin.php?page=authress_introduction&step=' . ( wp_authress_get_option( 'migration_ws' ) ? 4 : 3 ) );
 			?>
 			" >
 			<?php

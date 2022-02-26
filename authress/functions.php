@@ -194,7 +194,7 @@ function wp_authress_is_admin_page( $page ) {
  * @return bool
  */
 function wp_authress_is_ready() {
-	if ( wp_authress_get_option( 'domain' ) && wp_authress_get_option( 'client_id' ) && wp_authress_get_option( 'client_secret' ) ) {
+	if ( wp_authress_get_option( 'accessKey' ) && wp_authress_get_option( 'applicationId' ) && wp_authress_get_option( 'customDomain' ) ) {
 		return true;
 	}
 	return false;

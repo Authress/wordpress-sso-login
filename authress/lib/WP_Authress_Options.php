@@ -384,10 +384,10 @@ class WP_Authress_Options {
 			// Basic
 			'domain'                    => '',
 			'custom_domain'             => '',
-			'client_id'                 => '',
+			'access_key'                 => '',
 			'client_secret'             => '',
 			'organization'              => '',
-			'client_signing_algorithm'  => WP_Authress_Api_Client::DEFAULT_CLIENT_ALG,
+			'application_id'  => WP_Authress_Api_Client::DEFAULT_CLIENT_ALG,
 			'cache_expiration'          => 1440,
 			'wordpress_login_enabled'   => 'link',
 			'wle_code'                  => '',
@@ -422,7 +422,7 @@ class WP_Authress_Options {
 			'migration_ips_filter'      => false,
 			'migration_ips'             => '',
 			'valid_proxy_ip'            => '',
-			'authress_server_domain'       => 'authress.authress.com',
+			'authress_server_domain'       => 'authress.io',
 		];
 	}
 }

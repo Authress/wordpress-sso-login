@@ -209,7 +209,7 @@ class WP_Authress_Lock {
 				'settings'        => $lock_options->get_lock_options(),
 				'ready'           => wp_authress_is_ready(),
 				'domain'          => $options->get_auth_domain(),
-				'clientId'        => $options->get( 'client_id' ),
+				'clientId'        => $options->get( 'access_key' ),
 				'stateCookieName' => WP_Authress_State_Handler::get_storage_cookie_name(),
 				'nonceCookieName' => WP_Authress_Nonce_Handler::get_storage_cookie_name(),
 				'usePasswordless' => $options->get( 'passwordless_enabled' ),

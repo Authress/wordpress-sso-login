@@ -24,20 +24,20 @@ class WP_Authress_Api_Refresh_Access_Token extends WP_Authress_Api_Abstract {
 	/**
 	 * Make the API call and handle the response.
 	 *
-	 * @param string|null $client_id - Client ID to use.
+	 * @param string|null $access_key - Client ID to use.
 	 * @param string|null $client_secret - Client Secret to use.
 	 * @param string|null $refresh_token - Client's refresh token to use.
 	 *
 	 * @return string|null
 	 */
-	public function call( $client_id = null, $client_secret = null, $refresh_token = null ) {
+	public function call( $access_key = null, $client_secret = null, $refresh_token = null ) {
 
 		if ( empty( $refresh_token ) ) {
 			return self::RETURN_ON_FAILURE;
 		}
 
-		$client_id = $client_id ?: $this->options->get( 'client_id' );
-		if ( empty( $client_id ) ) {
+		$access_key = $access_key ?: $this->options->get( 'access_key' );
+		if ( empty( $access_key ) ) {
 			return self::RETURN_ON_FAILURE;
 		}
 
@@ -49,7 +49,7 @@ class WP_Authress_Api_Refresh_Access_Token extends WP_Authress_Api_Abstract {
 		return $this
 			->set_path( 'oauth/token' )
 			->add_body( 'grant_type', 'refresh_token' )
-			->add_body( 'client_id', $client_id )
+			->add_body( 'access_key', $access_key )
 			->add_body( 'client_secret', $client_secret )
 			->add_body( 'refresh_token', $refresh_token )
 			->post()

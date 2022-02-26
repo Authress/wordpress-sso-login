@@ -25,58 +25,29 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 
 		$options = [
 			[
-				'name'     => __( 'Domain', 'wp-authress' ),
-				'opt'      => 'domain',
-				'id'       => 'wp_authress_domain',
-				'function' => 'render_domain',
-			],
-			[
 				'name'     => __( 'Custom Domain', 'wp-authress' ),
 				'opt'      => 'custom_domain',
 				'id'       => 'wp_authress_custom_domain',
 				'function' => 'render_custom_domain',
 			],
 			[
-				'name'     => __( 'Client ID', 'wp-authress' ),
-				'opt'      => 'client_id',
-				'id'       => 'wp_authress_client_id',
-				'function' => 'render_client_id',
+				'name'     => __( 'API Access Key', 'wp-authress' ),
+				'opt'      => 'access_key',
+				'id'       => 'wp_authress_access_key',
+				'function' => 'render_access_key',
 			],
 			[
-				'name'     => __( 'Client Secret', 'wp-authress' ),
-				'opt'      => 'client_secret',
-				'id'       => 'wp_authress_client_secret',
-				'function' => 'render_client_secret',
-			],
-			[
-				'name'     => __( 'Organization', 'wp-authress' ),
-				'opt'      => 'organization',
-				'id'       => 'wp_authress_organization',
-				'function' => 'render_organization',
-			],
-			[
-				'name'     => __( 'JWT Signature Algorithm', 'wp-authress' ),
-				'opt'      => 'client_signing_algorithm',
-				'id'       => 'wp_authress_client_signing_algorithm',
-				'function' => 'render_client_signing_algorithm',
-			],
-			[
-				'name'     => __( 'JWKS Cache Time (in minutes)', 'wp-authress' ),
-				'opt'      => 'cache_expiration',
-				'id'       => 'wp_authress_cache_expiration',
-				'function' => 'render_cache_expiration',
-			],
-			[
-				'name'     => __( 'Original Login Form on wp-login.php', 'wp-authress' ),
-				'opt'      => 'wordpress_login_enabled',
-				'id'       => 'wp_authress_login_enabled',
-				'function' => 'render_allow_wordpress_login',
-			],
-			[
-				'name'     => __( 'Allow Signups', 'wp-authress' ),
-				'id'       => 'wp_authress_allow_signup',
-				'function' => 'render_allow_signup',
-			],
+				'name'     => __( 'Application ID', 'wp-authress' ),
+				'opt'      => 'application_id',
+				'id'       => 'wp_authress_application_id',
+				'function' => 'render_application_id',
+			]
+			// [
+			// 	'name'     => __( 'Original Login Form on wp-login.php', 'wp-authress' ),
+			// 	'opt'      => 'wordpress_login_enabled',
+			// 	'id'       => 'wp_authress_login_enabled',
+			// 	'function' => 'render_allow_wordpress_login',
+			// ],
 		];
 		$this->init_option_section( '', 'basic', $options );
 	}
@@ -112,35 +83,13 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 	 * @since 3.7.0
 	 */
 	public function render_custom_domain( $args = [] ) {
-
-		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', 'login.yourdomain.com' );
-		$this->render_field_description(
-			__( 'Custom login domain. ', 'wp-authress' ) .
-			$this->get_docs_link( 'custom-domains', __( 'More information here', 'wp-authress' ) )
-		);
-	}
-
-	/**
-	 * Render form field and description for the `client_id` option.
-	 * IMPORTANT: Internal callback use only, do not call this function directly!
-	 *
-	 * @param array $args - callback args passed in from add_settings_field().
-	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
-	 * @see add_settings_field()
-	 */
-	public function render_client_id( $args = [] ) {
-
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
 		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
-		$this->render_field_description(
-			__( 'Client ID, found in your Application settings in the ', 'wp-authress' ) .
-			$this->get_dashboard_link( 'applications' )
-		);
+		$this->render_field_description(__( 'Your custom domain host url, found in the domain settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'domains' ));
 	}
 
 	/**
-	 * Render form field and description for the `client_secret` option.
+	 * Render form field and description for the `access_key` option.
 	 * IMPORTANT: Internal callback use only, do not call this function directly!
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
@@ -148,14 +97,10 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 	 * @see WP_Authress_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
-	public function render_client_secret( $args = [] ) {
-
+	public function render_access_key( $args = [] ) {
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
-		$this->render_text_field( $args['label_for'], $args['opt_name'], 'password', '', $style );
-		$this->render_field_description(
-			__( 'Client Secret, found in your Application settings in the ', 'wp-authress' ) .
-			$this->get_dashboard_link( 'applications' )
-		);
+		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
+		$this->render_field_description(__( 'Authress Service Client Access Key, found in the service client settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'clients' ));
 	}
 
 	/**
@@ -167,38 +112,10 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 	 * @see WP_Authress_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
-	public function render_organization( $args = [] ) {
-
-		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '' );
-		$this->render_field_description(
-			__( 'Optional. Organization Id, found in your Organizations settings in the ', 'wp-authress' ) .
-			$this->get_dashboard_link( 'applications' )
-		);
-	}
-
-	/**
-	 * Render form field and description for the `client_signing_algorithm` option.
-	 * IMPORTANT: Internal callback use only, do not call this function directly!
-	 *
-	 * @param array $args - callback args passed in from add_settings_field().
-	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
-	 * @see add_settings_field()
-	 */
-	public function render_client_signing_algorithm( $args = [] ) {
-
-		$curr_value = $this->options->get( $args['opt_name'] ) ?: WP_Authress_Api_Client::DEFAULT_CLIENT_ALG;
-		$this->render_radio_buttons(
-			self::ALLOWED_ID_TOKEN_ALGS,
-			$args['label_for'],
-			$args['opt_name'],
-			$curr_value
-		);
-		$this->render_field_description(
-			__( 'This value can be found the Application settings in the ', 'wp-authress' ) .
-			$this->get_dashboard_link( 'applications' ) .
-			__( ' under Show Advanced Settings > OAuth > "JsonWebToken Signature Algorithm"', 'wp-authress' )
-		);
+	public function render_application_id( $args = [] ) {
+		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
+		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
+		$this->render_field_description(__( 'Identifier for this wordpress deployment, found in your Application settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'applications' ));
 	}
 
 	/**
@@ -315,47 +232,30 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 	 * @return array
 	 */
 	public function basic_validation( array $input ) {
-
-		if ( wp_cache_get( 'doing_db_update', WP_AUTHRESS_CACHE_GROUP ) ) {
-			return $input;
-		}
-
-		$input['domain'] = $this->sanitize_text_val( $input['domain'] ?? null );
-		if ( empty( $input['domain'] ) ) {
-			$this->add_validation_error( __( 'You need to specify a domain', 'wp-authress' ) );
-		}
-
 		$input['custom_domain'] = $this->sanitize_text_val( $input['custom_domain'] ?? null );
-
-		$input['client_id'] = $this->sanitize_text_val( $input['client_id'] ?? null );
-		if ( empty( $input['client_id'] ) ) {
-			$this->add_validation_error( __( 'You need to specify a Client ID', 'wp-authress' ) );
+		if ( empty( $input['custom_domain'] ) ) {
+			$this->add_validation_error( __( 'You need to specify your Custom Domain', 'wp-authress' ) );
 		}
 
-		$input['client_secret'] = $this->sanitize_text_val( $input['client_secret'] ?? null );
-		if ( __( '[REDACTED]', 'wp-authress' ) === $input['client_secret'] ) {
+		$input['access_key'] = $this->sanitize_text_val( $input['access_key'] ?? null );
+		if ( __( '[REDACTED]', 'wp-authress' ) === $input['access_key'] ) {
 			// The field is loaded with "[REDACTED]" so if that value is saved, we keep the existing secret.
-			$input['client_secret'] = $this->options->get( 'client_secret' );
+			$input['access_key'] = $this->options->get( 'access_key' );
 		}
-		if ( empty( $input['client_secret'] ) ) {
-			$this->add_validation_error( __( 'You need to specify a Client Secret', 'wp-authress' ) );
-		}
-
-		$input['organization'] = $this->sanitize_text_val( $input['organization'] ?? null );
-
-		$id_token_alg = $input['client_signing_algorithm'] ?? null;
-		if ( ! in_array( $id_token_alg, self::ALLOWED_ID_TOKEN_ALGS ) ) {
-			$input['client_signing_algorithm'] = $this->options->get_default( 'client_signing_algorithm' );
+		if ( empty( $input['access_key'] ) ) {
+			$this->add_validation_error( __( 'You need to specify a API Access Key', 'wp-authress' ) );
 		}
 
+		$input['application_id'] = $this->sanitize_text_val( $input['application_id'] ?? null );
+		if ( empty( $input['application_id'] ) ) {
+			$this->add_validation_error( __( 'You need to specify your Application Identifier', 'wp-authress' ) );
+		}
 		$input['cache_expiration'] = absint( $input['cache_expiration'] ?? 0 );
 
-		$wle = $input['wordpress_login_enabled'] ?? null;
-		if ( ! in_array( $wle, [ 'link', 'isset', 'code', 'no' ] ) ) {
-			$input['wordpress_login_enabled'] = $this->options->get_default( 'wordpress_login_enabled' );
-		}
-
-		$input['wle_code'] = $this->options->get( 'wle_code' ) ?: wp_authress_generate_token( 24 );
+		// $wle = $input['wordpress_login_enabled'] ?? null;
+		// if ( ! in_array( $wle, [ 'link', 'isset', 'code', 'no' ] ) ) {
+		// 	$input['wordpress_login_enabled'] = $this->options->get_default( 'wordpress_login_enabled' );
+		// }
 
 		return $input;
 	}

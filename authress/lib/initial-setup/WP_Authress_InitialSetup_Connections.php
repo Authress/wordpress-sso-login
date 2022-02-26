@@ -13,13 +13,13 @@ class WP_Authress_InitialSetup_Connections {
 	}
 
 	public function callback() {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&step=5' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=5' ) );
 	}
 
 	public function add_validation_error( $error ) {
 		wp_safe_redirect(
 			admin_url(
-				'admin.php?page=authress_setup&step=5&error=' .
+				'admin.php?page=authress_introduction&step=5&error=' .
 				urlencode( 'There was an error setting up your connections.' )
 			)
 		);

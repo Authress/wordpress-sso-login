@@ -17,7 +17,7 @@ $current_user = wp_get_current_user();
 	  <div class="notice notice-error settings-error"><p>
 
 			<?php _e( 'An error occurred creating the user. Check that the migration webservices are accessible or check the ', 'wp-authress' ); ?>
-		<a href="<?php echo admin_url( 'admin.php?page=authress-errors' ); ?>" target="_blank"><?php _e( 'Error Log', 'wp-authress' ); ?></a>
+		<a href="<?php echo admin_url( 'admin.php?page=authress_errors' ); ?>" target="_blank"><?php _e( 'Error Log', 'wp-authress' ); ?></a>
 			<?php _e( 'for more info.', 'wp-authress' ); ?>
 	  </p></div>
 
@@ -36,7 +36,7 @@ $current_user = wp_get_current_user();
 		<div class="a0-buttons">
 		  <input type="hidden" name="action" value="wp_authress_callback_step3_social" />
 		  <input type="submit" class="button button-primary" value="<?php _e( 'Submit', 'wp-authress' ); ?>" />
-		  <a href="<?php echo admin_url( 'admin.php?page=authress_setup&step=4' ); ?>"><?php _e( 'Skip this step', 'wp-authress' ); ?></a>
+		  <a href="<?php echo admin_url( 'admin.php?page=authress_introduction&step=4' ); ?>"><?php _e( 'Skip this step', 'wp-authress' ); ?></a>
 		</div>
 
 	  </form>

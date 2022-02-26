@@ -122,7 +122,7 @@ class WP_Authress_Routes {
 			authress.crossOriginAuthenticationCallback();
 			</script></head><body></body></html>',
 			esc_url( apply_filters( 'authress_coo_authressjs_url', WP_AUTHRESS_AUTHRESS_JS_CDN_URL ) ),
-			esc_attr( $this->a0_options->get( 'client_id' ) ),
+			esc_attr( $this->a0_options->get( 'access_key' ) ),
 			esc_attr( $this->a0_options->get_auth_domain() ),
 			esc_url( $this->a0_options->get_wp_authress_url( $protocol ) )
 		);

@@ -37,7 +37,7 @@ abstract class WP_Authress_Api_Abstract {
 	 *
 	 * @var string
 	 */
-	protected $client_id;
+	protected $access_key;
 
 	/**
 	 * Client Secret from plugin settings.
@@ -114,7 +114,7 @@ abstract class WP_Authress_Api_Abstract {
 
 		// Required settings in the plugin.
 		$this->domain        = $domain ?: $this->options->get( 'domain' );
-		$this->client_id     = $this->options->get( 'client_id' );
+		$this->access_key     = $this->options->get( 'access_key' );
 		$this->client_secret = $this->options->get( 'client_secret' );
 		$this->organization  = $this->options->get( 'organization' );
 
@@ -229,8 +229,8 @@ abstract class WP_Authress_Api_Abstract {
 	 *
 	 * @return $this
 	 */
-	protected function send_client_id() {
-		$this->body['client_id'] = $this->client_id;
+	protected function send_access_key() {
+		$this->body['access_key'] = $this->access_key;
 		return $this;
 	}
 

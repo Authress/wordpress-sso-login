@@ -235,11 +235,7 @@ class WP_Authress_Admin_Generic {
 	 * @return string
 	 */
 	protected function get_dashboard_link( $path = '' ) {
-		return sprintf(
-			'<a href="https://manage.authress.com/#/%s" target="_blank">%s</a>',
-			$path,
-			__( 'Authress dashboard', 'wp-authress' )
-		);
+		return sprintf('<a href="https://authress.io/app/#/setup?focus=%s" target="_blank">%s</a>', $path, __( 'Authress management portal', 'wp-authress' ));
 	}
 
 	/**

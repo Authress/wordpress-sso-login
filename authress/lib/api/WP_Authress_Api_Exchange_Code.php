@@ -24,19 +24,19 @@ class WP_Authress_Api_Exchange_Code extends WP_Authress_Api_Abstract {
 	 * Make the API call and handle the response.
 	 *
 	 * @param string|null $code - Authorization code to exchange for tokens.
-	 * @param string|null $client_id - Client ID to use.
+	 * @param string|null $access_key - Client ID to use.
 	 * @param string|null $redirect_uri - Redirect URI to use.
 	 *
 	 * @return string|null
 	 */
-	public function call( $code = null, $client_id = null, $redirect_uri = null ) {
+	public function call( $code = null, $access_key = null, $redirect_uri = null ) {
 
 		if ( empty( $code ) ) {
 			return self::RETURN_ON_FAILURE;
 		}
 
-		$client_id = $client_id ?: $this->options->get( 'client_id' );
-		if ( empty( $client_id ) ) {
+		$access_key = $access_key ?: $this->options->get( 'access_key' );
+		if ( empty( $access_key ) ) {
 			return self::RETURN_ON_FAILURE;
 		}
 
@@ -48,7 +48,7 @@ class WP_Authress_Api_Exchange_Code extends WP_Authress_Api_Abstract {
 			->add_body( 'grant_type', 'authorization_code' )
 			->add_body( 'code', $code )
 			->add_body( 'redirect_uri', $redirect_uri )
-			->add_body( 'client_id', $client_id )
+			->add_body( 'access_key', $access_key )
 			->add_body( 'client_secret', $client_secret )
 			->post()
 			->handle_response( __METHOD__ );

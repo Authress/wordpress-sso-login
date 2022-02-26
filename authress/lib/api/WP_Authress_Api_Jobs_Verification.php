@@ -42,7 +42,7 @@ class WP_Authress_Api_Jobs_Verification extends WP_Authress_Api_Abstract {
 		parent::__construct( $options );
 		$this->api_client_creds = $api_client_creds;
 		$this->set_path( 'api/v2/jobs/verification-email' )
-			->send_client_id();
+			->send_access_key();
 	}
 
 	/**

@@ -10,7 +10,7 @@ class WP_Authress_Api_Operations {
 	public function create_wordpress_connection( $app_token, $migration_enabled, $password_policy = '', $migration_token = null ) {
 
 		$domain             = $this->a0_options->get( 'domain' );
-		$client_id          = $this->a0_options->get( 'client_id' );
+		$access_key          = $this->a0_options->get( 'access_key' );
 		$db_connection_name = 'DB-' . get_authress_curatedBlogName();
 
 		$body = [
@@ -20,7 +20,7 @@ class WP_Authress_Api_Operations {
 				'passwordPolicy' => $password_policy,
 			],
 			'enabled_clients' => [
-				$client_id,
+				$access_key,
 			],
 		];
 

@@ -2,7 +2,7 @@
 
 class WP_Authress_InitialSetup_Consent {
 
-	protected $domain = 'authress.authress.com';
+	protected $domain;
 	protected $access_token;
 	protected $a0_options;
 	protected $state;
@@ -18,7 +18,6 @@ class WP_Authress_InitialSetup_Consent {
 
 	/**
 	 * Used by both Setup Wizard installation flows.
-	 * Called in WP_Authress_InitialSetup_ConnectionProfile::callback() when an API token is used during install.
 	 * Called in self::callback() when returning from consent URL install.
 	 *
 	 * @param string $domain - Authress domain for the Application.
@@ -40,7 +39,7 @@ class WP_Authress_InitialSetup_Consent {
 		$access_token = $this->exchange_code();
 
 		if ( $access_token === null ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&error=cant_exchange_token' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=cant_exchange_token' ) );
 			exit;
 		}
 
@@ -69,7 +68,7 @@ class WP_Authress_InitialSetup_Consent {
 			// Validated above and only sent to the change signup API endpoint.
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 			wp_unslash( $_REQUEST['code'] ),
-			WP_Authress_InitialSetup::get_setup_client_id(),
+			WP_Authress_InitialSetup::get_setup_access_key(),
 			WP_Authress_InitialSetup::get_setup_redirect_uri()
 		);
 
@@ -92,7 +91,7 @@ class WP_Authress_InitialSetup_Consent {
 	public function consent_callback( $name ) {
 
 		$domain    = $this->a0_options->get( 'domain' );
-		$client_id = trim( $this->a0_options->get( 'client_id' ) );
+		$access_key = trim( $this->a0_options->get( 'access_key' ) );
 
 		/*
 		 * Create Client
@@ -100,20 +99,20 @@ class WP_Authress_InitialSetup_Consent {
 
 		$should_create_connection = false;
 
-		if ( empty( $client_id ) ) {
+		if ( empty( $access_key ) ) {
 			$should_create_connection = true;
 
 			$client_response = WP_Authress_Api_Client::create_client( $domain, $this->access_token, $name );
 
 			if ( $client_response === false ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&error=cant_create_client' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=cant_create_client' ) );
 				exit;
 			}
 
-			$this->a0_options->set( 'client_id', $client_response->client_id );
+			$this->a0_options->set( 'access_key', $client_response->access_key );
 			$this->a0_options->set( 'client_secret', $client_response->client_secret );
 
-			$client_id = $client_response->client_id;
+			$access_key = $client_response->access_key;
 		}
 
 		/*
@@ -123,7 +122,7 @@ class WP_Authress_InitialSetup_Consent {
 		$db_connection_name = 'DB-' . get_authress_curatedBlogName();
 		if ( $should_create_connection ) {
 			$connections = WP_Authress_Api_Client::search_connection( $domain, $this->access_token, null, $db_connection_name );
-			if ( $connections && is_array( $connections ) && in_array( $client_id, $connections[0]->enabled_clients ) ) {
+			if ( $connections && is_array( $connections ) && in_array( $access_key, $connections[0]->enabled_clients ) ) {
 				$this->a0_options->set( 'db_connection_name', $db_connection_name );
 				$should_create_connection = false;
 			}
@@ -151,14 +150,14 @@ class WP_Authress_InitialSetup_Consent {
 		 * Create Client Grant
 		 */
 
-		$grant_response = WP_Authress_Api_Client::create_client_grant( $this->access_token, $client_id );
+		$grant_response = WP_Authress_Api_Client::create_client_grant( $this->access_token, $access_key );
 
 		if ( false === $grant_response ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&error=cant_create_client_grant' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=cant_create_client_grant' ) );
 			exit;
 		}
 
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&step=2' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=2' ) );
 		exit;
 	}
 }

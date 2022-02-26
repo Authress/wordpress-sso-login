@@ -27,14 +27,14 @@ class WP_Authress_InitialSetup_AdminUser {
 		}
 
 		if ( empty( $_POST['admin-password'] ) ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&step=3&result=error' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=3&result=error' ) );
 			exit;
 		}
 
 		$current_user = wp_get_current_user();
 
 		$data = [
-			'client_id'  => $this->a0_options->get( 'client_id' ),
+			'access_key'  => $this->a0_options->get( 'access_key' ),
 			'email'      => $current_user->user_email,
 			// Validated above and only sent to the change signup API endpoint.
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
@@ -45,7 +45,7 @@ class WP_Authress_InitialSetup_AdminUser {
 		$admin_user = WP_Authress_Api_Client::signup_user( $this->a0_options->get_auth_domain(), $data );
 
 		if ( $admin_user === false ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&step=3&result=error' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=3&result=error' ) );
 		} else {
 
 			$admin_user->sub = 'authress|' . $admin_user->_id;
@@ -54,7 +54,7 @@ class WP_Authress_InitialSetup_AdminUser {
 			$user_repo = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 			$user_repo->update_authress_object( $current_user->ID, $admin_user );
 
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_setup&step=4' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=4' ) );
 		}
 		exit;
 	}

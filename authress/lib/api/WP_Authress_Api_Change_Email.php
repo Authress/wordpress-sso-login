@@ -66,7 +66,7 @@ class WP_Authress_Api_Change_Email extends WP_Authress_Api_Abstract {
 			->add_body( 'email', $email )
 			// Email is either changed by an admin or verified by WP.
 			->add_body( 'email_verified', true )
-			->add_body( 'client_id', $this->options->get( 'client_id' ) )
+			->add_body( 'access_key', $this->options->get( 'access_key' ) )
 			->patch()
 			->handle_response( __METHOD__ );
 	}

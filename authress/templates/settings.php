@@ -2,15 +2,15 @@
 
 	<div class="container-fluid">
 
-			<h1><?php _e( 'SSO Login Settings', 'wp-authress' ); ?></h1>
+			<h1><?php _e( 'SSO Login Settings', 'authress_configuration' ); ?></h1>
 
 			<?php settings_errors(); ?>
 
 			<p class="nav nav-tabs" role="tablist">
 					<a id="tab-basic" href="#basic" class="js-a0-settings-tabs">
-						<?php _e( 'Basic', 'wp-authress' ); ?>
+						<?php _e( 'Configuration', 'wp-authress' ); ?>
 					</a>
-					<a id="tab-features" href="#features" class="js-a0-settings-tabs">
+					<!-- <a id="tab-features" href="#features" class="js-a0-settings-tabs">
 						<?php _e( 'Features', 'wp-authress' ); ?>
 					</a>
 					<a id="tab-appearance" href="#appearance" class="js-a0-settings-tabs">
@@ -18,7 +18,7 @@
 					</a>
 					<a id="tab-advanced" href="#advanced" class="js-a0-settings-tabs">
 						<?php _e( 'Advanced', 'wp-authress' ); ?>
-					</a>
+					</a> -->
 					<a id="tab-help" href="#help" class="js-a0-settings-tabs">
 						<?php _e( 'Help', 'wp-authress' ); ?>
 					</a>
@@ -40,59 +40,32 @@
 						<?php
 						_e( 'Thank you for installing SSO Login! Authress is a powerful identity solution that secures billions of logins every month. In addition to the options here, there are many more features available in the', 'wp-authress' );
 						?>
-						<a href="https://manage.authress.com" target="_blank"><?php _e( 'Authress dashboard', 'wp-authress' ); ?></a>
+						<a href="https://authress.io/app" target="_blank"><?php _e( 'Authress management portal', 'wp-authress' ); ?></a>
 						<?php _e( 'including:', 'wp-authress' ); ?>
 					</p>
 
 					<ul class="list">
-						<li><a href="https://authress.com/docs/identityproviders" target="_blank">
-								<?php
-								_e( 'Many social and enterprise login connections', 'wp-authress' )
-								?>
-							</a></li>
-						<li><a href="https://authress.com/docs/connections/passwordless" target="_blank">
-								<?php
-								_e( 'Passwordless login connections', 'wp-authress' );
-								?>
-							</a></li>
-						<li><a href="https://authress.com/docs/anomaly-detection" target="_blank">
-								<?php
-								_e( 'Anomaly detection', 'wp-authress' );
-								?>
-							</a></li>
-						<li><a href="https://authress.com/docs/rules/current" target="_blank">
-								<?php
-								_e( 'Profile enrichment, integrations, and other custom management tasks using Rules', 'wp-authress' );
-								?>
-							</a></li>
+						<li><a href="https://authress.io/knowledge-base" target="_blank"><?php _e( 'Many social and enterprise login connections', 'wp-authress' ) ?></a></li>
+						<li><a href="https://authress.io/knowledge-base" target="_blank"><?php _e( 'Anomaly detection', 'wp-authress' ); ?></a></li>
+						<li><a href="https://authress.io/knowledge-base" target="_blank"><?php _e( 'User access control and granular permissions', 'wp-authress' ); ?></a></li>
 					</ul>
 
 					<p><?php _e( 'If you have issues or questions, we provide a variety of channels to assist:', 'wp-authress' ); ?><p>
 
 					<ul class="list">
-						<li><a href="https://authress.com/docs/cms/wordpress/configuration" target="_blank">
-								<?php
-								_e( 'Configuration documentation', 'wp-authress' )
-								?>
-							</a> -
-							<?php
-							_e( 'If you are setting up the plugin for the first time or having issues after an upgrade, please review the settings to make sure your Application is setup correctly.', 'wp-authress' )
-							?>
+						<li>
+							<a href="https://authress.io/knowledge-base" target="_blank"><?php _e( 'Knowledge base', 'wp-authress' ) ?></a> -
+							<?php _e( 'If you are setting up the plugin for the first time or having issues after an upgrade, please review the settings to make sure your Application is setup correctly.', 'wp-authress' ) ?>
 						</li>
-						<li><a href="https://community.authress.com/tags/wordpress" target="_blank">
-								<?php
-								_e( 'Authress Community', 'wp-authress' )
-								?>
-							</a> -
-							<?php
-							_e( 'If you have questions about how to use Authress or the plugin, please create a post (tagged "WordPress") if you do not find what you are looking for.', 'wp-authress' )
-							?>
+						<li>
+							<a href="https://authress.io/community" target="_blank"><?php _e( 'Authress Community', 'wp-authress' ) ?></a> -
+							<?php _e( 'If you have questions about how to use Authress or the plugin, join the Authress community, and ask any questions you may have.', 'wp-authress' ) ?>
 						</li>
-						<li><a href="https://github.com/authress/wp-authress/issues" target="_blank"><?php _e( 'GitHub Issues', 'wp-authress' ); ?></a> -
+						<li><a href="https://github.com/authress/wordpress-plugin/issues" target="_blank"><?php _e( 'GitHub Issues', 'wp-authress' ); ?></a> -
 							<?php _e( 'If you find a bug in the plugin code, the best place to report that is on GitHub under the Issues tab.', 'wp-authress' ); ?>
 						</li>
-						<li><a href="https://support.authress.com/" target="_blank"><?php _e( 'Support', 'wp-authress' ); ?></a> -
-							<?php _e( 'Customers on a paid Authress plan can submit trouble tickets for a quick response.', 'wp-authress' ); ?>
+						<li><a href="https://authress.io/app/#/support" target="_blank"><?php _e( 'Support', 'wp-authress' ); ?></a> -
+							<?php _e( 'Customers can submit support tickets or reach out directly for a quick response.', 'wp-authress' ); ?>
 						</li>
 					</ul>
 				</div>

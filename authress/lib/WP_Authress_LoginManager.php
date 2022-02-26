@@ -449,7 +449,7 @@ class WP_Authress_LoginManager {
 
 		$params = [
 			'connection'    => $connection,
-			'client_id'     => $opts->get( 'client_id' ),
+			'access_key'     => $opts->get( 'access_key' ),
 			'organization'  => $opts->get( 'organization' ),
 			'scope'         => self::get_userinfo_scope( 'authorize_url' ),
 			'nonce'         => WP_Authress_Nonce_Handler::get_instance()->get_unique(),
@@ -594,7 +594,7 @@ class WP_Authress_LoginManager {
 	 */
 	private function decode_id_token( $id_token ) {
 		$expectedIss = apply_filters( 'authress_id_token_issuer', 'https://' . $this->a0_options->get_auth_domain() . '/' );
-		$expectedAlg = $this->a0_options->get( 'client_signing_algorithm' );
+		$expectedAlg = $this->a0_options->get( 'application_id' );
 		if ( 'RS256' === $expectedAlg ) {
 			$sigVerifier = new WP_Authress_AsymmetricVerifier( new WP_Authress_JwksFetcher() );
 		} elseif ( 'HS256' === $expectedAlg ) {
@@ -610,7 +610,7 @@ class WP_Authress_LoginManager {
 			'org_id'  => apply_filters( 'authress_jwt_org_id', $this->a0_options->get_auth_organization() ),
 		];
 
-		$idTokenVerifier = new WP_Authress_IdTokenVerifier( $expectedIss, $this->a0_options->get( 'client_id' ), $sigVerifier );
+		$idTokenVerifier = new WP_Authress_IdTokenVerifier( $expectedIss, $this->a0_options->get( 'access_key' ), $sigVerifier );
 		return (object) $idTokenVerifier->verify( $id_token, $verifierOptions );
 	}
 
@@ -646,9 +646,9 @@ class WP_Authress_LoginManager {
 	 */
 	private function authress_logout_url( $return_to = null ) {
 		return sprintf(
-			'https://%s/v2/logout?client_id=%s&returnTo=%s',
+			'https://%s/v2/logout?access_key=%s&returnTo=%s',
 			$this->a0_options->get_auth_domain(),
-			$this->a0_options->get( 'client_id' ),
+			$this->a0_options->get( 'access_key' ),
 			rawurlencode( $return_to ?: home_url() )
 		);
 	}

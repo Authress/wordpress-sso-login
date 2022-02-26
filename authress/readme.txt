@@ -50,17 +50,6 @@ Also, you can use the Authress widget as a shortcode in your editor. Just add th
 
     [authress]
 
-Like widgets, shortcode login forms will use the main plugins settings. It can be customized by adding the following attributes:
-
-- `icon_url` - A direct URL to an image used at the top of the login form
-- `title` - Text to appear at top of the login form
-- `redirect_url` - A direct URL to use after successful login
-- `options` - Valid JSON configuration to specify custom options ([see options here](https://authress.io))
-
-Example:
-
-    [authress icon_url="https://your-app.example.com/logo.png"]
-
 == Frequently Asked Questions ==
 
 = Can I customize the Authress login? =
