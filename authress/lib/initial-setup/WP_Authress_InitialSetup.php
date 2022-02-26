@@ -3,16 +3,9 @@
 class WP_Authress_InitialSetup {
 
 	protected $a0_options;
-	protected $adminuser_step;
-	protected $connections_step;
-	protected $end_step;
 
 	public function __construct( WP_Authress_Options $a0_options ) {
 		$this->a0_options = $a0_options;
-
-		$this->adminuser_step     = new WP_Authress_InitialSetup_AdminUser( $this->a0_options );
-		$this->connections_step   = new WP_Authress_InitialSetup_Connections( $this->a0_options );
-		$this->end_step           = new WP_Authress_InitialSetup_End( $this->a0_options );
 	}
 
 	public function notify_error( $error ) {
@@ -20,39 +13,10 @@ class WP_Authress_InitialSetup {
 	}
 
 	public function render_setup_page() {
-		// Not processing form data, only pulling from the URL.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-		$step = ( isset( $_REQUEST['step'] ) ? absint( $_GET['step'] ) : 1 );
-
-		if ( is_numeric( $step ) && $step >= 1 && $step <= 6 ) {
-
-			$last_step = $this->a0_options->get( 'last_step' );
-
-			if ( $step > $last_step ) {
-				$this->a0_options->set( 'last_step', $step );
-			}
-
-			switch ( $step ) {
-				case 1:
-					include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/connection_profile.php';
-					break;
-
-				case 2:
-					$this->connections_step->render( $step );
-					break;
-
-				case 3:
-					$this->adminuser_step->render( $step );
-					break;
-
-				case 4:
-					$this->end_step->render( $step );
-					break;
-			}
-		}
-
-	  // phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
+		$this->a0_options->set( 'accessKey', $client_response->access_key );
+		$this->a0_options->set( 'customDomain', $client_response->client_secret );
+		$this->a0_options->set( 'applicationId', $client_response->client_secret );
+		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/connection_profile.php';
 	}
 
 	public function cant_create_client_message() {
@@ -123,8 +87,7 @@ class WP_Authress_InitialSetup {
 		  <div class="notice notice-error">
 			  <p>
 				  <strong>
-					<?php _e( 'Please create your Authress account first at ', 'wp-authress' ); ?>
-			<a href="https://manage.authress.com">https://manage.authress.com</a>
+					<?php _e( 'Please create your Authress account first at ', 'wp-authress' ); ?><a href="https://manage.authress.com">https://manage.authress.com</a>
 				  </strong>
 			  </p>
 		  </div>

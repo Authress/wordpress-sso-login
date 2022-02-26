@@ -16,25 +16,6 @@ class WP_Authress_InitialSetup_Consent {
 	public function render( $step ) {
 	}
 
-	/**
-	 * Used by both Setup Wizard installation flows.
-	 * Called in self::callback() when returning from consent URL install.
-	 *
-	 * @param string $domain - Authress domain for the Application.
-	 * @param string $access_token - Management API access token.
-	 * @param bool   $hasInternetConnection - True if the installing site be reached by Authress, false if not.
-	 */
-	public function callback_with_token( $domain, $access_token, $hasInternetConnection = true ) {
-
-		$this->a0_options->set( 'domain', $domain );
-		$this->access_token          = $access_token;
-		$this->hasInternetConnection = $hasInternetConnection;
-
-		$name = get_authress_curatedBlogName();
-		$this->consent_callback( $name );
-
-	}
-
 	public function callback() {
 		$access_token = $this->exchange_code();
 
@@ -104,57 +85,12 @@ class WP_Authress_InitialSetup_Consent {
 
 			$client_response = WP_Authress_Api_Client::create_client( $domain, $this->access_token, $name );
 
-			if ( $client_response === false ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=cant_create_client' ) );
-				exit;
-			}
 
-			$this->a0_options->set( 'access_key', $client_response->access_key );
-			$this->a0_options->set( 'client_secret', $client_response->client_secret );
+			$this->a0_options->set( 'accessKey', $client_response->access_key );
+			$this->a0_options->set( 'customDomain', $client_response->client_secret );
+			$this->a0_options->set( 'applicationId', $client_response->client_secret );
 
 			$access_key = $client_response->access_key;
-		}
-
-		/*
-		 * Create Connection
-		 */
-
-		$db_connection_name = 'DB-' . get_authress_curatedBlogName();
-		if ( $should_create_connection ) {
-			$connections = WP_Authress_Api_Client::search_connection( $domain, $this->access_token, null, $db_connection_name );
-			if ( $connections && is_array( $connections ) && in_array( $access_key, $connections[0]->enabled_clients ) ) {
-				$this->a0_options->set( 'db_connection_name', $db_connection_name );
-				$should_create_connection = false;
-			}
-		}
-
-		if ( $should_create_connection ) {
-			$migration_token = $this->a0_options->get( 'migration_token' );
-			if ( empty( $migration_token ) ) {
-				$migration_token = wp_authress_generate_token();
-			}
-			$operations = new WP_Authress_Api_Operations( $this->a0_options );
-			$operations->create_wordpress_connection(
-				$this->access_token,
-				$this->hasInternetConnection,
-				'fair',
-				$migration_token
-			);
-
-			$this->a0_options->set( 'migration_ws', $this->hasInternetConnection );
-			$this->a0_options->set( 'migration_token', $migration_token );
-			$this->a0_options->set( 'db_connection_name', $db_connection_name );
-		}
-
-		/*
-		 * Create Client Grant
-		 */
-
-		$grant_response = WP_Authress_Api_Client::create_client_grant( $this->access_token, $access_key );
-
-		if ( false === $grant_response ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=cant_create_client_grant' ) );
-			exit;
 		}
 
 		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=2' ) );

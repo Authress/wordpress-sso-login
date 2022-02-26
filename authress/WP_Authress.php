@@ -150,7 +150,7 @@ function wp_authress_register_widget() {
 add_action( 'widgets_init', 'wp_authress_register_widget' );
 
 function wp_authress_register_query_vars( $qvars ) {
-	return array_merge( $qvars, [ 'error', 'error_description', 'a0_action', 'authress', 'state', 'code', 'invitation', 'organization', 'organization_name' ] );
+	return array_merge( $qvars, [ 'error', 'applicationId', 'accessKey', 'customDomain'] );
 }
 add_filter( 'query_vars', 'wp_authress_register_query_vars' );
 
@@ -175,16 +175,10 @@ add_filter( 'login_message', 'wp_authress_render_lock_form', 5 );
  * Add settings link on plugin page.
  */
 function wp_authress_plugin_action_links( $links ) {
-	array_unshift(
-		$links,
-		sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Settings', 'wp-authress' ))
-	);
+	array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Settings', 'wp-authress' )));
 
 	if ( ! wp_authress_is_ready() ) {
-		array_unshift(
-			$links,
-			sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress_introduction' ), __( 'Setup Wizard', 'wp-authress' ))
-		);
+		array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress_introduction' ), __( 'Setup Wizard', 'wp-authress' )));
 	}
 
 	return $links;
@@ -297,12 +291,6 @@ function wp_authress_introduction_callback_step1() {
 }
 add_action( 'admin_action_wp_authress_callback_step1', 'wp_authress_introduction_callback_step1' );
 
-function wp_authress_introduction_callback_step3_social() {
-	$setup_admin = new WP_Authress_InitialSetup_AdminUser( WP_Authress_Options::Instance() );
-	$setup_admin->callback();
-}
-add_action( 'admin_action_wp_authress_callback_step3_social', 'wp_authress_introduction_callback_step3_social' );
-
 /**
  * Function to call the method that clears out the error log.
  *
@@ -399,7 +387,7 @@ add_action( 'wp_ajax_authress_delete_data', 'wp_authress_delete_user_data' );
 
 function wp_authress_init_admin_menu() {
 
-	if ( wp_authress_is_admin_page( 'wp_authress-help' ) ) {
+	if ( wp_authress_is_admin_page( 'authress_help' ) ) {
 		wp_safe_redirect( admin_url( 'admin.php?page=authress#help' ), 301 );
 		exit;
 	}
@@ -420,40 +408,18 @@ function wp_authress_init_admin_menu() {
 	$menu_parent = ! wp_authress_is_ready() ? $setup_slug : $settings_slug;
 	$cap         = 'manage_options';
 
-	add_menu_page(
-		'Authress',
-		'Authress',
-		$cap,
-		$menu_parent,
-		! wp_authress_is_ready() ? $setup_func : $settings_func,
-		WP_AUTHRESS_PLUGIN_IMG_URL . 'logo_16x16.png',
-		86
-	);
+	add_menu_page('Authress', 'Authress', $cap, $menu_parent, ! wp_authress_is_ready() ? $setup_func : $settings_func, WP_AUTHRESS_PLUGIN_IMG_URL . 'logo_16x16.png', 86);
 
 	if ( ! wp_authress_is_ready() ) {
 		add_submenu_page( $menu_parent, $setup_title, $setup_title, $cap, $setup_slug, $setup_func );
 		add_submenu_page( $menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
 	} else {
 		add_submenu_page( $menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
-		// add_submenu_page(
-		// 	$menu_parent,
-		// 	__( 'Help', 'wp-authress' ),
-		// 	__( 'Help', 'wp-authress' ),
-		// 	$cap,
-		// 	'wp_authress-help',
-		// 	'__return_false'
-		// );
+		add_submenu_page($menu_parent, __( 'Help', 'wp-authress' ), __( 'Help', 'wp-authress' ), $cap, 'authress_help', '__return_false');
 		add_submenu_page( null, $setup_title, $setup_title, $cap, 'authress_introduction', $setup_func );
 	}
 
-	add_submenu_page(
-		$menu_parent,
-		__( 'Error Log', 'wp-authress' ),
-		__( 'Error Log', 'wp-authress' ),
-		$cap,
-		'authress_errors',
-		[ new WP_Authress_ErrorLog(), 'render_settings_page' ]
-	);
+	add_submenu_page($menu_parent, __( 'Error Log', 'wp-authress' ), __( 'Error Log', 'wp-authress' ), $cap, 'authress_errors', [ new WP_Authress_ErrorLog(), 'render_settings_page' ]);
 }
 add_action( 'admin_menu', 'wp_authress_init_admin_menu', 96, 0 );
 
@@ -464,13 +430,12 @@ function wp_authress_create_account_message() {
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	$current_page     = $_GET['page'] ?? null;
-	$is_correct_admin = in_array( $current_page, [ 'authress_introduction', 'authress_configuration', 'authress_errors' ] );
+	$is_correct_admin = in_array( $current_page, ['authress_configuration', 'authress_errors' ] );
 	if ( wp_authress_is_ready() || ! $is_correct_admin ) {
 		return false;
 	}
 
-	printf(
-		'<div class="update-nag">%s<strong><a href="%s">%s</a></strong>.</div>',
+	printf('<div class="update-nag">%s<strong><a href="%s">%s</a></strong>.</div>',
 		__( 'SSO Login is not yet configured. Please use the ', 'wp-authress' ),
 		admin_url( 'admin.php?page=authress_introduction' ),
 		__( 'Setup Wizard', 'wp-authress' )
