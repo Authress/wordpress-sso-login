@@ -29,8 +29,8 @@ define( 'WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID', 'authress-login-form' );
 define( 'WP_AUTHRESS_CACHE_GROUP', 'wp_authress' );
 define( 'WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME', 'WP_Authress_JWKS_cache' );
 
-require __DIR__ . '/functions.php';
-require __DIR__ . '/vendor/autoload.php';
+// require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 /*
  * Startup
@@ -411,10 +411,7 @@ function wp_authress_init_admin_menu() {
 	add_menu_page('Authress', 'Authress', $cap, $menu_parent, $setup_func, WP_AUTHRESS_PLUGIN_IMG_URL . 'logo_16x16.png', 86);
 
 	add_submenu_page($menu_parent, $setup_title, $setup_title, $cap, $setup_slug, $setup_func );
-	if (wp_authress_is_ready()) {
-		add_submenu_page($menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
-	}
-
+	add_submenu_page($menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
 	add_submenu_page($menu_parent, __( 'Error Log', 'wp-authress' ), __( 'Error Log', 'wp-authress' ), $cap, 'authress_errors', [ new WP_Authress_ErrorLog(), 'render_settings_page' ]);
 	add_submenu_page($menu_parent, __( 'Help', 'wp-authress' ), __( 'Help', 'wp-authress' ), $cap, 'authress_help', '__return_false');
 }

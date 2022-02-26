@@ -40,15 +40,15 @@ Please see our [knowledge base](https://authress.io/knowledge-base/) for more in
 
 Authress allows multiple authentication providers. You can have social providers like Facebook, Twitter, Google+, a database of users and passwords (just like WordPress), or you can use an Enterprise directories like, Office365, Google Apps, SAML, OpenID, OAuth2.1. All those authentication providers are supported and more.
 
-= Widget =
-
-You can enable the Authress as a WordPress widget in order to show it in a sidebar. The widget inherits the main plugin settings but can be overridden with its own settings in the widget form. Note: this form will not display for logged-in users.
-
-= Shortcode =
-
-Also, you can use the Authress widget as a shortcode in your editor. Just add the following to use the global settings:
+= Use the SSO Widget =
+Add the Authress widget via a shortcode in your editor. Just add the following to use the global settings:
 
     [authress]
+
+All for your customer admin user, make sure to direct them to the Authress SSO administrative page to configure their SSO settings for their whole tenant:
+
+    [authress admin="true"]
+
 
 == Frequently Asked Questions ==
 

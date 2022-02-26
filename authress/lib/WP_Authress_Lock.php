@@ -174,7 +174,7 @@ class WP_Authress_Lock {
 		printf(
 			'<div id="extra-options"><a href="?">%s</a></div>',
 			// translators: The $title variable is the admin-controlled form title.
-			sanitize_text_field( sprintf( __( '← Back to %s login', 'wp-authress' ), $title ) )
+			sanitize_text_field( sprintf( __( '← Back to SSO login', 'wp-authress' ), $title ) )
 		);
 	}
 

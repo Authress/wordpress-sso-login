@@ -383,6 +383,58 @@ class WP_Authress_Options {
 			'cdn_url' => WP_AUTHRESS_LOCK_CDN_URL,
 			'default_login_redirection' => home_url(),
 			'authress_server_domain' => 'authress.io',
+
+            'last_step'                 => 1,
+            'db_connection_name'        => '',
+ 
+            // Basic
+            'domain'                    => '',
+            'custom_domain'             => '',
+            'access_key'                 => '',
+            'client_secret'             => '',
+            'organization'              => '',
+            'application_id'  => WP_Authress_Api_Client::DEFAULT_CLIENT_ALG,
+            'cache_expiration'          => 1440,
+            'wordpress_login_enabled'   => 'link',
+            'wle_code'                  => '',
+ 
+            // Features
+            'auto_login'                => true,
+            'auto_login_method'         => '',
+            'singlelogout'              => true,
+            'override_wp_avatars'       => true,
+ 
+            // Embedded
+            'passwordless_enabled'      => false,
+            'icon_url'                  => '',
+            'form_title'                => '',
+            'gravatar'                  => true,
+            'username_style'            => '',
+            'primary_color'             => '',
+            'extra_conf'                => '',
+            'custom_cdn_url'            => false,
+            'cdn_url'                   => WP_AUTHRESS_LOCK_CDN_URL,
+            'lock_connections'          => '',
+ 
+            // Advanced
+            'requires_verified_email'   => true,
+            'skip_strategies'           => '',
+            'remember_users_session'    => false,
+            'version' => 1,
+            'applicationId' => '',
+            'customDomain' => '',
+            'accessKey' => '',
+            'cdn_url' => WP_AUTHRESS_LOCK_CDN_URL,
+            'default_login_redirection' => home_url(),
+            'force_https_callback'      => false,
+            'auto_provisioning'         => false,
+            'migration_ws'              => false,
+            'migration_token'           => '',
+            'migration_ips_filter'      => false,
+            'migration_ips'             => '',
+            'valid_proxy_ip'            => '',
+            'authress_server_domain' => 'authress.io',
+
 		];
 	}
 }

@@ -201,28 +201,6 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	}
 
 	/**
-	 * Render description for the `wp_authress_allow_signup` option.
-	 * IMPORTANT: Internal callback use only, do not call this function directly!
-	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
-	 * @see add_settings_field()
-	 */
-	public function render_allow_signup() {
-
-		if ( is_multisite() ) {
-			$settings_text = __( '"Allow new registrations" in the Network Admin > Settings > Network Settings', 'wp-authress' );
-		} else {
-			$settings_text = __( '"Anyone can register" in the WordPress General Settings', 'wp-authress' );
-		}
-		$allow_signup = $this->options->is_wp_registration_enabled();
-		$this->render_field_description(
-			__( 'Signups are currently ', 'wp-authress' ) . '<b>' .
-			( $allow_signup ? __( 'enabled', 'wp-authress' ) : __( 'disabled', 'wp-authress' ) ) .
-			'</b>' . __( ' by this setting ', 'wp-authress' ) . $settings_text
-		);
-	}
-
-	/**
 	 * Validation for Basic settings tab.
 	 *
 	 * @param array $input - New options being saved.

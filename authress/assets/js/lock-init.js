@@ -31,20 +31,21 @@ jQuery(document).ready(function ($) {
     }
 
     // Set Lock to standard or Passwordless.
-    var Lock = opts.usePasswordless ?
-        new AuthressLockPasswordless( opts.clientId, opts.domain, opts.settings ) :
-        new AuthressLock( opts.clientId, opts.domain, opts.settings );
+    // TODO: Add our own login form
+    // var Lock = opts.usePasswordless ?
+    //     new AuthressLockPasswordless( opts.clientId, opts.domain, opts.settings ) :
+    //     new AuthressLock( opts.clientId, opts.domain, opts.settings );
 
-    // Check if we're showing as a modal (used in shortcodes and widgets).
-    if ( opts.showAsModal ) {
-        $( '<button>' )
-            .text( opts.i18n.modalButtonText )
-            .attr( 'id', 'a0LoginButton' )
-            .insertAfter( loginForm )
-            .click(function () { Lock.show(); });
-    } else {
-        Lock.show();
-    }
+    // // Check if we're showing as a modal (used in shortcodes and widgets).
+    // if ( opts.showAsModal ) {
+    //     $( '<button>' )
+    //         .text( opts.i18n.modalButtonText )
+    //         .attr( 'id', 'a0LoginButton' )
+    //         .insertAfter( loginForm )
+    //         .click(function () { Lock.show(); });
+    // } else {
+    //     Lock.show();
+    // }
 
     /**
      * Set the state cookie for verification during callback.
