@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__ . '/WP_Authress_Settings_Configuration.php';
+
 class WP_Authress_Admin {
 
 	const OPT_SECTIONS = [ 'basic', 'features', 'appearance', 'advanced' ];
@@ -15,7 +17,7 @@ class WP_Authress_Admin {
 		$this->router     = $router;
 
 		$this->sections = [
-			'basic'      => new WP_Authress_Admin_Basic( $this->a0_options ),
+			'basic'      => new WP_Authress_Settings_Configuration( $this->a0_options ),
 			'features'   => new WP_Authress_Admin_Features( $this->a0_options ),
 			'appearance' => new WP_Authress_Admin_Appearance( $this->a0_options ),
 			'advanced'   => new WP_Authress_Admin_Advanced( $this->a0_options, $this->router ),

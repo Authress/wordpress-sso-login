@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains WP_Authress_Admin_Basic.
+ * Contains WP_Authress_Settings_Configuration.
  *
  * @package WP-Authress
  *
@@ -8,12 +8,10 @@
  */
 
 /**
- * Class WP_Authress_Admin_Basic.
+ * Class WP_Authress_Settings_Configuration.
  * Fields and validations for the Basic settings tab.
  */
-class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
-
-	const ALLOWED_ID_TOKEN_ALGS = [ 'HS256', 'RS256' ];
+class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 
 	/**
 	 * All settings in the Basic tab
@@ -26,19 +24,19 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 		$options = [
 			[
 				'name'     => __( 'Custom Domain', 'wp-authress' ),
-				'opt'      => 'custom_domain',
+				'opt'      => 'customDomain',
 				'id'       => 'wp_authress_custom_domain',
 				'function' => 'render_custom_domain',
 			],
 			[
 				'name'     => __( 'API Access Key', 'wp-authress' ),
-				'opt'      => 'access_key',
+				'opt'      => 'accessKey',
 				'id'       => 'wp_authress_access_key',
 				'function' => 'render_access_key',
 			],
 			[
 				'name'     => __( 'Application ID', 'wp-authress' ),
-				'opt'      => 'application_id',
+				'opt'      => 'applicationId',
 				'id'       => 'wp_authress_application_id',
 				'function' => 'render_application_id',
 			]
@@ -64,7 +62,7 @@ class WP_Authress_Admin_Basic extends WP_Authress_Admin_Generic {
 	public function render_domain( $args = [] ) {
 
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
-		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', 'your-tenant.authress.com', $style );
+		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
 		$this->render_field_description(
 			__( 'Authress Domain, found in your Application settings in the ', 'wp-authress' ) .
 			$this->get_dashboard_link( 'applications' )

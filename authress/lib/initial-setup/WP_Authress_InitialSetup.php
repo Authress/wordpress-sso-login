@@ -13,10 +13,12 @@ class WP_Authress_InitialSetup {
 	}
 
 	public function render_setup_page() {
-		$this->a0_options->set( 'accessKey', $client_response->access_key );
-		$this->a0_options->set( 'customDomain', $client_response->client_secret );
-		$this->a0_options->set( 'applicationId', $client_response->client_secret );
-		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/connection_profile.php';
+		if (isset($_GET['accessKey'])) {
+			$this->a0_options->set( 'accessKey', $_GET['accessKey'] );
+			$this->a0_options->set( 'customDomain', $_GET['customDomain'] );
+			$this->a0_options->set( 'applicationId', $_GET['applicationId'] );
+		}
+		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/setup_wizard.php';
 	}
 
 	public function cant_create_client_message() {

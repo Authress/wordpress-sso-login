@@ -38,19 +38,12 @@ class WP_Authress_Admin_Generic {
 		$options_name = $this->_option_name . '_' . strtolower( $id );
 		$section_id   = "wp_authress_{$id}_settings_section";
 
-		add_settings_section(
-			$section_id,
-			$section_name,
-			null,
-			$options_name
-		);
+		add_settings_section($section_id, $section_name, null, $options_name);
 
 		$options = apply_filters( 'authress_settings_fields', $options, $id );
 
 		foreach ( $options as $setting ) {
-			$callback = function_exists( $setting['function'] )
-				? $setting['function']
-				: [ $this, $setting['function'] ];
+			$callback = function_exists( $setting['function'] ) ? $setting['function'] : [ $this, $setting['function'] ];
 
 			add_settings_field(
 				$setting['id'],

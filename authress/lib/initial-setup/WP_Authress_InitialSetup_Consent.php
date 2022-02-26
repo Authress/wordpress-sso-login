@@ -62,38 +62,4 @@ class WP_Authress_InitialSetup_Consent {
 
 		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}
-
-	/**
-	 * Used by both Setup Wizard installation flows.
-	 * Called by self::callback_with_token() to create a Client, Connection, and Client Grant.
-	 *
-	 * @param string $name - Client name to use.
-	 */
-	public function consent_callback( $name ) {
-
-		$domain    = $this->a0_options->get( 'domain' );
-		$access_key = trim( $this->a0_options->get( 'access_key' ) );
-
-		/*
-		 * Create Client
-		 */
-
-		$should_create_connection = false;
-
-		if ( empty( $access_key ) ) {
-			$should_create_connection = true;
-
-			$client_response = WP_Authress_Api_Client::create_client( $domain, $this->access_token, $name );
-
-
-			$this->a0_options->set( 'accessKey', $client_response->access_key );
-			$this->a0_options->set( 'customDomain', $client_response->client_secret );
-			$this->a0_options->set( 'applicationId', $client_response->client_secret );
-
-			$access_key = $client_response->access_key;
-		}
-
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&step=2' ) );
-		exit;
-	}
 }
