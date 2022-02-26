@@ -6,9 +6,8 @@
 			<p>
 				<h3>Next steps:</h3>
 				<ul>
-					<li>Add the shortcode <code>[authress]</code> to your application, and users will be directed to log in with their SSO credentials.</li>
-					<li>For your customer's admin they should be directed to a page with the shortcode <code>[authress admin="true"]</code> to configure their SSO.</li>
-					<li>Your users can now sign in with their configured SSO provider. When prompted they can enter their SSO user identity and log in.</li>
+				<li>Your users can now sign in with their configured SSO provider. When prompted they can enter their SSO identity and log in.</li>
+				<li>For your customer's admin they should be directed to configure their SSO.</li>
 				</ul>
 			</p>
 

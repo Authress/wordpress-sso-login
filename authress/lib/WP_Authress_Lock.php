@@ -168,14 +168,10 @@ class WP_Authress_Lock {
 	public static function render_back_to_lock() {
 		$title = wp_authress_get_option( 'form_title' );
 		if ( empty( $title ) ) {
-			$title = 'Authress';
+			$title = 'SSO Login';
 		}
 
-		printf(
-			'<div id="extra-options"><a href="?">%s</a></div>',
-			// translators: The $title variable is the admin-controlled form title.
-			sanitize_text_field( sprintf( __( '← Back to SSO login', 'wp-authress' ), $title ) )
-		);
+		printf('<div id="extra-options"><a href="?">%s</a></div>', sanitize_text_field( sprintf( __( '← Back to %s', 'wp-authress' ), $title)));
 	}
 
 	/**

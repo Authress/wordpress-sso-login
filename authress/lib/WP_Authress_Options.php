@@ -138,6 +138,9 @@ class WP_Authress_Options {
 	 * @link https://authress.com/docs/cms/wordpress/extending#wp_authress_get_option
 	 */
 	public function get( $key, $default = null ) {
+		if ($key === 'auto_login') {
+			return $this->get_default($key);
+		}
 		$options = $this->get_options();
 		$value   = isset( $options[ $key ] ) ? $options[ $key ] : $default;
 		return apply_filters( 'wp_authress_get_option', $value, $key );
@@ -399,7 +402,8 @@ class WP_Authress_Options {
             'wle_code'                  => '',
  
             // Features
-            'auto_login'                => true,
+            // AutoLogin means automatically redirect the user to a login location, but we actually don't want that, we want to check if the user logged
+			'auto_login'                => false,
             'auto_login_method'         => '',
             'singlelogout'              => true,
             'override_wp_avatars'       => true,
@@ -407,7 +411,7 @@ class WP_Authress_Options {
             // Embedded
             'passwordless_enabled'      => false,
             'icon_url'                  => '',
-            'form_title'                => '',
+            'form_title'                => 'SSO Login',
             'gravatar'                  => true,
             'username_style'            => '',
             'primary_color'             => '',

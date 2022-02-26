@@ -83,7 +83,6 @@ class WP_Authress_LoginManager {
 		WP_Authress_Nonce_Handler::get_instance()->set_cookie( $auth_params['nonce'] );
 
 		$auth_url = self::build_authorize_url( $auth_params );
-
 		wp_safe_redirect( $auth_url );
 		exit;
 
