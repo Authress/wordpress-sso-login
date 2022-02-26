@@ -36,7 +36,6 @@ class WP_Authress_Admin_Advanced extends WP_Authress_Admin_Generic {
 	public function __construct( WP_Authress_Options $options, WP_Authress_Routes $router ) {
 		parent::__construct( $options );
 		$this->router                = $router;
-		$this->actions_middlewares[] = 'migration_ws_validation';
 		$this->actions_middlewares[] = 'migration_ips_validation';
 	}
 
@@ -349,36 +348,10 @@ class WP_Authress_Admin_Advanced extends WP_Authress_Admin_Generic {
 		$input['default_login_redirection'] = $this->validate_login_redirect( $input['default_login_redirection'] ?? null );
 		$input['force_https_callback']      = $this->sanitize_switch_val( $input['force_https_callback'] ?? null );
 		$input['auto_provisioning']         = $this->sanitize_switch_val( $input['auto_provisioning'] ?? null );
-		// `migration_ws` is sanitized in $this->migration_ws_validation() below.
-		// `migration_token` is sanitized in $this->migration_ws_validation() below.
 		$input['migration_ips_filter'] = $this->sanitize_switch_val( $input['migration_ips_filter'] ?? null );
 		// `migration_ips` is sanitized in $this->migration_ips_validation() below.
 		$input['valid_proxy_ip']      = ( isset( $input['valid_proxy_ip'] ) ? $input['valid_proxy_ip'] : null );
 		$input['authress_server_domain'] = $this->sanitize_text_val( $input['authress_server_domain'] ?? null );
-		return $input;
-	}
-
-	/**
-	 * Validation for the migration_ws setting.
-	 * Generates new migration tokens if none is present.
-	 *
-	 * @param array $input - New option values to validate.
-	 *
-	 * @return array
-	 */
-	public function migration_ws_validation( array $input ) {
-		$input['migration_ws']    = $this->sanitize_switch_val( $input['migration_ws'] ?? null );
-		$input['migration_token'] = $this->options->get( 'migration_token' );
-
-		if ( empty( $input['migration_token'] ) ) {
-			$input['migration_token'] = wp_authress_generate_token();
-		}
-
-		if ( $input['migration_ws'] ) {
-			$this->router->setup_rewrites();
-			flush_rewrite_rules();
-		}
-
 		return $input;
 	}
 

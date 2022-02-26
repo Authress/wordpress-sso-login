@@ -8,20 +8,6 @@
  */
 
 /**
- * Generate a secure, random, URL-safe token.
- *
- * @since 4.0.0
- *
- * @param int $size Size of the token, in bytes.
- *
- * @return mixed
- */
-function wp_authress_generate_token( $size = 64 ) {
-	$token = WP_Authress_Nonce_Handler::get_instance()->generate_unique( $size );
-	return wp_authress_url_base64_encode( $token );
-}
-
-/**
  * Return a stored option value.
  *
  * @since 3.10.0

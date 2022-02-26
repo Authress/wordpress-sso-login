@@ -466,6 +466,7 @@ class WP_Authress_LoginManager {
 				: filter_var( wp_unslash( $_GET['redirect_to'] ), FILTER_SANITIZE_URL );
 		}
 
+
 		$filtered_params = apply_filters( 'authress_authorize_url_params', $params, $connection, $redirect_to );
 
 		// State parameter, checked during login callback.

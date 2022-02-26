@@ -529,22 +529,6 @@ function wp_authress_ajax_delete_cache_transient() {
 add_action( 'wp_ajax_authress_delete_cache_transient', 'wp_authress_ajax_delete_cache_transient' );
 
 /**
- * AJAX endpoint to rotate the migration token.
- */
-function wp_authress_ajax_rotate_migration_token() {
-	check_ajax_referer( WP_Authress_Admin_Advanced::ROTATE_TOKEN_NONCE_ACTION );
-
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( [ 'error' => __( 'Not authorized.', 'wp-authress' ) ] );
-		return;
-	}
-
-	WP_Authress_Options::Instance()->set( 'migration_token', wp_authress_generate_token() );
-	wp_send_json_success();
-}
-add_action( 'wp_ajax_authress_rotate_migration_token', 'wp_authress_ajax_rotate_migration_token' );
-
-/**
  * AJAX handler to re-send verification email.
  * Hooked to: wp_ajax_nopriv_resend_verification_email
  *
