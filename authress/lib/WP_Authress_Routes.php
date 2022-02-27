@@ -81,10 +81,6 @@ class WP_Authress_Routes {
 			case 'migration-ws-get-user':
 				$output = wp_json_encode( $this->migration_ws_get_user() );
 				break;
-			case 'coo-fallback':
-				$json_header = false;
-				$output      = $this->coo_fallback();
-				break;
 			default:
 				return false;
 		}
@@ -112,20 +108,6 @@ class WP_Authress_Routes {
 	public function add_json_header( array $headers ) {
 		$headers['Content-Type'] = 'application/json; charset=' . get_bloginfo( 'charset' );
 		return $headers;
-	}
-
-	protected function coo_fallback() {
-		$protocol = $this->a0_options->get( 'force_https_callback', false ) ? 'https' : null;
-		return sprintf(
-			'<!DOCTYPE html><html><head><script src="%s"></script><script type="text/javascript">
-			var authress = new authress.WebAuth({clientID:"%s",domain:"%s",redirectUri:"%s"});
-			authress.crossOriginAuthenticationCallback();
-			</script></head><body></body></html>',
-			esc_url( apply_filters( 'authress_coo_authressjs_url', WP_AUTHRESS_AUTHRESS_JS_CDN_URL ) ),
-			esc_attr( $this->a0_options->get( 'access_key' ) ),
-			esc_attr( $this->a0_options->get_auth_domain() ),
-			esc_url( $this->a0_options->get_wp_authress_url( $protocol ) )
-		);
 	}
 
 	protected function getAuthorizationHeader() {

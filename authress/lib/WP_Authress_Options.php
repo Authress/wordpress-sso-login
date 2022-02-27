@@ -290,16 +290,6 @@ class WP_Authress_Options {
 	}
 
 	/**
-	 * Get a custom Lock URL or the default, depending on settings.
-	 *
-	 * @return string
-	 */
-	public function get_lock_url() {
-		$cdn_url = $this->get( 'cdn_url' );
-		return ( $cdn_url && $this->get( 'custom_cdn_url' ) ) ? $cdn_url : WP_AUTHRESS_LOCK_CDN_URL;
-	}
-
-	/**
 	 * Get the authentication domain.
 	 *
 	 * @return string
@@ -383,7 +373,6 @@ class WP_Authress_Options {
 			'applicationId' => '',
 			'customDomain' => '',
 			'accessKey' => '',
-			'cdn_url' => WP_AUTHRESS_LOCK_CDN_URL,
 			'default_login_redirection' => home_url(),
 			'authress_server_domain' => 'authress.io',
 
@@ -417,7 +406,6 @@ class WP_Authress_Options {
             'primary_color'             => '',
             'extra_conf'                => '',
             'custom_cdn_url'            => false,
-            'cdn_url'                   => WP_AUTHRESS_LOCK_CDN_URL,
             'lock_connections'          => '',
  
             // Advanced
@@ -428,7 +416,6 @@ class WP_Authress_Options {
             'applicationId' => '',
             'customDomain' => '',
             'accessKey' => '',
-            'cdn_url' => WP_AUTHRESS_LOCK_CDN_URL,
             'default_login_redirection' => home_url(),
             'force_https_callback'      => false,
             'auto_provisioning'         => false,

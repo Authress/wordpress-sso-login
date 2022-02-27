@@ -56,7 +56,7 @@ class WP_Authress_Admin {
 		// Only checking the value, not processing.
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$wp_authress_curr_page = ! empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '';
-		$wp_authress_pages     = [ 'authress_introduction', 'authress_configuration', 'authress_errors' ];
+		$wp_authress_pages     = [ 'authress', 'authress_configuration', 'authress_errors' ];
 		if ( ! in_array( $wp_authress_curr_page, $wp_authress_pages ) ) {
 			return false;
 		}

@@ -22,9 +22,6 @@ define( 'WP_AUTHRESS_PLUGIN_IMG_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/img/' );
 define( 'WP_AUTHRESS_PLUGIN_LIB_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/lib/' );
 define( 'WP_AUTHRESS_PLUGIN_BS_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/bootstrap/' );
 
-define( 'WP_AUTHRESS_LOCK_CDN_URL', 'https://cdn.authress.com/js/lock/11.30/lock.min.js' );
-define( 'WP_AUTHRESS_AUTHRESS_JS_CDN_URL', 'https://cdn.authress.com/js/authress/9.16/authress.min.js' );
-
 define( 'WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID', 'authress-login-form' );
 define( 'WP_AUTHRESS_CACHE_GROUP', 'wp_authress' );
 define( 'WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME', 'WP_Authress_JWKS_cache' );
@@ -103,7 +100,7 @@ function wp_authress_activated_plugin_redirect( $plugin ) {
 		return;
 	}
 
-	$redirect_query = wp_authress_is_ready() ? 'page=authress' : 'page=authress_introduction&activation=1';
+	$redirect_query = wp_authress_is_ready() ? 'page=authress' : 'page=authress&activation=1';
 	wp_safe_redirect( admin_url( 'admin.php?' . $redirect_query ) );
 	exit;
 }
@@ -178,7 +175,7 @@ function wp_authress_plugin_action_links( $links ) {
 	array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Settings', 'wp-authress' )));
 
 	if ( ! wp_authress_is_ready() ) {
-		array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress_introduction' ), __( 'Setup Wizard', 'wp-authress' )));
+		array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Setup Wizard', 'wp-authress' )));
 	}
 
 	return $links;
@@ -240,7 +237,7 @@ function wp_authress_filter_get_avatar( $avatar, $id_or_email, $size, $default, 
 }
 add_filter( 'get_avatar', 'wp_authress_filter_get_avatar', 1, 5 );
 
-function wp_authress_introduction_error_admin_notices() {
+function wp_authress_error_admin_notices() {
 	// Not processing form data, just using a redirect parameter if present.
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -282,14 +279,14 @@ function wp_authress_introduction_error_admin_notices() {
 
 	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 }
-add_action( 'admin_notices', 'wp_authress_introduction_error_admin_notices' );
+add_action( 'admin_notices', 'wp_authress_error_admin_notices' );
 
-function wp_authress_introduction_callback_step1() {
-	$consent_url = sprintf('https://authress.io/app/#/wordpress?hostedUrl=%s', urlencode(admin_url( 'admin.php?page=authress_introduction')));
+function wp_authress_callback_step1() {
+	$consent_url = sprintf('https://authress.io/app/#/wordpress?hostedUrl=%s', urlencode(admin_url( 'admin.php?page=authress')));
 	wp_safe_redirect( $consent_url );
 	exit();
 }
-add_action( 'admin_action_wp_authress_callback_step1', 'wp_authress_introduction_callback_step1' );
+add_action( 'admin_action_wp_authress_callback_step1', 'wp_authress_callback_step1' );
 
 /**
  * Function to call the method that clears out the error log.
@@ -322,21 +319,21 @@ function wp_authress_initial_setup_init() {
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	if ( 'authress_introduction' !== ( $_REQUEST['page'] ?? null ) || ! isset( $_REQUEST['callback'] ) ) {
+	if ( 'authress' !== ( $_REQUEST['page'] ?? null ) || ! isset( $_REQUEST['callback'] ) ) {
 		return false;
 	}
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	if ( 'rejected' === ( $_REQUEST['error'] ?? null ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=rejected' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=authress&error=rejected' ) );
 		exit;
 	}
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	if ( 'access_denied' === ( $_REQUEST['error'] ?? null ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=access_denied' ) );
+		wp_safe_redirect( admin_url( 'admin.php?page=authress&error=access_denied' ) );
 		exit;
 	}
 
@@ -397,7 +394,7 @@ function wp_authress_init_admin_menu() {
 	$routes        = new WP_Authress_Routes( $options );
 	$admin         = new WP_Authress_Admin( $options, $routes );
 
-	$setup_slug  = 'authress_introduction';
+	$setup_slug  = 'authress';
 	$setup_title = __( 'Setup Wizard', 'wp-authress' );
 	$setup_func  = [ $initial_setup, 'render_setup_page' ];
 
@@ -431,7 +428,7 @@ function wp_authress_create_account_message() {
 
 	printf('<div class="update-nag">%s<strong><a href="%s">%s</a></strong>.</div>',
 		__( 'SSO Login is not yet configured. Please use the ', 'wp-authress' ),
-		admin_url( 'admin.php?page=authress_introduction' ),
+		admin_url( 'admin.php?page=authress' ),
 		__( 'Setup Wizard', 'wp-authress' )
 	);
 	return true;

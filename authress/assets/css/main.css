@@ -10,6 +10,11 @@
 .authress-login .form-signin-heading {
     margin-bottom: 10px;
 }
+.authress-login .form-signin {
+    min-width: 320px;
+    max-width: 600px;
+}
+
 .a0-message{
     position: fixed;
     top: 0;

@@ -101,6 +101,6 @@ class WP_Authress_InitialSetup {
 	}
 
 	public static function get_setup_redirect_uri() {
-		return admin_url( 'admin.php?page=authress_introduction&callback=1' );
+		return admin_url( 'admin.php?page=authress&callback=1' );
 	}
 }

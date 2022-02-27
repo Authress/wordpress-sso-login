@@ -313,7 +313,7 @@ class WP_Authress_Admin_Appearance extends WP_Authress_Admin_Generic {
 
 		$input['cdn_url'] = esc_url_raw( $this->sanitize_text_val( $input['cdn_url'] ?? null ) );
 		if ( $input['custom_cdn_url'] && ! filter_var( $input['cdn_url'], FILTER_VALIDATE_URL ) ) {
-			$input['cdn_url'] = $this->options->get( 'cdn_url', WP_AUTHRESS_LOCK_CDN_URL );
+			$input['cdn_url'] = $this->options->get( 'cdn_url', '' );
 			self::add_validation_error( __( 'The Custom Lock JS URL used is not valid.', 'wp-authress' ) );
 		}
 

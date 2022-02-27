@@ -21,7 +21,7 @@
 			  </a>
 			<a class="button button-primary" href="
 			<?php
-			echo admin_url( 'admin.php?page=authress_introduction&step=' . ( wp_authress_get_option( 'migration_ws' ) ? 4 : 3 ) );
+			echo admin_url( 'admin.php?page=authress&step=' . ( wp_authress_get_option( 'migration_ws' ) ? 4 : 3 ) );
 			?>
 			" >
 			<?php

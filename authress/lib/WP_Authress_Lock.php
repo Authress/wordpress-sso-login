@@ -191,38 +191,37 @@ class WP_Authress_Lock {
 			return;
 		}
 
-		$options      = WP_Authress_Options::Instance();
-		$lock_options = new self( $specialSettings );
+		// $options      = WP_Authress_Options::Instance();
+		// $lock_options = new self( $specialSettings );
 
-		wp_enqueue_script( 'wp_authress_lock', $options->get_lock_url(), [ 'jquery' ], null, true );
-		wp_enqueue_script( 'js-cookie', WP_AUTHRESS_PLUGIN_LIB_URL . 'js.cookie.min.js', [], '2.2.0', true );
-		wp_enqueue_script( 'wp_authress_lock_init', WP_AUTHRESS_PLUGIN_JS_URL . 'lock-init.js', [ 'jquery' ], WP_AUTHRESS_VERSION, true );
+		// wp_enqueue_script( 'js-cookie', WP_AUTHRESS_PLUGIN_LIB_URL . 'js.cookie.min.js', [], '2.2.0', true );
+		// wp_enqueue_script( 'wp_authress_lock_init', WP_AUTHRESS_PLUGIN_JS_URL . 'lock-init.js', [ 'jquery' ], WP_AUTHRESS_VERSION, true );
 
-		wp_localize_script(
-			'wp_authress_lock_init',
-			self::LOCK_GLOBAL_JS_VAR_NAME,
-			[
-				'settings'        => $lock_options->get_lock_options(),
-				'ready'           => wp_authress_is_ready(),
-				'domain'          => $options->get_auth_domain(),
-				'clientId'        => $options->get( 'access_key' ),
-				'stateCookieName' => WP_Authress_State_Handler::get_storage_cookie_name(),
-				'nonceCookieName' => WP_Authress_Nonce_Handler::get_storage_cookie_name(),
-				'usePasswordless' => $options->get( 'passwordless_enabled' ),
-				'loginFormId'     => WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID,
-				'showAsModal'     => ! empty( $specialSettings['show_as_modal'] ),
-				'i18n'            => [
-					'notReadyText'       => __( 'Authress is not configured', 'wp-authress' ),
-					'cannotFindNodeText' => __( 'Authress cannot find node with id ', 'wp-authress' ),
-					'modalButtonText'    => ! empty( $specialSettings['modal_trigger_name'] )
-						? sanitize_text_field( $specialSettings['modal_trigger_name'] )
-						: __( 'Login', 'wp-authress' ),
-				],
-			]
-		);
+		// wp_localize_script(
+		// 	'wp_authress_lock_init',
+		// 	self::LOCK_GLOBAL_JS_VAR_NAME,
+		// 	[
+		// 		'settings'        => $lock_options->get_lock_options(),
+		// 		'ready'           => wp_authress_is_ready(),
+		// 		'domain'          => $options->get_auth_domain(),
+		// 		'clientId'        => $options->get( 'access_key' ),
+		// 		'stateCookieName' => WP_Authress_State_Handler::get_storage_cookie_name(),
+		// 		'nonceCookieName' => WP_Authress_Nonce_Handler::get_storage_cookie_name(),
+		// 		'usePasswordless' => $options->get( 'passwordless_enabled' ),
+		// 		'loginFormId'     => WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID,
+		// 		'showAsModal'     => ! empty( $specialSettings['show_as_modal'] ),
+		// 		'i18n'            => [
+		// 			'notReadyText'       => __( 'Authress is not configured', 'wp-authress' ),
+		// 			'cannotFindNodeText' => __( 'Authress cannot find node with id ', 'wp-authress' ),
+		// 			'modalButtonText'    => ! empty( $specialSettings['modal_trigger_name'] )
+		// 				? sanitize_text_field( $specialSettings['modal_trigger_name'] )
+		// 				: __( 'Login', 'wp-authress' ),
+		// 		],
+		// 	]
+		// );
 
 		$login_tpl = WP_AUTHRESS_PLUGIN_DIR . 'templates/authress-login-form.php';
-		$login_tpl = apply_filters( 'authress_login_form_tpl', $login_tpl, $lock_options, $canShowLegacyLogin );
+		$login_tpl = apply_filters( 'authress_login_form_tpl', $login_tpl);
 		require $login_tpl;
 	}
 }

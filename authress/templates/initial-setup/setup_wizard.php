@@ -11,6 +11,27 @@
 				</ul>
 			</p>
 
+			<h3><?php _e( 'Automated Setup', 'wp-authress' ); ?></h3>
+
+			<p><?php _e( 'Want to see the SSO login page?', 'wp-authress' ); ?></p>
+			<p><?php _e( "(Note: You won't be able to actually log in until you configure a tenant identity provider:", 'wp-authress' );
+				printf(' <strong><a href="https://authress.io/knowledge-base/user-oauth-authentication-quick-start" target="_blank">%s</a></strong>', __( 'Configure identity provider', 'wp-authress' ));
+			?>)</p>
+
+			<a href="/wp-login.php?action=logout"><button class="button button-primary">Try the SSO login</button></a>
+
+			<hr>
+
+			<form action="options.php" method="POST">
+				<input type="hidden" name="action" value="wp_authress_callback_step1" />
+				<h3><?php _e( 'Automated Setup', 'wp-authress' ); ?></h3>
+
+				<p>
+					<?php _e( 'If you are running into issues, you can always rerun the automated setup.', 'wp-authress' ); ?>
+				</p>
+
+				<p><input type="submit" class="button button-primary" value="<?php _e( 'Rerun Setup', 'wp-authress' ); ?>"/></p>
+			</form>
 		<?php else : ?>
 			<p><?php _e( "SSO Login enables Users to log in with their employee credentials through their identity provider. Using SSO Login will increase your WordPress site's security and consolidate identity data.", 'wp-authress' ); ?></p>
 		

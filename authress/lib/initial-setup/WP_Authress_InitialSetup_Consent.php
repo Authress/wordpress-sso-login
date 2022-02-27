@@ -20,7 +20,7 @@ class WP_Authress_InitialSetup_Consent {
 		$access_token = $this->exchange_code();
 
 		if ( $access_token === null ) {
-			wp_safe_redirect( admin_url( 'admin.php?page=authress_introduction&error=cant_exchange_token' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=authress&error=cant_exchange_token' ) );
 			exit;
 		}
 
