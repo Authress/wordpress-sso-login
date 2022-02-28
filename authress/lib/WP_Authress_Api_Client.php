@@ -12,7 +12,7 @@
  */
 class WP_Authress_Api_Client {
 
-	const DEFAULT_CLIENT_ALG = 'RS256';
+	const DEFAULT_CLIENT_ALG = 'EdDSA';
 
 	/**
 	 * Reusable API information.
