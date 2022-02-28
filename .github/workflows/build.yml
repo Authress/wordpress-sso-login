@@ -19,7 +19,7 @@ jobs:
     - name: Set up environment
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 7.3
+        php-version: 7.4
         extensions: mbstring, xml, ctype, iconv, intl
         coverage: xdebug
 

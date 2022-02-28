@@ -2,7 +2,7 @@
 Contributors: authress
 Tags: authentication, SSO, oauth2, openid, saml, Google Workspaces, Azure AD, Social Login, security, single sign-on
 Requires at least: 5.5
-Requires PHP: 7.3
+Requires PHP: 7.4
 Tested up to: 5.9.1
 Stable tag: 0.1
 License: Apache-2.0
