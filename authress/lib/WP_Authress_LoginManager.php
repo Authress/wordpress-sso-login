@@ -450,9 +450,13 @@ class WP_Authress_LoginManager {
 		$keys = json_decode($response->getBody()->getContents())->keys;
 
 		$jwk = null;
+		$signer = new Signer\Eddsa();
 		foreach ( $keys as $element ) {
 			if ( $keyId == $element->kid ) {
 				$jwk = json_decode(json_encode($element), true);
+				if ($element->alg === 'RS512') {
+					$signer = new Signer\Rsa\Sha512();
+				}
 			}
 		}
 
@@ -460,9 +464,7 @@ class WP_Authress_LoginManager {
 
 		$config->setValidationConstraints(new Constraint\LooseValidAt(SystemClock::fromUTC()));
 		$config->setValidationConstraints(new Constraint\IssuedBy($expectedIss));
-		$config->setValidationConstraints(new Constraint\SignedWith(new Signer\Eddsa(), InMemory::plainText($jwkConverter->toPEM($jwk))));
-		// RS512 for testing
-		// $config->setValidationConstraints(new Constraint\SignedWith(new Signer\Rsa\Sha512(), InMemory::plainText($jwkConverter->toPEM($jwk))));
+		$config->setValidationConstraints(new Constraint\SignedWith($signer, InMemory::plainText($jwkConverter->toPEM($jwk))));
 		$constraints = $config->validationConstraints();
 		try {
 			$config->validator()->assert($token, ...$constraints);

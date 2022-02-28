@@ -23,7 +23,7 @@ class WP_Authress_Users {
 		}
 
 		// Generate a random password
-		$password = wp_generate_password();
+		$password = wp_generate_password(1024);
 
 		$firstname = '';
 		$lastname  = '';
