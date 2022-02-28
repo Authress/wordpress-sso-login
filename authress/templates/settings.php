@@ -61,7 +61,7 @@
 							<a href="https://authress.io/community" target="_blank"><?php _e( 'Authress Community', 'wp-authress' ) ?></a> -
 							<?php _e( 'If you have questions about how to use Authress or the plugin, join the Authress community, and ask any questions you may have.', 'wp-authress' ) ?>
 						</li>
-						<li><a href="https://github.com/authress/wordpress-plugin/issues" target="_blank"><?php _e( 'GitHub Issues', 'wp-authress' ); ?></a> -
+						<li><a href="https://github.com/Authress/wordpress-sso-login/issues" target="_blank"><?php _e( 'GitHub Issues', 'wp-authress' ); ?></a> -
 							<?php _e( 'If you find a bug in the plugin code, the best place to report that is on GitHub under the Issues tab.', 'wp-authress' ); ?>
 						</li>
 						<li><a href="https://authress.io/app/#/support" target="_blank"><?php _e( 'Support', 'wp-authress' ); ?></a> -

@@ -6,7 +6,7 @@ Requires PHP: 7.4
 Tested up to: 5.9.1
 Stable tag: {{VERSION}}
 License: Apache-2.0
-License URI: https://github.com/Authress/wordpress-plugin/blob/main/LICENSE
+License URI: https://github.com/Authress/wordpress-sso-login/blob/main/LICENSE
 
 SSO Login provides user login, business authentication, SSO, Social login, and Single Sign-On for all sites.
 
@@ -54,7 +54,7 @@ All for your customer admin user, make sure to direct them to the Authress SSO a
 
 = Can I customize the Authress login? =
 
-The Authress login widget is completely configurable and it's [open source on GitHub](https://github.com/Authress/wordpress-plugin). You can style the form like any of your site components by enqueuing a stylesheet in your theme. Use the [`login_enqueue_scripts`](https://developer.wordpress.org/reference/hooks/login_enqueue_scripts/) hook to style the form on wp-login.php, [`wp_enqueue_scripts`](https://developer.wordpress.org/reference/hooks/wp_enqueue_scripts/) to style widgets and shortcodes, or both to affect the form in all locations.
+The Authress login widget is completely configurable and it's [open source on GitHub](https://github.com/Authress/wordpress-sso-login). You can style the form like any of your site components by enqueuing a stylesheet in your theme. Use the [`login_enqueue_scripts`](https://developer.wordpress.org/reference/hooks/login_enqueue_scripts/) hook to style the form on wp-login.php, [`wp_enqueue_scripts`](https://developer.wordpress.org/reference/hooks/wp_enqueue_scripts/) to style widgets and shortcodes, or both to affect the form in all locations.
 
 
 = Which authentication providers are supported? =
@@ -68,4 +68,4 @@ No problem, you can directly connect with the Authress development team in our [
 
 == Changelog ==
 
-[Complete list of changes for this and other releases](https://github.com/Authress/wordpress-plugin)
+[Complete list of changes for this and other releases](https://github.com/Authress/wordpress-sso-login)

@@ -1,5 +1,7 @@
 /* global jQuery, wpa0UserProfile, alert */
 
+// Used to update the user profile screen in the admin console adding a connection to delete the Authress data and add a button to jump to Authress
+
 jQuery(function($) {
     'use strict';
 
