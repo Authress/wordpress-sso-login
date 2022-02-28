@@ -31,6 +31,8 @@ jobs:
 
     - name: Install Composer dependencies
       run: ./composer.phar install -d authress --prefer-dist --optimize-autoloader
+    - name: Create Archive
+      run: zip authress.zip -r authress
     - name: Create Release
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       id: create_release
