@@ -24,7 +24,7 @@ jobs:
         coverage: xdebug
 
     - name: Install Composer dependencies
-      run: composer install -d authress --no-progress --prefer-dist --optimize-autoloader -q
+      run: ./composer.phar install -d authress --prefer-dist --optimize-autoloader
     - name: Tag package
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       run: |
