@@ -25,9 +25,10 @@ jobs:
         extensions: mbstring, xml, ctype, iconv, intl
         coverage: xdebug
     - name: Set package versioning
+      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       run: |
-        sed -i "s/{{VERSION}}/${VERSION}/"  authress/WP_Authress.php
-        sed -i "s/{{VERSION}}/${VERSION}/"  authress/readme.txt
+        sed -i "s/{{VERSION}}/${VERSION}/" authress/WP_Authress.php
+        sed -i "s/{{VERSION}}/${VERSION}/" authress/readme.txt
 
     - name: Install Composer dependencies
       run: ./composer.phar install -d authress --prefer-dist --optimize-autoloader
