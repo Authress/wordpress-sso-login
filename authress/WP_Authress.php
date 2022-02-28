@@ -100,8 +100,7 @@ function wp_authress_activated_plugin_redirect( $plugin ) {
 		return;
 	}
 
-	$redirect_query = wp_authress_is_ready() ? 'page=authress' : 'page=authress&activation=1';
-	wp_safe_redirect( admin_url( 'admin.php?' . $redirect_query ) );
+	wp_safe_redirect( admin_url( 'admin.php?page=authress') );
 	exit;
 }
 add_action( 'activated_plugin', 'wp_authress_activated_plugin_redirect' );
@@ -113,7 +112,7 @@ add_action( 'activated_plugin', 'wp_authress_activated_plugin_redirect' );
 function wp_authress_add_allowed_redirect_hosts( $hosts ) {
 	$hosts[] = 'authress.io';
 	$hosts[] = wp_authress_get_option( 'domain' );
-	$hosts[] = wp_authress_get_option( 'custom_domain' );
+	$hosts[] = wp_authress_get_option( 'customDomain' );
 	$hosts[] = wp_authress_get_option( 'authress_server_domain' );
 	return $hosts;
 }

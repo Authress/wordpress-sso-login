@@ -64,7 +64,6 @@ class WP_Authress_Nonce_Handler {
 		// If a NONCE_COOKIE_NAME is not defined then we don't need to persist the nonce value.
 		if ( defined( static::NONCE_COOKIE_NAME ) && isset( $_COOKIE[ static::get_storage_cookie_name() ] ) ) {
 			// Have a cookie, don't want to generate a new one.
-			// TODO: validate whether we need to persist this value and sanitize if so.
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 			$this->unique = $_COOKIE[ static::get_storage_cookie_name() ];
 		} else {

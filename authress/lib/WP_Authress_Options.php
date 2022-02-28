@@ -138,9 +138,6 @@ class WP_Authress_Options {
 	 * @link https://authress.com/docs/cms/wordpress/extending#wp_authress_get_option
 	 */
 	public function get( $key, $default = null ) {
-		if ($key === 'auto_login') {
-			return $this->get_default($key);
-		}
 		$options = $this->get_options();
 		$value   = isset( $options[ $key ] ) ? $options[ $key ] : $default;
 		return apply_filters( 'wp_authress_get_option', $value, $key );
@@ -295,7 +292,7 @@ class WP_Authress_Options {
 	 * @return string
 	 */
 	public function get_auth_domain() {
-		$domain = $this->get( 'custom_domain' );
+		$domain = $this->get( 'customDomain' );
 		if ( empty( $domain ) ) {
 			$domain = $this->get( 'domain' );
 		}
@@ -381,18 +378,15 @@ class WP_Authress_Options {
  
             // Basic
             'domain'                    => '',
-            'custom_domain'             => '',
-            'access_key'                 => '',
             'client_secret'             => '',
             'organization'              => '',
-            'application_id'  => WP_Authress_Api_Client::DEFAULT_CLIENT_ALG,
             'cache_expiration'          => 1440,
             'wordpress_login_enabled'   => 'link',
             'wle_code'                  => '',
  
             // Features
             // AutoLogin means automatically redirect the user to a login location, but we actually don't want that, we want to check if the user logged
-			'auto_login'                => false,
+			'auto_login'                => true,
             'auto_login_method'         => '',
             'singlelogout'              => true,
             'override_wp_avatars'       => true,
@@ -412,19 +406,8 @@ class WP_Authress_Options {
             'requires_verified_email'   => true,
             'skip_strategies'           => '',
             'remember_users_session'    => false,
-            'version' => 1,
-            'applicationId' => '',
-            'customDomain' => '',
-            'accessKey' => '',
             'default_login_redirection' => home_url(),
-            'force_https_callback'      => false,
-            'auto_provisioning'         => false,
-            'migration_ws'              => false,
-            'migration_token'           => '',
-            'migration_ips_filter'      => false,
-            'migration_ips'             => '',
-            'valid_proxy_ip'            => '',
-            'authress_server_domain' => 'authress.io',
+            'valid_proxy_ip'            => ''
 
 		];
 	}

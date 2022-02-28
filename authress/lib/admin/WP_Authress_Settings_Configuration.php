@@ -97,7 +97,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 */
 	public function render_access_key( $args = [] ) {
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
-		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
+		$this->render_text_field( $args['label_for'], $args['opt_name'], 'password', '', $style );
 		$this->render_field_description(__( 'Authress Service Client Access Key, found in the service client settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'clients' ));
 	}
 
@@ -208,22 +208,22 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 * @return array
 	 */
 	public function basic_validation( array $input ) {
-		$input['custom_domain'] = $this->sanitize_text_val( $input['custom_domain'] ?? null );
-		if ( empty( $input['custom_domain'] ) ) {
+		$input['customDomain'] = $this->sanitize_text_val( $input['customDomain'] ?? null );
+		if ( empty( $input['customDomain'] ) ) {
 			$this->add_validation_error( __( 'You need to specify your Custom Domain', 'wp-authress' ) );
 		}
 
-		$input['access_key'] = $this->sanitize_text_val( $input['access_key'] ?? null );
-		if ( __( '[REDACTED]', 'wp-authress' ) === $input['access_key'] ) {
+		$input['accessKey'] = $this->sanitize_text_val( $input['accessKey'] ?? null );
+		if ( __( '[REDACTED]', 'wp-authress' ) === $input['accessKey'] ) {
 			// The field is loaded with "[REDACTED]" so if that value is saved, we keep the existing secret.
-			$input['access_key'] = $this->options->get( 'access_key' );
+			$input['accessKey'] = $this->options->get( 'accessKey' );
 		}
-		if ( empty( $input['access_key'] ) ) {
+		if ( empty( $input['accessKey'] ) ) {
 			$this->add_validation_error( __( 'You need to specify a API Access Key', 'wp-authress' ) );
 		}
 
-		$input['application_id'] = $this->sanitize_text_val( $input['application_id'] ?? null );
-		if ( empty( $input['application_id'] ) ) {
+		$input['applicationId'] = $this->sanitize_text_val( $input['applicationId'] ?? null );
+		if ( empty( $input['applicationId'] ) ) {
 			$this->add_validation_error( __( 'You need to specify your Application Identifier', 'wp-authress' ) );
 		}
 		$input['cache_expiration'] = absint( $input['cache_expiration'] ?? 0 );

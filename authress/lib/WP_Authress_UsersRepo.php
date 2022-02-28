@@ -32,7 +32,6 @@ class WP_Authress_UsersRepo {
 	 * Create or join a WP user with an incoming Authress one or reject with an exception.
 	 *
 	 * @param object $userinfo - Profile object from Authress.
-	 * @param string $token - ID token from Authress.
 	 *
 	 * @return int|null|WP_Error
 	 *
@@ -40,27 +39,13 @@ class WP_Authress_UsersRepo {
 	 * @throws WP_Authress_EmailNotVerifiedException - When a users's email is not verified but the site requires it.
 	 * @throws WP_Authress_RegistrationNotEnabledException - When registration is not turned on for this site.
 	 */
-	public function create( $userinfo, $token ) {
+	public function create( $userinfo ) {
 
 		$authress_sub      = $userinfo->sub;
 		list($strategy) = explode( '|', $authress_sub );
 		$wp_user        = null;
 		$user_id        = null;
 
-		// Check legacy identities profile object for a DB connection.
-		$is_db_connection = 'authress' === $strategy;
-		if ( ! $is_db_connection && ! empty( $userinfo->identities ) ) {
-			foreach ( $userinfo->identities as $identity ) {
-				if ( 'authress' === $identity->provider ) {
-					$is_db_connection = true;
-					break;
-				}
-			}
-		}
-
-		// Email is considered verified if flagged as such, if we ignore the requirement, or if the strategy is skipped.
-		$email_verified = ! empty( $userinfo->email_verified )
-			|| $this->a0_options->strategy_skips_verified_email( $strategy );
 
 		// WP user to join with incoming Authress user.
 		if ( ! empty( $userinfo->email ) ) {
@@ -70,11 +55,6 @@ class WP_Authress_UsersRepo {
 		if ( is_object( $wp_user ) && $wp_user instanceof WP_User ) {
 			// WP user exists, check if we can join.
 			$user_id = $wp_user->ID;
-
-			// Cannot join a DB connection user without a verified email.
-			if ( $is_db_connection && ! $email_verified ) {
-				throw new WP_Authress_EmailNotVerifiedException( $userinfo, $token );
-			}
 
 			// If the user has a different Authress ID, we cannot join it.
 			$current_authress_id = self::get_meta( $user_id, 'authress_id' );

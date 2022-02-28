@@ -35,7 +35,7 @@ class WP_Authress_Api_Exchange_Code extends WP_Authress_Api_Abstract {
 			return self::RETURN_ON_FAILURE;
 		}
 
-		$access_key = $access_key ?: $this->options->get( 'access_key' );
+		$access_key = $access_key ?: $this->options->get( 'accessKey' );
 		if ( empty( $access_key ) ) {
 			return self::RETURN_ON_FAILURE;
 		}
@@ -48,7 +48,7 @@ class WP_Authress_Api_Exchange_Code extends WP_Authress_Api_Abstract {
 			->add_body( 'grant_type', 'authorization_code' )
 			->add_body( 'code', $code )
 			->add_body( 'redirect_uri', $redirect_uri )
-			->add_body( 'access_key', $access_key )
+			->add_body( 'accessKey', $access_key )
 			->add_body( 'client_secret', $client_secret )
 			->post()
 			->handle_response( __METHOD__ );

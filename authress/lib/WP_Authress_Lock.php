@@ -121,10 +121,10 @@ class WP_Authress_Lock {
 		$extraOptions['auth']['responseType']    = 'code';
 		$extraOptions['auth']['redirectUrl']     = $this->wp_options->get_wp_authress_url( $this->get_callback_protocol() );
 
-		if ( $this->wp_options->get( 'custom_domain' ) ) {
+		if ( $this->wp_options->get( 'customDomain' ) ) {
 			$extraOptions['configurationBaseUrl'] = sprintf(
 				'https://%s',
-				$this->wp_options->get( 'custom_domain' )
+				$this->wp_options->get( 'customDomain' )
 			);
 		}
 
@@ -204,7 +204,7 @@ class WP_Authress_Lock {
 		// 		'settings'        => $lock_options->get_lock_options(),
 		// 		'ready'           => wp_authress_is_ready(),
 		// 		'domain'          => $options->get_auth_domain(),
-		// 		'clientId'        => $options->get( 'access_key' ),
+		// 		'clientId'        => $options->get( 'accessKey' ),
 		// 		'stateCookieName' => WP_Authress_State_Handler::get_storage_cookie_name(),
 		// 		'nonceCookieName' => WP_Authress_Nonce_Handler::get_storage_cookie_name(),
 		// 		'usePasswordless' => $options->get( 'passwordless_enabled' ),

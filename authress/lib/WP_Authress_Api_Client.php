@@ -58,7 +58,7 @@ class WP_Authress_Api_Client {
 		if ( is_null( self::$connect_info ) ) {
 			self::$connect_info = [
 				'domain'        => wp_authress_get_option( 'domain' ),
-				'access_key'     => wp_authress_get_option( 'access_key' ),
+				'accessKey'     => wp_authress_get_option( 'accessKey' ),
 				'client_secret' => wp_authress_get_option( 'client_secret' ),
 				'app_token'     => null,
 				'audience'      => self::get_endpoint( 'api/v2/' ),
@@ -233,7 +233,7 @@ class WP_Authress_Api_Client {
 	public static function create_client_grant( $app_token, $access_key ) {
 
 		$data = [
-			'access_key' => $access_key,
+			'accessKey' => $access_key,
 			'audience'  => self::get_connect_info( 'audience' ),
 			'scope'     => self::get_required_scopes(),
 		];
@@ -259,7 +259,7 @@ class WP_Authress_Api_Client {
 				sprintf(
 					// translators: placeholders are machine names stored for this WP instance and must be included.
 					__( 'A client grant for %1$s to %2$s already exists. Make sure this grant at least includes %3$s.', 'wp-authress' ),
-					self::get_connect_info( 'access_key' ),
+					self::get_connect_info( 'accessKey' ),
 					self::get_connect_info( 'audience' ),
 					implode( ', ', self::get_required_scopes() )
 				)

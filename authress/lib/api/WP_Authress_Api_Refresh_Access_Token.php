@@ -36,7 +36,7 @@ class WP_Authress_Api_Refresh_Access_Token extends WP_Authress_Api_Abstract {
 			return self::RETURN_ON_FAILURE;
 		}
 
-		$access_key = $access_key ?: $this->options->get( 'access_key' );
+		$access_key = $access_key ?: $this->options->get( 'accessKey' );
 		if ( empty( $access_key ) ) {
 			return self::RETURN_ON_FAILURE;
 		}
@@ -49,7 +49,7 @@ class WP_Authress_Api_Refresh_Access_Token extends WP_Authress_Api_Abstract {
 		return $this
 			->set_path( 'oauth/token' )
 			->add_body( 'grant_type', 'refresh_token' )
-			->add_body( 'access_key', $access_key )
+			->add_body( 'accessKey', $access_key )
 			->add_body( 'client_secret', $client_secret )
 			->add_body( 'refresh_token', $refresh_token )
 			->post()

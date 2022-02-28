@@ -32,7 +32,7 @@ final class WP_Authress_AsymmetricVerifier extends WP_Authress_SignatureVerifier
 	 */
 	public function __construct( WP_Authress_JwksFetcher $jwks ) {
 		$this->jwks = $jwks;
-		parent::__construct( 'RS256' );
+		parent::__construct( 'EdDSA' );
 	}
 
 	/**

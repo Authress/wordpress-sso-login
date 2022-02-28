@@ -114,7 +114,7 @@ abstract class WP_Authress_Api_Abstract {
 
 		// Required settings in the plugin.
 		$this->domain        = $domain ?: $this->options->get( 'domain' );
-		$this->access_key     = $this->options->get( 'access_key' );
+		$this->access_key     = $this->options->get( 'accessKey' );
 		$this->client_secret = $this->options->get( 'client_secret' );
 		$this->organization  = $this->options->get( 'organization' );
 
@@ -230,7 +230,7 @@ abstract class WP_Authress_Api_Abstract {
 	 * @return $this
 	 */
 	protected function send_access_key() {
-		$this->body['access_key'] = $this->access_key;
+		$this->body['accessKey'] = $this->access_key;
 		return $this;
 	}
 

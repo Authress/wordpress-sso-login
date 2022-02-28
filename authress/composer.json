@@ -1,0 +1,32 @@
+{
+    "name": "authress/wordpress-plugin.php",
+    "type": "library",
+    "description": "Client SDK for Authress authorization as a service. Provides managed authorization api to secure service resources including user data.",
+    "keywords": [
+        "authorization",
+        "authorization as a service",
+        "authentication",
+        "user authentication",
+        "Authress",
+        "Authress client",
+        "access management",
+        "access management as a service",
+        "user security"
+    ],
+    "homepage": "https://authress.io",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Authress Developers",
+            "homepage": "https://authress.io/app/#/support"
+        }
+    ],
+    "require": {
+        "php": ">=7.3"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": { "" : "lib/" }
+    }
+}
