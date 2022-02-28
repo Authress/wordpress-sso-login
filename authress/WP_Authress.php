@@ -3,7 +3,7 @@
 	Plugin Name:  Authress
 	Plugin URI:   https://wordpress.org/plugins/authress
 	Description:  Upgrades the WordPress login to support SSO Login.
-	Version:      0.1
+	Version:      {{VERSION}}
 	Author:       Authress 
 	Author URI:   https://authress.io
 	License:      Apache-2.0

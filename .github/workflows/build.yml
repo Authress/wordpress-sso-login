@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+    - name: Set env
+      run: echo "VERSION=${GITHUB_REF/refs\/heads\/release\//}.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
     - uses: actions/checkout@v2
     - name: Set up environment
       uses: shivammathur/setup-php@v2
@@ -22,12 +24,32 @@ jobs:
         php-version: 7.4
         extensions: mbstring, xml, ctype, iconv, intl
         coverage: xdebug
+    - name: Set package versioning
+      run: |
+        sed -i "s/{{VERSION}}/${VERSION}/"  authress/WP_Authress.php
+        sed -i "s/{{VERSION}}/${VERSION}/"  authress/readme.txt
 
     - name: Install Composer dependencies
       run: ./composer.phar install -d authress --prefer-dist --optimize-autoloader
-    - name: Tag package
+    - name: Create Release
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
-      run: |
-        git tag ${GITHUB_REF/refs\/heads\/release\//}.$GITHUB_RUN_NUMBER
-        git push origin ${GITHUB_REF/refs\/heads\/release\//}.$GITHUB_RUN_NUMBER
-
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.VERSION }}
+        release_name: Release ${{ env.VERSION }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./authress.zip
+        asset_name: authress.zip
+        asset_content_type: application/zip

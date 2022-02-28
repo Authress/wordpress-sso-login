@@ -4,7 +4,7 @@ Tags: authentication, SSO, oauth2, openid, saml, Google Workspaces, Azure AD, So
 Requires at least: 5.5
 Requires PHP: 7.4
 Tested up to: 5.9.1
-Stable tag: 0.1
+Stable tag: {{VERSION}}
 License: Apache-2.0
 License URI: https://github.com/Authress/wordpress-plugin/blob/main/LICENSE
 
