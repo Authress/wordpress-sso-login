@@ -26,7 +26,7 @@ define( 'WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID', 'authress-login-form' );
 define( 'WP_AUTHRESS_CACHE_GROUP', 'wp_authress' );
 define( 'WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME', 'WP_Authress_JWKS_cache' );
 
-// require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 /*

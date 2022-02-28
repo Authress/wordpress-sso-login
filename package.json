@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "composer install -d authress --no-progress --prefer-dist --optimize-autoloader",
+    "build": "composer install -d authress --optimize-autoloader",
     "start": "sudo docker-compose up",
     "kill": "sudo docker-compose rm",
     "cli": "sudo docker-compose run wordpress /bin/bash",

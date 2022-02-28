@@ -407,6 +407,7 @@ class WP_Authress_Options {
             'skip_strategies'           => '',
             'remember_users_session'    => false,
             'default_login_redirection' => home_url(),
+			'auto_provisioning'         => false,
             'valid_proxy_ip'            => ''
 
 		];

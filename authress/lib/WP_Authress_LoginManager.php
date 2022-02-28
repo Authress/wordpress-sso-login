@@ -7,7 +7,14 @@
  * @since 2.0.0
  */
 
-/**
+use Lcobucci\Clock\SystemClock;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\UnencryptedToken;
+use Lcobucci\JWT\Signer;
+use Lcobucci\JWT\Validation\Constraint;
+use Lcobucci\JWT\Signer\Key\InMemory;
+
+ /**
  * Handles login callbacks and auto-login redirecting
  *
  * @since 2.0.0
@@ -143,28 +150,26 @@ class WP_Authress_LoginManager {
 	 * @link https://authress.com/docs/api-auth/tutorials/authorization-code-grant
 	 */
 	public function handle_login_redirect() {
-		if (isset($_REQUEST['access_token']) && !isset( $_COOKIE['authorization'])) {
+		$access_token = $_COOKIE['authorization'];
+		if (!isset($access_token) && isset($_REQUEST['access_token'])) {
+			$access_token = $_REQUEST['access_token'];
 			setcookie('authorization', $_REQUEST['access_token']);
 		}
 
-		if (isset($_REQUEST['id_token']) && !isset( $_COOKIE['user'])) {
+		$id_token = $_COOKIE['user'];
+		if (!isset($id_token) && isset($_REQUEST['id_token'])) {
+			$id_token = $_REQUEST['id_token'];
 			setcookie('user', $_REQUEST['id_token']);
 		}
-
-		$id_token = $_COOKIE['user'];
-		$access_token = $_COOKIE['authorization'];
 
 		if (empty($id_token) || empty($access_token)) {
 			return false;
 		}
 
-		// TODO: validate token
-
 		// Decode the incoming ID token for the Authress user.
 		$decoded_token = $this->decode_id_token( $id_token );
 		$userinfo = $this->clean_id_token( $decoded_token );
 
-		// throw new Exception( __( '************************************************************************************************************************************', 'wp-authress' ), 401 );
 		if ( $this->login_user( $userinfo, $access_token ) ) {
 			return true;
 		}
@@ -431,10 +436,43 @@ class WP_Authress_LoginManager {
 	 * @throws WP_Authress_InvalidIdTokenException
 	 */
 	private function decode_id_token( $id_token ) {
-		$expectedIss = 'https://' . $this->a0_options->get_auth_domain();
+		$expectedIss = $this->a0_options->get_auth_domain();
 
-		$idTokenVerifier = new WP_Authress_IdTokenVerifier($expectedIss);
-		return (object) $idTokenVerifier->verify( $id_token, $verifierOptions );
+		$config = Configuration::forUnsecuredSigner();
+		$token = $config->parser()->parse($id_token);
+		$keyId = $token->headers()->get('kid');
+
+		$client = new GuzzleHttp\Client([
+			'base_uri' => $expectedIss,
+			'decode_content' => false
+		]);
+
+		$response = $client->request('GET', '/.well-known/openid-configuration/jwks');
+		$keys = json_decode($response->getBody()->getContents())->keys;
+
+		$jwk = null;
+		foreach ( $keys as $element ) {
+			if ( $keyId == $element->kid ) {
+				$jwk = json_decode(json_encode($element), true);
+			}
+		}
+
+		$jwkConverter = new CoderCat\JWKToPEM\JWKConverter();		
+
+		$config->setValidationConstraints(new Constraint\LooseValidAt(SystemClock::fromUTC()));
+		$config->setValidationConstraints(new Constraint\IssuedBy($expectedIss));
+		// $config->setValidationConstraints(new Constraint\SignedWith(new Signer\Eddsa(), InMemory::plainText($jwkConverter->toPEM($jwk))));
+		$config->setValidationConstraints(new Constraint\SignedWith(new Signer\Rsa\Sha512(), InMemory::plainText($jwkConverter->toPEM($jwk))));
+		$constraints = $config->validationConstraints();
+		try {
+			$config->validator()->assert($token, ...$constraints);
+			$userObject = (object) $token->claims()->all();
+			return $userObject;
+		} catch (RequiredConstraintsViolated $e) {
+			// list of constraints violation exceptions:
+			var_dump($e->violations());
+			throw $e;
+		}
 	}
 
 	/**

@@ -17,6 +17,7 @@
  *
  * @return mixed
  */
+
 function wp_authress_get_option( $key, $default = null ) {
 	return WP_Authress_Options::Instance()->get( $key, $default );
 }
@@ -227,65 +228,5 @@ if ( ! function_exists( 'get_authressuserinfo' ) ) {
 	function get_authressuserinfo( $authress_user_id ) {
 		$profile = WP_Authress_UsersRepo::get_meta( $authress_user_id, 'authress_obj' );
 		return $profile ? WP_Authress_Serializer::unserialize( $profile ) : false;
-	}
-}
-
-if ( ! function_exists( 'get_currentauthressuser' ) ) {
-	/**
-	 * Get all Authress data for the currently logged-in user.
-	 *
-	 * @return object
-	 */
-	//phpcs:ignore
-	function get_currentauthressuser() {
-		return (object) [
-			'authress_obj'   => get_authressuserinfo( get_current_user_id() ),
-			'last_update' => WP_Authress_UsersRepo::get_meta( get_current_user_id(), 'last_update' ),
-			'authress_id'    => WP_Authress_UsersRepo::get_meta( get_current_user_id(), 'authress_id' ),
-		];
-	}
-}
-
-if ( ! function_exists( 'get_authress_curatedBlogName' ) ) {
-	/**
-	 * Get the Authress application name from the current site name.
-	 *
-	 * @return mixed
-	 */
-	//phpcs:ignore
-	function get_authress_curatedBlogName() {
-
-		$name = get_bloginfo( 'name' );
-
-		// WordPress can have a blank site title, which will cause initial client creation to fail.
-		if ( empty( $name ) ) {
-			$name = wp_parse_url( home_url(), PHP_URL_HOST );
-			$port = wp_parse_url( home_url(), PHP_URL_PORT );
-
-			if ( $port ) {
-				$name .= ':' . $port;
-			}
-		}
-
-		$name = preg_replace( '/[^A-Za-z0-9 ]/', '', $name );
-		$name = preg_replace( '/\s+/', ' ', $name );
-		$name = str_replace( ' ', '-', $name );
-
-		return $name;
-	}
-}
-
-if ( ! function_exists( 'get_currentauthressuserinfo' ) ) {
-	/**
-	 * Set the global $currentauthress_user and return the Authress data for the currently logged-in user.
-	 *
-	 * @return mixed
-	 */
-	//phpcs:ignore
-	function get_currentauthressuserinfo() {
-		global $currentauthress_user;
-		//phpcs:ignore
-		$currentauthress_user = get_authressuserinfo( get_current_user_id() );
-		return $currentauthress_user;
 	}
 }
