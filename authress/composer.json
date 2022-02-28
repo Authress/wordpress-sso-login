@@ -23,7 +23,6 @@
     ],
     "require": {
         "php": ">=7.3",
-        "web-token/jwt-easy": "^2.2",
         "lcobucci/jwt": "^4.1",
         "guzzlehttp/guzzle": "^7.0",
         "codercat/jwk-to-pem": "^1.1"
