@@ -228,7 +228,7 @@ class WP_Authress_LoginManager {
 			$this->users_repo->update_authress_object( $user->data->ID, $userinfo );
 			$user = apply_filters( 'authress_get_wp_user', $user, $userinfo );
 			$this->do_login( $user);
-			return true;
+			return is_user_logged_in();
 		}
 		try {
 			debug('New user: creating.');
@@ -236,7 +236,7 @@ class WP_Authress_LoginManager {
 			$user_id = $creator->create( $userinfo);
 			$user    = get_user_by( 'id', $user_id );
 			$this->do_login( $user);
-			return true;
+			return is_user_logged_in();
 		} catch ( WP_Authress_CouldNotCreateUserException $e ) {
 
 			throw new WP_Authress_LoginFlowValidationException( $e->getMessage() );
@@ -247,7 +247,7 @@ class WP_Authress_LoginManager {
 		} catch ( WP_Authress_EmailNotVerifiedException $e ) {
 			WP_Authress_Email_Verification::render_die( $e->userinfo );
 		}
-		return true;
+		return is_user_logged_in();
 	}
 
 	/**
@@ -264,6 +264,7 @@ class WP_Authress_LoginManager {
 		set_query_var( 'authress_login_successful', true );
 
 		$secure_cookie = is_ssl();
+		$secure_cookie = apply_filters('secure_signon_cookie', $secure_cookie, [ 'user_login' => $user->user_login, 'user_password' => null, 'remember' => $remember_users_session, ]);
 
 		debug($user->user_login);
 
@@ -405,6 +406,7 @@ class WP_Authress_LoginManager {
 	 * @param string|int $code - error code, if given.
 	 */
 	protected function die_on_login( $msg = '', $code = 0 ) {
+		debug('Ending User Session.');
 
 		// Log the user out completely.
 		wp_destroy_current_session();

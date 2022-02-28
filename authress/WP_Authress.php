@@ -38,12 +38,6 @@ function wp_authress_plugins_loaded() {
 }
 add_action( 'plugins_loaded', 'wp_authress_plugins_loaded' );
 
-function wp_authress_init() {
-	$router = new WP_Authress_Routes( WP_Authress_Options::Instance() );
-	$router->setup_rewrites();
-}
-add_action( 'init', 'wp_authress_init' );
-
 // function wp_authress_shortcode( $atts ) {
 // 	if ( empty( $atts ) ) {
 // 		$atts = [];
@@ -315,6 +309,7 @@ add_action( 'admin_action_wp_authress_clear_error_log', 'wp_authress_errorlog_cl
 
 function wp_authress_initial_setup_init() {
 	debug('wp_authress_initial_setup_init');
+
 	// Not processing form data, just using a redirect parameter if present.
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -343,6 +338,42 @@ function wp_authress_initial_setup_init() {
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 }
 add_action( 'init', 'wp_authress_initial_setup_init', 1 );
+
+function wp_authress_init() {
+	debug('wp_authress_init()');
+	$router = new WP_Authress_Routes( WP_Authress_Options::Instance() );
+	$router->setup_rewrites();
+}
+add_action( 'init', 'wp_authress_init');
+
+function check_for_user_logged_in() {
+	debug('check_for_user_logged_in');
+	debug($_REQUEST['nonce']);
+	
+	if (!is_user_logged_in() && $_REQUEST['nonce']) {
+		$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
+		$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
+		$login_manager->init_authress();
+		wp_safe_redirect(home_url());
+		exit();
+
+		// if (is_user_logged_in()) {
+		// 	wp_safe_redirect(home_url());
+		// 	debug('User successfully now logged in during handler');
+		// } else {
+		// 	debug('User NOT logged in during handler');
+		// }
+		// wp_safe_redirect();
+		// debug($_REQUEST['redirect_to']);
+		// if ($_REQUEST['redirect_to']) {
+		// 	// wp_redirect(urldecode($_REQUEST['redirect_to']));
+		// 	wp_safe_redirect(urldecode($_REQUEST['redirect_to']));
+		// 	exit;
+		// }
+	}
+}
+add_action('init', 'check_for_user_logged_in');
+// add_action('login_init', 'check_for_user_logged_in');
 
 function wp_authress_profile_change_email( $wp_user_id, $old_user_data ) {
 	$options              = WP_Authress_Options::Instance();
@@ -504,6 +535,12 @@ function page_loaded() {
 	debug('page_loaded');
 	return $login_manager->init_authress();
 }
+
+function redirect_handled($location) {
+	return $location;
+}
+
+add_action( 'wp_redirect', 'redirect_handled', 1 );
 add_action( 'template_redirect', 'page_loaded', 1 );
 
 function login_widget_loaded() {
