@@ -242,7 +242,7 @@ class WP_Authress_Admin_Generic {
 	protected function get_docs_link( $path, $text = '' ) {
 		$path = '/' === $path[0] ? substr( $path, 1 ) : $path;
 		$text = empty( $text ) ? __( 'here', 'wp-authress' ) : sanitize_text_field( $text );
-		return sprintf( '<a href="https://authress.com/docs/%s" target="_blank">%s</a>', $path, $text );
+		return sprintf( '<a href="https://authress.io/knowledge-base" target="_blank">%s</a>', $text );
 	}
 
 	/**

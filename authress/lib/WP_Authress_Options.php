@@ -135,7 +135,6 @@ class WP_Authress_Options {
 	 *
 	 * @return mixed
 	 *
-	 * @link https://authress.com/docs/cms/wordpress/extending#wp_authress_get_option
 	 */
 	public function get( $key, $default = null ) {
 		$options = $this->get_options();

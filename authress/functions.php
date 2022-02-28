@@ -78,9 +78,6 @@ function wp_authress_login_override_url( $login_url = null ) {
  * @return bool
  */
 function wp_authress_can_show_wp_login_form() {
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
 	if ( ! wp_authress_is_ready() ) {
 		return true;
 	}
@@ -184,6 +181,7 @@ function wp_authress_is_ready() {
 	if ( wp_authress_get_option( 'accessKey' ) && wp_authress_get_option( 'applicationId' ) && wp_authress_get_option( 'customDomain' ) ) {
 		return true;
 	}
+	debug('Authress db is not loaded');
 	return false;
 }
 
@@ -229,4 +227,8 @@ if ( ! function_exists( 'get_authressuserinfo' ) ) {
 		$profile = WP_Authress_UsersRepo::get_meta( $authress_user_id, 'authress_obj' );
 		return $profile ? WP_Authress_Serializer::unserialize( $profile ) : false;
 	}
+}
+
+function debug($message) {
+	// error_log("****************************************************************           " . json_encode($message) . "           ****************************************************************");
 }

@@ -62,10 +62,6 @@ The Authress login widget is completely configurable and it's [open source on Gi
 All social providers and business login directories are supported. For more details, please see [configuring social and enterprise authentication providers](https://authress.io/knowledge-base/user-oauth-authentication-quick-start).
 
 
-= Is this plugin compatible with WooCommerce? =
-
-Yes, this plugin will override the default WooCommerce login and all other WordPress compatible login widgets.
-
 = Didn't find what you were looking for? =
 
 No problem, you can directly connect with the Authress development team in our [user community](https://authress.io/community), and we'll help you get squared away.

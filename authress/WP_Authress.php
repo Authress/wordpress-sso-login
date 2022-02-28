@@ -44,20 +44,20 @@ function wp_authress_init() {
 }
 add_action( 'init', 'wp_authress_init' );
 
-function wp_authress_shortcode( $atts ) {
-	if ( empty( $atts ) ) {
-		$atts = [];
-	}
+// function wp_authress_shortcode( $atts ) {
+// 	if ( empty( $atts ) ) {
+// 		$atts = [];
+// 	}
 
-	if ( empty( $atts['redirect_to'] ) && ! empty( $_SERVER['REQUEST_URI'] ) ) {
-		$atts['redirect_to'] = home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
-	}
+// 	if ( empty( $atts['redirect_to'] ) && ! empty( $_SERVER['REQUEST_URI'] ) ) {
+// 		// $atts['redirect_to'] = home_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) );
+// 	}
 
-	ob_start();
-	\WP_Authress_Lock::render( false, $atts );
-	return ob_get_clean();
-}
-add_shortcode( 'authress', 'wp_authress_shortcode' );
+// 	ob_start();
+// 	\WP_Authress_Lock::render( false, $atts );
+// 	return ob_get_clean();
+// }
+// add_shortcode( 'authress', 'wp_authress_shortcode' );
 
 /*
  * Plugin install/uninstall/update actions
@@ -160,6 +160,7 @@ add_filter( 'query_vars', 'wp_authress_register_query_vars' );
  * @return string
  */
 function wp_authress_render_lock_form( $html ) {
+	debug('wp_authress_render_lock_form');
 	ob_start();
 	\WP_Authress_Lock::render();
 	$authress_form = ob_get_clean();
@@ -313,6 +314,7 @@ function wp_authress_errorlog_clear_error_log() {
 add_action( 'admin_action_wp_authress_clear_error_log', 'wp_authress_errorlog_clear_error_log' );
 
 function wp_authress_initial_setup_init() {
+	debug('wp_authress_initial_setup_init');
 	// Not processing form data, just using a redirect parameter if present.
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -365,9 +367,6 @@ add_action( 'user_profile_update_errors', 'wp_authress_validate_new_password', 1
 // Used during password reset on wp-login.php.
 add_action( 'validate_password_reset', 'wp_authress_validate_new_password', 10, 2 );
 
-// Used during WooCommerce edit account save.
-add_action( 'woocommerce_save_account_details_errors', 'wp_authress_validate_new_password', 10, 2 );
-
 function wp_authress_show_delete_identity() {
 	$profile_delete_data = new WP_Authress_Profile_Delete_Data();
 	$profile_delete_data->show_delete_identity();
@@ -382,7 +381,7 @@ function wp_authress_delete_user_data() {
 add_action( 'wp_ajax_authress_delete_data', 'wp_authress_delete_user_data' );
 
 function wp_authress_init_admin_menu() {
-
+	debug('wp_authress_init_admin_menu');
 	if ( wp_authress_is_admin_page( 'authress_help' ) ) {
 		wp_safe_redirect( admin_url( 'admin.php?page=authress_configuration#help' ), 301 );
 		exit;
@@ -437,6 +436,7 @@ function wp_authress_create_account_message() {
 add_action( 'admin_notices', 'wp_authress_create_account_message' );
 
 function wp_authress_init_admin() {
+	debug('wp_authress_init_admin');
 	$options = WP_Authress_Options::Instance();
 	$routes  = new WP_Authress_Routes( $options );
 	$admin   = new WP_Authress_Admin( $options, $routes );
@@ -445,6 +445,7 @@ function wp_authress_init_admin() {
 add_action( 'admin_init', 'wp_authress_init_admin' );
 
 function wp_authress_admin_enqueue_scripts() {
+	debug('wp_authress_admin_enqueue_scripts');
 	$options = WP_Authress_Options::Instance();
 	$routes  = new WP_Authress_Routes( $options );
 	$admin   = new WP_Authress_Admin( $options, $routes );
@@ -459,6 +460,7 @@ function wp_authress_custom_requests( $wp, $return = false ) {
 add_action( 'parse_request', 'wp_authress_custom_requests' );
 
 function wp_authress_profile_enqueue_scripts() {
+	debug('wp_authress_profile_enqueue_scripts');
 	global $pagenow;
 
 	if ( ! in_array( $pagenow, [ 'profile.php', 'user-edit.php' ] ) ) {
@@ -496,19 +498,21 @@ function wp_authress_profile_enqueue_scripts() {
 }
 add_action( 'admin_enqueue_scripts', 'wp_authress_profile_enqueue_scripts' );
 
-function wp_authress_process_auth_callback() {
+function page_loaded() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 	$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
+	debug('page_loaded');
 	return $login_manager->init_authress();
 }
-add_action( 'template_redirect', 'wp_authress_process_auth_callback', 1 );
+add_action( 'template_redirect', 'page_loaded', 1 );
 
-function wp_authress_login_ulp_redirect() {
+function login_widget_loaded() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 	$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
+	debug('login_widget_loaded');
 	return $login_manager->login_auto();
 }
-add_action( 'login_init', 'wp_authress_login_ulp_redirect' );
+add_action( 'login_init', 'login_widget_loaded' );
 
 function wp_authress_process_logout() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
@@ -516,6 +520,7 @@ function wp_authress_process_logout() {
 	$login_manager->logout();
 }
 add_action( 'wp_logout', 'wp_authress_process_logout' );
+
 
 function wp_authress_ajax_delete_cache_transient() {
 	check_ajax_referer( 'authress_delete_cache_transient' );
@@ -648,36 +653,6 @@ function wp_authress_filter_body_class( array $classes ) {
 }
 add_filter( 'body_class', 'wp_authress_filter_body_class' );
 add_filter( 'login_body_class', 'wp_authress_filter_body_class' );
-
-/*
- * WooCommerce hooks
- */
-
-/**
- * Add the Authress login form to the checkout page.
- *
- * @param string $html - Original HTML passed to this hook.
- *
- * @return mixed
- */
-function wp_authress_filter_woocommerce_checkout_login_message( $html ) {
-	$wp_authress_woocommerce = new WP_Authress_WooCommerceOverrides( WP_Authress_Options::Instance() );
-	return $wp_authress_woocommerce->override_woocommerce_checkout_login_form( $html );
-}
-add_filter( 'woocommerce_checkout_login_message', 'wp_authress_filter_woocommerce_checkout_login_message' );
-
-/**
- * Add the Authress login form to the account page.
- *
- * @param string $html - Original HTML passed to this hook.
- *
- * @return mixed
- */
-function wp_authress_filter_woocommerce_before_customer_login_form( $html ) {
-	$wp_authress_woocommerce = new WP_Authress_WooCommerceOverrides( WP_Authress_Options::Instance() );
-	return $wp_authress_woocommerce->override_woocommerce_login_form( $html );
-}
-add_filter( 'woocommerce_before_customer_login_form', 'wp_authress_filter_woocommerce_before_customer_login_form' );
 
 /*
  * Beta plugin deactivation

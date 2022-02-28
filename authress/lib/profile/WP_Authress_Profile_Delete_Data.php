@@ -39,7 +39,7 @@ class WP_Authress_Profile_Delete_Data {
 					<input type="button" id="authress_delete_data" class="button button-secondary"
 						value="<?php _e( 'Delete Authress Data', 'wp-authress' ); ?>" />
 					<br><br>
-					<a href="https://manage.authress.com/#/users/<?php echo rawurlencode( $authress_user->sub ); ?>" target="_blank">
+					<a href="https://authress.io/app/#/setup?focus=explorer<?php echo rawurlencode( $authress_user->sub ); ?>" target="_blank">
 						<?php _e( 'View in Authress', 'wp-authress' ); ?>
 					</a>
 				</td>

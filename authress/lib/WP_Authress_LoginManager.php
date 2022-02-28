@@ -53,6 +53,7 @@ class WP_Authress_LoginManager {
 	 * @return bool
 	 */
 	public function login_auto() {
+		debug('login_auto');
 		// Not processing form data, just using a redirect parameter if present.
 		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -79,7 +80,6 @@ class WP_Authress_LoginManager {
 		}
 
 		return $this->init_authress();
-		exit;
 
 		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}
@@ -90,6 +90,7 @@ class WP_Authress_LoginManager {
 	 * Handles errors and state validation
 	 */
 	public function init_authress() {
+		debug('init_authress');
 		// WP nonce is not needed here, nonce and state parameters provide replay and CSRF protection.
 		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -101,7 +102,6 @@ class WP_Authress_LoginManager {
 		}
 
 		// Catch any incoming errors and stop the login process.
-		// See https://authress.com/docs/libraries/error-messages for more info.
 		if ( ! empty( $_REQUEST['error'] ) || ! empty( $_REQUEST['error_description'] ) ) {
 			// Input variable is sanitized.
 			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
@@ -109,11 +109,13 @@ class WP_Authress_LoginManager {
 			$error_code = sanitize_text_field( rawurldecode( wp_unslash( $_REQUEST['error'] ) ) );
 			// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$this->die_on_login( $error_msg, $error_code );
+			return false;
 		}
 
 		// No need to process a login if the user is already logged in and there is no error.
 		if ( is_user_logged_in() ) {
 			// wp_safe_redirect( $this->a0_options->get( 'default_login_redirection' ) );
+			debug('user_logged_in: returning without further setup');
 			return true;
 		}
 
@@ -147,7 +149,6 @@ class WP_Authress_LoginManager {
 	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
 	 * @throws WP_Authress_InvalidIdTokenException If the ID token does not validate.
 	 *
-	 * @link https://authress.com/docs/api-auth/tutorials/authorization-code-grant
 	 */
 	public function handle_login_redirect() {
 		$access_token = $_COOKIE['authorization'];
@@ -163,6 +164,7 @@ class WP_Authress_LoginManager {
 		}
 
 		if (empty($id_token) || empty($access_token)) {
+			debug('No tokens set, user is not logged in');
 			return false;
 		}
 
@@ -170,7 +172,8 @@ class WP_Authress_LoginManager {
 		$decoded_token = $this->decode_id_token( $id_token );
 		$userinfo = $this->clean_id_token( $decoded_token );
 
-		if ( $this->login_user( $userinfo, $access_token ) ) {
+		if ( $this->login_user($userinfo) ) {
+			debug('Tokens set, user is logged in');
 			return true;
 		}
 	}
@@ -186,7 +189,7 @@ class WP_Authress_LoginManager {
 	 * @throws WP_Authress_LoginFlowValidationException - OAuth login flow errors.
 	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
 	 */
-	public function login_user( $userinfo, $access_token = null) {
+	public function login_user( $userinfo) {
 		$authress_sub        = $userinfo->sub;
 		list( $strategy ) = explode( '|', $authress_sub );
 		$user = $this->users_repo->find_authress_user( $authress_sub );
@@ -194,6 +197,7 @@ class WP_Authress_LoginManager {
 		$user = apply_filters( 'authress_get_wp_user', $user, $userinfo );
 
 		if ( ! is_null( $user ) ) {
+			debug('Existing user: updating');
 			// User exists so log them in.
 			if ( isset( $userinfo->email ) && $user->data->user_email !== $userinfo->email ) {
 				$description = $user->data->description;
@@ -227,10 +231,12 @@ class WP_Authress_LoginManager {
 			return true;
 		}
 		try {
+			debug('New user: creating.');
 			$creator = new WP_Authress_UsersRepo( $this->a0_options );
 			$user_id = $creator->create( $userinfo);
 			$user    = get_user_by( 'id', $user_id );
 			$this->do_login( $user);
+			return true;
 		} catch ( WP_Authress_CouldNotCreateUserException $e ) {
 
 			throw new WP_Authress_LoginFlowValidationException( $e->getMessage() );
@@ -239,7 +245,6 @@ class WP_Authress_LoginManager {
 			$msg = __( 'Could not create user. The registration process is not available. Please contact your site’s administrator.', 'wp-authress' );
 			throw new WP_Authress_LoginFlowValidationException( $msg );
 		} catch ( WP_Authress_EmailNotVerifiedException $e ) {
-
 			WP_Authress_Email_Verification::render_die( $e->userinfo );
 		}
 		return true;
@@ -253,22 +258,14 @@ class WP_Authress_LoginManager {
 	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
 	 */
 	private function do_login( $user) {
-		$remember_users_session = $this->a0_options->get( 'remember_users_session' );
+		debug('LoginManager.do_login');
+		$remember_users_session = $this->a0_options->get( 'remember_users_session', true);
 
 		set_query_var( 'authress_login_successful', true );
 
 		$secure_cookie = is_ssl();
 
-		// See wp_signon() for documentation on this filter.
-		$secure_cookie = apply_filters(
-			'secure_signon_cookie',
-			$secure_cookie,
-			[
-				'user_login'    => $user->user_login,
-				'user_password' => null,
-				'remember'      => $remember_users_session,
-			]
-		);
+		debug($user->user_login);
 
 		wp_set_auth_cookie( $user->ID, $remember_users_session, $secure_cookie );
 		do_action( 'wp_login', $user->user_login, $user );

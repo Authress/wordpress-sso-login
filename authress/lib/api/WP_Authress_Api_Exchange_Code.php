@@ -11,7 +11,6 @@
  * Class WP_Authress_Api_Exchange_Code
  * Exchange an authorization code for tokens.
  *
- * @see https://authress.com/docs/api/authentication#authorization-code-flow
  */
 class WP_Authress_Api_Exchange_Code extends WP_Authress_Api_Abstract {
 

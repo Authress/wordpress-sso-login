@@ -30,7 +30,7 @@ class WP_Authress_Profile_Change_Password {
 
 	/**
 	 * Update the user's password at Authress
-	 * Hooked to: user_profile_update_errors, validate_password_reset, woocommerce_save_account_details_errors
+	 * Hooked to: user_profile_update_errors, validate_password_reset
 	 * IMPORTANT: Internal callback use only, do not call this function directly!
 	 *
 	 * @param WP_Error         $errors - WP_Error object to use if validation fails.

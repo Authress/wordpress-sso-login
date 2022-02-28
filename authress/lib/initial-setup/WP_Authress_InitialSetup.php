@@ -29,7 +29,7 @@ class WP_Authress_InitialSetup {
 					<?php _e( 'There was an error creating the Authress App. Check the ', 'wp-authress' ); ?>
 					  <a target="_blank" href="<?php echo admin_url( 'admin.php?page=authress_errors' ); ?>"><?php _e( 'error log', 'wp-authress' ); ?></a>
 					<?php _e( ' for more information. If the problem persists, please follow the ', 'wp-authress' ); ?>
-					  <a target="_blank" href="https://authress.com/docs/cms/wordpress/installation#manual-setup"><?php _e( 'manual setup instructions', 'wp-authress' ); ?></a>.
+					  <a target="_blank" href="https://authress.io/knowledge-base"><?php _e( 'manual setup instructions', 'wp-authress' ); ?></a>.
 				  </strong>
 			  </p>
 		  </div>
@@ -89,7 +89,7 @@ class WP_Authress_InitialSetup {
 		  <div class="notice notice-error">
 			  <p>
 				  <strong>
-					<?php _e( 'Please create your Authress account first at ', 'wp-authress' ); ?><a href="https://manage.authress.com">https://manage.authress.com</a>
+					<?php _e( 'Please create your Authress account first at ', 'wp-authress' ); ?><a href="https://https://authress.io/app/#/setup">https://https://authress.io/app/#/setup</a>
 				  </strong>
 			  </p>
 		  </div>

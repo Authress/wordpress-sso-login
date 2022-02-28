@@ -94,6 +94,6 @@ if ( $this->showAsModal() ) :
 			  name="<?php echo $this->get_field_name( 'extra_conf' ); ?>"><?php echo sanitize_text_field( $extra_conf ); ?></textarea>
 	<br><span class="description">
 			<?php _e( 'Valid JSON for Lock options configuration; will override all options set elsewhere.', 'wp-authress' ); ?>
-		<a target="_blank" href="https://authress.com/docs/libraries/lock/v11/configuration"><?php _e( 'See options and examples', 'wp-authress' ); ?></a>
+		<a target="_blank" href="https://authress.io/knowledge-base"><?php _e( 'See options and examples', 'wp-authress' ); ?></a>
 		</span>
 </p>

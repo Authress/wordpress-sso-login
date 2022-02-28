@@ -12,7 +12,7 @@
 
 		<div class="row">
 			<div class="a0-buttons">
-			<a href="https://manage.authress.com/#/applications/
+			<a href="https://https://authress.io/app/#/setup/#/applications/
 			<?php echo esc_attr( wp_authress_get_option( 'accessKey' ) ); ?>
 			/connections" class="button button-secondary" target="_blank">
 			<?php

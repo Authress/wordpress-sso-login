@@ -35,7 +35,7 @@
 	<div id="form-signin-wrapper" class="authress-login">
 		<div class="form-signin">
 			<div id="<?php echo esc_attr( WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID ); ?>">
-				<form name="ssoLoginForm" onsubmit="return loginWithSsoDomain()">
+				<form onsubmit="return loginWithSsoDomain()">
 					<p>
 						<label for="customer_sso_domain">Enter SSO Domain</label>
 						<input type="text" name="sso_domain" autocomplete="on" id="customer_sso_domain" class="input" value="" size="20" autocapitalize="off" autocomplete="off" style="background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" required>

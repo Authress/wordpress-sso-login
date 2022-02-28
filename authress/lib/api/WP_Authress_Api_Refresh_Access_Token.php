@@ -10,9 +10,6 @@
 /**
  * Class WP_Authress_Api_Refresh_Access_Token
  * Get a new access token using the refresh token of a user.
- *
- * @see https://authress.com/docs/tokens/refresh-token/current
- * @see https://authress.com/docs/api/authentication#refresh-token
  */
 class WP_Authress_Api_Refresh_Access_Token extends WP_Authress_Api_Abstract {
 

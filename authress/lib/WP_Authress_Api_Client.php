@@ -149,9 +149,6 @@ class WP_Authress_Api_Client {
 	/**
 	 * Create a new Application for the WordPress site.
 	 *
-	 * @see https://authress.com/docs/clients/client-settings/regular-web-app
-	 * @see https://authress.com/docs/api/management/v2#!/Clients/post_clients
-	 *
 	 * @param string $domain - Tenant domain for the Management API.
 	 * @param string $app_token - Valid Management API token with create:clients scope.
 	 * @param string $name - Name of the new Application.
@@ -196,7 +193,6 @@ class WP_Authress_Api_Client {
 			'sso'                 => true,
 
 			// Advanced > OAuth > OIDC Conformant
-			// https://authress.com/docs/api-auth/intro#legacy-vs-new
 			'oidc_conformant'     => true,
 		];
 
