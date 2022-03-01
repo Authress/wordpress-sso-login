@@ -18,8 +18,10 @@
  * @return mixed
  */
 
-function wp_authress_get_option( $key, $default = null ) {
-	return WP_Authress_Options::Instance()->get( $key, $default );
+if ( ! function_exists( 'wp_authress_get_option' ) ) {
+	function wp_authress_get_option( $key, $default = null ) {
+		return WP_Authress_Options::Instance()->get( $key, $default );
+	}
 }
 
 /**
@@ -31,23 +33,25 @@ function wp_authress_get_option( $key, $default = null ) {
  *
  * @return bool
  */
-function wp_authress_is_current_login_action( array $actions ) {
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
+if ( ! function_exists( 'wp_authress_is_current_login_action' ) ) {
+	function wp_authress_is_current_login_action( array $actions ) {
+		// Not processing form data, just using a redirect parameter if present.
+		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
-	// Not on wp-login.php.
-	if (
-		( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' !== $GLOBALS['pagenow'] ) &&
-		! function_exists( 'login_header' )
-	) {
-		return false;
+		// Not on wp-login.php.
+		if (
+			( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' !== $GLOBALS['pagenow'] ) &&
+			! function_exists( 'login_header' )
+		) {
+			return false;
+		}
+
+		// Null coalescing validates input variable.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		return in_array( wp_unslash( $_REQUEST['action'] ?? '' ), $actions );
+
+		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}
-
-	// Null coalescing validates input variable.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	return in_array( wp_unslash( $_REQUEST['action'] ?? '' ), $actions );
-
-	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 }
 
 /**
@@ -57,19 +61,21 @@ function wp_authress_is_current_login_action( array $actions ) {
  *
  * @return string
  */
-function wp_authress_login_override_url( $login_url = null ) {
-	$wle = wp_authress_get_option( 'wordpress_login_enabled' );
-	if ( 'no' === $wle ) {
-		return '';
-	}
+if ( ! function_exists( 'wp_authress_login_override_url' ) ) {
+	function wp_authress_login_override_url( $login_url = null ) {
+		$wle = wp_authress_get_option( 'wordpress_login_enabled' );
+		if ( 'no' === $wle ) {
+			return '';
+		}
 
-	$wle_code = '';
-	if ( 'code' === $wle ) {
-		$wle_code = wp_authress_get_option( 'wle_code' );
-	}
+		$wle_code = '';
+		if ( 'code' === $wle ) {
+			$wle_code = wp_authress_get_option( 'wle_code' );
+		}
 
-	$login_url = $login_url ?: wp_login_url();
-	return add_query_arg( 'wle', $wle_code, $login_url );
+		$login_url = $login_url ?: wp_login_url();
+		return add_query_arg( 'wle', $wle_code, $login_url );
+	}
 }
 
 /**
@@ -77,99 +83,42 @@ function wp_authress_login_override_url( $login_url = null ) {
  *
  * @return bool
  */
-function wp_authress_can_show_wp_login_form() {
-	if ( ! wp_authress_is_ready() ) {
-		return true;
-	}
+if ( ! function_exists( 'wp_authress_can_show_wp_login_form' ) ) {
+	function wp_authress_can_show_wp_login_form() {
+		if ( ! wp_authress_is_ready() ) {
+			return true;
+		}
 
-	if ( wp_authress_is_current_login_action( [ 'resetpass', 'rp', 'validate_2fa', 'postpass' ] ) ) {
-		return true;
-	}
+		if ( wp_authress_is_current_login_action( [ 'resetpass', 'rp', 'validate_2fa', 'postpass' ] ) ) {
+			return true;
+		}
 
-	if ( get_query_var( 'authress_login_successful' ) ) {
-		return true;
-	}
+		if ( get_query_var( 'authress_login_successful' ) ) {
+			return true;
+		}
 
-	if ( ! isset( $_REQUEST['wle'] ) ) {
+		if ( ! isset( $_REQUEST['wle'] ) ) {
+			return false;
+		}
+
+		$wle_setting = wp_authress_get_option( 'wordpress_login_enabled' );
+		if ( 'no' === $wle_setting ) {
+			return false;
+		}
+
+		if ( in_array( $wle_setting, [ 'link', 'isset' ] ) ) {
+			return true;
+		}
+
+		$wle_code = wp_authress_get_option( 'wle_code' );
+		if ( 'code' === $wle_setting && $wle_code === $_REQUEST['wle'] ) {
+			return true;
+		}
+
 		return false;
+
+		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}
-
-	$wle_setting = wp_authress_get_option( 'wordpress_login_enabled' );
-	if ( 'no' === $wle_setting ) {
-		return false;
-	}
-
-	if ( in_array( $wle_setting, [ 'link', 'isset' ] ) ) {
-		return true;
-	}
-
-	$wle_code = wp_authress_get_option( 'wle_code' );
-	if ( 'code' === $wle_setting && $wle_code === $_REQUEST['wle'] ) {
-		return true;
-	}
-
-	return false;
-
-	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-}
-
-/**
- * @param string $input
- *
- * @return string
- *
- * @see https://github.com/firebase/php-jwt/blob/v5.0.0/src/JWT.php#L337
- */
-function wp_authress_url_base64_encode( $input ) {
-	return str_replace( '=', '', strtr( base64_encode( $input ), '+/', '-_' ) );
-}
-
-/**
- * @param string $input
- *
- * @return bool|string
- *
- * @see https://github.com/firebase/php-jwt/blob/v5.0.0/src/JWT.php#L320
- */
-function wp_authress_url_base64_decode( $input ) {
-	$remainder = strlen( $input ) % 4;
-	if ( $remainder ) {
-		$padlen = 4 - $remainder;
-		$input .= str_repeat( '=', $padlen );
-	}
-	return base64_decode( strtr( $input, '-_', '+/' ), true );
-}
-
-/**
- * Delete all Authress data for a specific user.
- *
- * @param int $user_id - WordPress user ID.
- */
-function wp_authress_delete_authress_object( $user_id ) {
-	WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_id' );
-	WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_obj' );
-	WP_Authress_UsersRepo::delete_meta( $user_id, 'last_update' );
-	WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_transient_email_update' );
-}
-
-/**
- * Determine whether a specific admin page is being loaded or not.
- *
- * @param string $page - Admin page slug to check.
- *
- * @return bool
- */
-function wp_authress_is_admin_page( $page ) {
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-	if ( empty( $_REQUEST['page'] ) || ! is_admin() ) {
-		return false;
-	}
-
-	return $page === $_REQUEST['page'];
-
-	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 }
 
 /**
@@ -177,41 +126,14 @@ function wp_authress_is_admin_page( $page ) {
  *
  * @return bool
  */
-function wp_authress_is_ready() {
-	if ( wp_authress_get_option( 'accessKey' ) && wp_authress_get_option( 'applicationId' ) && wp_authress_get_option( 'customDomain' ) ) {
-		return true;
+if ( ! function_exists( 'wp_authress_is_ready' ) ) {
+	function wp_authress_is_ready() {
+		if ( wp_authress_get_option( 'accessKey' ) && wp_authress_get_option( 'applicationId' ) && wp_authress_get_option( 'customDomain' ) ) {
+			return true;
+		}
+		debug('Authress db is not loaded');
+		return false;
 	}
-	debug('Authress db is not loaded');
-	return false;
-}
-
-/**
- * Get the tenant region based on a domain.
- *
- * @param string $domain Tenant domain.
- *
- * @return string
- */
-function wp_authress_get_tenant_region( $domain ) {
-	preg_match( '/^[\w\d\-_0-9]+\.([\w\d\-_0-9]*)[\.]*authress\.com$/', $domain, $matches );
-	return ! empty( $matches[1] ) ? $matches[1] : 'us';
-}
-
-/**
- * Get the full tenant name with region.
- *
- * @param null|string $domain Tenant domain.
- *
- * @return string
- */
-function wp_authress_get_tenant( $domain = null ) {
-
-	if ( empty( $domain ) ) {
-		$domain = wp_authress_get_option( 'domain' );
-	}
-
-	$parts = explode( '.', $domain );
-	return $parts[0] . '@' . wp_authress_get_tenant_region( $domain );
 }
 
 if ( ! function_exists( 'get_authressuserinfo' ) ) {
@@ -229,6 +151,8 @@ if ( ! function_exists( 'get_authressuserinfo' ) ) {
 	}
 }
 
-function debug($message) {
-	// error_log("****************************************************************           " . json_encode($message) . "           ****************************************************************");
+if ( ! function_exists( 'debug' ) ) {
+	function debug($message) {
+		// error_log("****************************************************************           " . json_encode($message) . "           ****************************************************************");
+	}
 }

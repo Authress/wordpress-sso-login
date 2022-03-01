@@ -31,7 +31,15 @@ class WP_Authress_InitialSetup_Consent {
 
 	protected function parse_token_domain( $token ) {
 		$parts   = explode( '.', $token );
-		$payload = json_decode( wp_authress_url_base64_decode( $parts[1] ) );
+
+		$input = $parts[1];
+		$remainder = strlen( $input ) % 4;
+		if ( $remainder ) {
+			$padlen = 4 - $remainder;
+			$input .= str_repeat( '=', $padlen );
+		}
+		$payload = json_decode(base64_decode( strtr( $input, '-_', '+/' ), true ));
+
 		return trim( str_replace( [ '/api/v2', 'https://' ], '', $payload->aud ), ' /' );
 	}
 

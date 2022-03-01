@@ -66,7 +66,10 @@ class WP_Authress_Profile_Delete_Data {
 			wp_send_json_error( [ 'error' => __( 'Forbidden', 'wp-authress' ) ] );
 		}
 
-		wp_authress_delete_authress_object( $user_id );
+		WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_id' );
+		WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_obj' );
+		WP_Authress_UsersRepo::delete_meta( $user_id, 'last_update' );
+		WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_transient_email_update' );
 		wp_send_json_success();
 	}
 }

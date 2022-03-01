@@ -413,7 +413,7 @@ add_action( 'wp_ajax_authress_delete_data', 'wp_authress_delete_user_data' );
 
 function wp_authress_init_admin_menu() {
 	debug('wp_authress_init_admin_menu');
-	if ( wp_authress_is_admin_page( 'authress_help' ) ) {
+	if (is_admin() && !empty($_REQUEST['page']) && 'authress_help' === $_REQUEST['page']) {
 		wp_safe_redirect( admin_url( 'admin.php?page=authress_configuration#help' ), 301 );
 		exit;
 	}
