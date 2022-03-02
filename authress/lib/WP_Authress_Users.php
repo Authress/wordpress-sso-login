@@ -106,10 +106,6 @@ class WP_Authress_Users {
 	 * @return string
 	 */
 	public static function get_strategy( $authress_id ) {
-		if ( false === strpos( $authress_id, '|' ) ) {
-			return '';
-		}
-		$authress_id_parts = explode( '|', $authress_id );
-		return $authress_id_parts[0];
+		return 'authress';
 	}
 }

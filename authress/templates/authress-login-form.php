@@ -1,6 +1,6 @@
 <?php
 	$authress_options = WP_Authress_Options::Instance();
-	$wle = $authress_options->get('wordpress_login_enabled');
+	$wle = 'link';
 ?>
 
 	<script src="https://unpkg.com/authress-login@1.2.93/dist/authress.min.js"></script>

@@ -1,4 +1,4 @@
-/* global jQuery, wpa0UserProfile, alert */
+/* global jQuery, wp_authressUserProfile, alert */
 
 // Used to update the user profile screen in the admin console adding a connection to delete the Authress data and add a button to jump to Authress
 
@@ -12,16 +12,30 @@ jQuery(function($) {
     /**
      * Hide the password field if not an authress strategy.
      */
-    if ( passwordFieldRow.length && wpa0UserProfile.userStrategy && 'authress' !== wpa0UserProfile.userStrategy ) {
+    if ( passwordFieldRow.length && wp_authressUserProfile.userStrategy && 'authress' === wp_authressUserProfile.userStrategy ) {
         passwordFieldRow.hide();
+        var resetPasswordFieldRow = $('.user-generate-reset-link-wrap');
+        if (resetPasswordFieldRow.length) {
+            resetPasswordFieldRow.hide();
+        }
+
+        $('<p>This account was created through an SSO federated login provider.</p>')
+            .addClass('description')
+            .insertAfter(resetPasswordFieldRow);
+
+            
+        var applicationPasswords = $('.application-passwords');
+        if (applicationPasswords.length) {
+            applicationPasswords.hide();
+        }
     }
 
     /**
      * Disable email changes if not an authress connection.
      */
-    if ( emailField.length && wpa0UserProfile.userStrategy && 'authress' !== wpa0UserProfile.userStrategy ) {
+    if ( emailField.length && wp_authressUserProfile.userStrategy && 'authress' === wp_authressUserProfile.userStrategy ) {
         emailField.prop( 'readonly', true );
-        $('<p>' + wpa0UserProfile.i18n.cannotChangeEmail + '</p>')
+        $('<p>' + wp_authressUserProfile.i18n.cannotChangeEmail + '</p>')
             .addClass('description')
             .insertAfter(emailField);
     }
@@ -30,11 +44,11 @@ jQuery(function($) {
      * Delete authress Data button click.
      */
     deleteUserDataButton.click(function (e) {
-        if ( ! window.confirm(wpa0UserProfile.i18n.confirmDeleteId) ) {
+        if ( ! window.confirm(wp_authressUserProfile.i18n.confirmDeleteId) ) {
             return;
         }
         e.preventDefault();
-        userProfileAjaxAction($(this), 'authress_delete_data', wpa0UserProfile.deleteIdNonce );
+        userProfileAjaxAction($(this), 'authress_delete_data', wp_authressUserProfile.deleteIdNonce );
     });
 
     /**
@@ -48,16 +62,16 @@ jQuery(function($) {
         var postData = {
             'action' : action,
             '_ajax_nonce' : nonce,
-            'user_id' : wpa0UserProfile.userId
+            'user_id' : wp_authressUserProfile.userId
         };
-        var errorMsg = wpa0UserProfile.i18n.actionFailed;
+        var errorMsg = wp_authressUserProfile.i18n.actionFailed;
         uiControl.prop( 'disabled', true );
         $.post(
-            wpa0UserProfile.ajaxUrl,
+            wp_authressUserProfile.ajaxUrl,
             postData,
             function(response) {
                 if ( response.success ) {
-                    uiControl.val(wpa0UserProfile.i18n.actionComplete);
+                    uiControl.val(wp_authressUserProfile.i18n.actionComplete);
                 } else {
                     if (response.data && response.data.error) {
                         errorMsg = response.data.error;

@@ -75,12 +75,6 @@ class WP_Authress_Routes {
 			case 'oauth2-config':
 				$output = wp_json_encode( $this->oauth2_config() );
 				break;
-			case 'migration-ws-login':
-				$output = wp_json_encode( $this->migration_ws_login() );
-				break;
-			case 'migration-ws-get-user':
-				$output = wp_json_encode( $this->migration_ws_get_user() );
-				break;
 			default:
 				return false;
 		}
@@ -136,97 +130,6 @@ class WP_Authress_Routes {
 		}
 
 		return $authorization;
-
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-	}
-
-	/**
-	 * User migration login route used by custom database Login script.
-	 *
-	 * @return array
-	 *
-	 * @see lib/scripts-js/db-login.js
-	 */
-	protected function migration_ws_login() {
-		// Nonce is not needed here as this is an API endpoint.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-		$code = $this->check_endpoint_access_error();
-		if ( $code ) {
-			return $this->error_return_array( $code );
-		}
-
-		try {
-			$this->check_endpoint_request( true );
-
-			// Input is sanitized by core wp_authenticate function.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-			$user = wp_authenticate( $_POST['username'], $_POST['password'] );
-
-			if ( is_wp_error( $user ) ) {
-				throw new Exception( __( 'Invalid credentials', 'wp-authress' ), 401 );
-			}
-
-			unset( $user->data->user_pass );
-			return apply_filters( 'authress_migration_ws_authenticated', $user );
-
-		} catch ( Exception $e ) {
-			WP_Authress_ErrorLog::insert_error( __METHOD__, $e );
-			return [
-				'status' => $e->getCode() ?: 400,
-				'error'  => $e->getMessage(),
-			];
-		}
-
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-	}
-
-	/**
-	 * User migration get user route used by custom database Login script.
-	 * This is used for email changes made in Authress.
-	 *
-	 * @return array
-	 *
-	 * @see lib/scripts-js/db-get-user.js
-	 */
-	protected function migration_ws_get_user() {
-		// Nonce is not needed here as this is an API endpoint.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-		$code = $this->check_endpoint_access_error();
-		if ( $code ) {
-			return $this->error_return_array( $code );
-		}
-
-		try {
-			$this->check_endpoint_request();
-
-			// Input is sanitized by core get_user_by function.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-			$user = get_user_by( 'email', $_POST['username'] );
-
-			if ( ! $user ) {
-				throw new Exception( __( 'User not found', 'wp-authress' ), 401 );
-			}
-
-			$updated_email = WP_Authress_UsersRepo::get_meta( $user->ID, WP_Authress_Profile_Change_Email::UPDATED_EMAIL );
-			if ( $updated_email === $user->data->user_email ) {
-				return [
-					'status' => 200,
-					'error'  => 'Email update in process',
-				];
-			}
-
-			unset( $user->data->user_pass );
-			return apply_filters( 'authress_migration_ws_authenticated', $user );
-
-		} catch ( Exception $e ) {
-			WP_Authress_ErrorLog::insert_error( __METHOD__, $e );
-			return [
-				'status' => $e->getCode() ?: 400,
-				'error'  => $e->getMessage(),
-			];
-		}
 
 		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}

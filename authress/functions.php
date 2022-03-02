@@ -63,16 +63,6 @@ if ( ! function_exists( 'wp_authress_is_current_login_action' ) ) {
  */
 if ( ! function_exists( 'wp_authress_login_override_url' ) ) {
 	function wp_authress_login_override_url( $login_url = null ) {
-		$wle = wp_authress_get_option( 'wordpress_login_enabled' );
-		if ( 'no' === $wle ) {
-			return '';
-		}
-
-		$wle_code = '';
-		if ( 'code' === $wle ) {
-			$wle_code = wp_authress_get_option( 'wle_code' );
-		}
-
 		$login_url = $login_url ?: wp_login_url();
 		return add_query_arg( 'wle', $wle_code, $login_url );
 	}
@@ -93,29 +83,11 @@ if ( ! function_exists( 'wp_authress_can_show_wp_login_form' ) ) {
 			return true;
 		}
 
-		if ( get_query_var( 'authress_login_successful' ) ) {
-			return true;
-		}
-
 		if ( ! isset( $_REQUEST['wle'] ) ) {
 			return false;
 		}
 
-		$wle_setting = wp_authress_get_option( 'wordpress_login_enabled' );
-		if ( 'no' === $wle_setting ) {
-			return false;
-		}
-
-		if ( in_array( $wle_setting, [ 'link', 'isset' ] ) ) {
-			return true;
-		}
-
-		$wle_code = wp_authress_get_option( 'wle_code' );
-		if ( 'code' === $wle_setting && $wle_code === $_REQUEST['wle'] ) {
-			return true;
-		}
-
-		return false;
+		return true;
 
 		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}
@@ -131,7 +103,7 @@ if ( ! function_exists( 'wp_authress_is_ready' ) ) {
 		if ( wp_authress_get_option( 'accessKey' ) && wp_authress_get_option( 'applicationId' ) && wp_authress_get_option( 'customDomain' ) ) {
 			return true;
 		}
-		debug('Authress db is not loaded');
+		debug('!!!!Authress Plugin and DB is not loaded');
 		return false;
 	}
 }
@@ -153,6 +125,8 @@ if ( ! function_exists( 'get_authressuserinfo' ) ) {
 
 if ( ! function_exists( 'debug' ) ) {
 	function debug($message) {
-		// error_log("****************************************************************           " . json_encode($message) . "           ****************************************************************");
+		if (getenv('DEVELOPMENT_DEBUG')) {
+			error_log("****************************************************************           " . json_encode($message) . "           ****************************************************************");
+		}
 	}
 }

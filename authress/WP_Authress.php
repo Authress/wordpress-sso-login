@@ -231,50 +231,6 @@ function wp_authress_filter_get_avatar( $avatar, $id_or_email, $size, $default, 
 }
 add_filter( 'get_avatar', 'wp_authress_filter_get_avatar', 1, 5 );
 
-function wp_authress_error_admin_notices() {
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-	if ( empty( $_GET['error'] ) ) {
-		return false;
-	}
-
-	$initial_setup = new WP_Authress_InitialSetup( WP_Authress_Options::Instance() );
-
-	switch ( $_GET['error'] ) {
-
-		case 'cant_create_client':
-			$initial_setup->cant_create_client_message();
-			break;
-
-		case 'cant_create_client_grant':
-			$initial_setup->cant_create_client_grant_message();
-			break;
-
-		case 'cant_exchange_token':
-			$initial_setup->cant_exchange_token_message();
-			break;
-
-		case 'rejected':
-			$initial_setup->rejected_message();
-			break;
-
-		case 'access_denied':
-			$initial_setup->access_denied_message();
-			break;
-
-		default:
-			// Output is sanitized in the notify_error method.
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			$initial_setup->notify_error( wp_unslash( $_GET['error'] ) );
-	}
-
-	return true;
-
-	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-}
-add_action( 'admin_notices', 'wp_authress_error_admin_notices' );
-
 function wp_authress_callback_step1() {
 	$consent_url = sprintf('https://authress.io/app/#/wordpress?hostedUrl=%s', urlencode(admin_url( 'admin.php?page=authress')));
 	wp_safe_redirect( $consent_url );
@@ -309,32 +265,7 @@ add_action( 'admin_action_wp_authress_clear_error_log', 'wp_authress_errorlog_cl
 
 function wp_authress_initial_setup_init() {
 	debug('wp_authress_initial_setup_init');
-
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-	// Null coalescing validates input variable.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	if ( 'authress' !== ( $_REQUEST['page'] ?? null ) || ! isset( $_REQUEST['callback'] ) ) {
-		return false;
-	}
-
-	// Null coalescing validates input variable.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	if ( 'rejected' === ( $_REQUEST['error'] ?? null ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress&error=rejected' ) );
-		exit;
-	}
-
-	// Null coalescing validates input variable.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	if ( 'access_denied' === ( $_REQUEST['error'] ?? null ) ) {
-		wp_safe_redirect( admin_url( 'admin.php?page=authress&error=access_denied' ) );
-		exit;
-	}
-
-	(new WP_Authress_InitialSetup_Consent( WP_Authress_Options::Instance() ))->callback();
-
+	return false;
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 }
 add_action( 'init', 'wp_authress_initial_setup_init', 1 );
@@ -348,7 +279,7 @@ add_action( 'init', 'wp_authress_init');
 
 function check_for_user_logged_in() {
 	debug('check_for_user_logged_in');
-	debug($_REQUEST['nonce']);
+	debug(sanitize_text_field($_REQUEST['nonce']));
 	
 	if (!is_user_logged_in() && $_REQUEST['nonce']) {
 		$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
@@ -374,29 +305,6 @@ function check_for_user_logged_in() {
 }
 add_action('init', 'check_for_user_logged_in');
 // add_action('login_init', 'check_for_user_logged_in');
-
-function wp_authress_profile_change_email( $wp_user_id, $old_user_data ) {
-	$options              = WP_Authress_Options::Instance();
-	$api_client_creds     = new WP_Authress_Api_Client_Credentials( $options );
-	$api_change_email     = new WP_Authress_Api_Change_Email( $options, $api_client_creds );
-	$profile_change_email = new WP_Authress_Profile_Change_Email( $api_change_email );
-	return $profile_change_email->update_email( $wp_user_id, $old_user_data );
-}
-add_action( 'profile_update', 'wp_authress_profile_change_email', 100, 2 );
-
-function wp_authress_validate_new_password( $errors, $user ) {
-	$options             = WP_Authress_Options::Instance();
-	$api_client_creds    = new WP_Authress_Api_Client_Credentials( $options );
-	$api_change_password = new WP_Authress_Api_Change_Password( $options, $api_client_creds );
-	$profile_change_pwd  = new WP_Authress_Profile_Change_Password( $api_change_password );
-	return $profile_change_pwd->validate_new_password( $errors, $user );
-}
-
-// Used during profile update in wp-admin.
-add_action( 'user_profile_update_errors', 'wp_authress_validate_new_password', 10, 2 );
-
-// Used during password reset on wp-login.php.
-add_action( 'validate_password_reset', 'wp_authress_validate_new_password', 10, 2 );
 
 function wp_authress_show_delete_identity() {
 	$profile_delete_data = new WP_Authress_Profile_Delete_Data();
@@ -449,7 +357,7 @@ function wp_authress_create_account_message() {
 
 	// Null coalescing validates input variable.
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	$current_page     = $_GET['page'] ?? null;
+	$current_page     = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : null;
 	$is_correct_admin = in_array( $current_page, ['authress_configuration', 'authress_errors' ] );
 	if ( wp_authress_is_ready() || ! $is_correct_admin ) {
 		return false;
@@ -567,69 +475,6 @@ function wp_authress_ajax_delete_cache_transient() {
 add_action( 'wp_ajax_authress_delete_cache_transient', 'wp_authress_ajax_delete_cache_transient' );
 
 /**
- * AJAX handler to re-send verification email.
- * Hooked to: wp_ajax_nopriv_resend_verification_email
- *
- * @codeCoverageIgnore - Tested in TestEmailVerification::testResendVerificationEmail()
- */
-function wp_authress_ajax_resend_verification_email() {
-	check_ajax_referer( WP_Authress_Email_Verification::RESEND_NONCE_ACTION );
-
-	$options               = WP_Authress_Options::Instance();
-	$api_client_creds      = new WP_Authress_Api_Client_Credentials( $options );
-	$api_jobs_verification = new WP_Authress_Api_Jobs_Verification( $options, $api_client_creds );
-
-	if ( empty( $_POST['sub'] ) ) {
-		wp_send_json_error( [ 'error' => __( 'No Authress user ID provided.', 'wp-authress' ) ] );
-	}
-
-	// Validated above and only sent to the change signup API endpoint.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-	if ( ! $api_jobs_verification->call( wp_unslash( $_POST['sub'] ) ) ) {
-		wp_send_json_error( [ 'error' => __( 'API call failed.', 'wp-authress' ) ] );
-	}
-
-	wp_send_json_success();
-}
-add_action( 'wp_ajax_nopriv_resend_verification_email', 'wp_authress_ajax_resend_verification_email' );
-
-/**
- * Redirect a successful lost password submission to a login override page.
- *
- * @param string $location - Redirect in process.
- *
- * @return string
- */
-function wp_authress_filter_wp_redirect_lostpassword( $location ) {
-	// Make sure we're going to the check email action on the wp-login page.
-	if ( 'wp-login.php?checkemail=confirm' !== $location ) {
-		return $location;
-	}
-
-	// Make sure we're on the lost password action on the wp-login page.
-	if ( ! wp_authress_is_current_login_action( [ 'lostpassword' ] ) ) {
-		return $location;
-	}
-
-	// Make sure plugin settings allow core WP login form overrides
-	if ( 'never' === wp_authress_get_option( 'wordpress_login_enabled' ) ) {
-		return $location;
-	}
-
-	// Make sure we're coming from an override page.
-	$required_referrer = remove_query_arg( 'wle', wp_login_url() );
-	$required_referrer = add_query_arg( 'action', 'lostpassword', $required_referrer );
-	$required_referrer = wp_authress_login_override_url( $required_referrer );
-	if ( ! isset( $_SERVER['HTTP_REFERER'] ) || $required_referrer !== $_SERVER['HTTP_REFERER'] ) {
-		return $location;
-	}
-
-	return wp_authress_login_override_url( $location );
-}
-
-add_filter( 'wp_redirect', 'wp_authress_filter_wp_redirect_lostpassword', 100 );
-
-/**
  * Add an override code to the lost password URL if authorized.
  *
  * @param string $wp_login_url - Existing lost password URL.
@@ -643,10 +488,6 @@ function wp_authress_filter_login_override_url( $wp_login_url ) {
 	if ( wp_authress_can_show_wp_login_form() && isset( $_REQUEST['wle'] ) ) {
 		// We are on an override page.
 		$wp_login_url = add_query_arg( 'wle', sanitize_text_field( wp_unslash( $_REQUEST['wle'] ) ), $wp_login_url );
-	} elseif ( wp_authress_is_current_login_action( [ 'resetpass' ] ) ) {
-		// We are on the reset password page with a link to login.
-		// This page will not be shown unless we get here via a valid reset password request.
-		$wp_login_url = wp_authress_login_override_url( $wp_login_url );
 	}
 	return $wp_login_url;
 

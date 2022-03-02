@@ -5,8 +5,6 @@ class WP_Authress_Lock {
 	const LOCK_GLOBAL_JS_VAR_NAME = 'wpAuthressLockGlobal';
 
 	protected $wp_options;
-	protected $extended_settings;
-	protected $signup_mode = false;
 
 	/**
 	 * WP_Authress_Lock_Options constructor.
@@ -16,31 +14,6 @@ class WP_Authress_Lock {
 	 */
 	public function __construct( $extended_settings = [], $opts = null ) {
 		$this->wp_options        = ! empty( $opts ) ? $opts : WP_Authress_Options::Instance();
-		$this->extended_settings = $extended_settings;
-	}
-
-	public function get_state_obj( $redirect_to = null ) {
-		// Nonce is not needed here as this is not processing form data.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-		$stateObj = [
-			'interim' => ( isset( $_GET['interim-login'] ) && $_GET['interim-login'] === 1 ),
-			'nonce'   => WP_Authress_State_Handler::get_instance()->get_unique(),
-		];
-
-		if ( ! empty( $redirect_to ) ) {
-			$stateObj['redirect_to'] = addslashes( $redirect_to );
-		} elseif ( isset( $_GET['redirect_to'] ) ) {
-			$stateObj['redirect_to'] = addslashes( sanitize_text_field( wp_unslash( $_GET['redirect_to'] ) ) );
-		}
-
-		return base64_encode( json_encode( $stateObj ) );
-
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-	}
-
-	protected function _is_valid( $array, $key ) {
-		return isset( $array[ $key ] ) && trim( $array[ $key ] ) !== '';
 	}
 
 	/**

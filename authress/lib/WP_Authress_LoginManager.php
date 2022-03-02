@@ -91,11 +91,6 @@ class WP_Authress_LoginManager {
 	 */
 	public function init_authress() {
 		debug('init_authress');
-		// WP nonce is not needed here, nonce and state parameters provide replay and CSRF protection.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-		set_query_var( 'authress_login_successful', false );
-
 		// Not an Authress login process or settings are not configured to allow logins.
 		if ( ! wp_authress_is_ready() ) {
 			return false;
@@ -132,14 +127,11 @@ class WP_Authress_LoginManager {
 		} catch ( WP_Authress_InvalidIdTokenException $e ) {
 			$code            = 'invalid_id_token';
 			$display_message = __( 'Invalid ID token', 'wp-authress' );
-			WP_Authress_ErrorLog::insert_error(
-				__METHOD__ . ' L:' . __LINE__,
-				new WP_Error( $code, $display_message . ': ' . $e->getMessage() )
-			);
+			WP_Authress_ErrorLog::insert_error(__METHOD__ . ' L:' . __LINE__, new WP_Error( $code, $display_message . ': ' . $e->getMessage() ));
 			$this->die_on_login( $display_message, $code );
 		}
 
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
+		return is_user_logged_in();
 	}
 
 	/**
@@ -151,17 +143,21 @@ class WP_Authress_LoginManager {
 	 *
 	 */
 	public function handle_login_redirect() {
-		$access_token = $_COOKIE['authorization'];
-		if (!isset($access_token) && isset($_REQUEST['access_token'])) {
-			$access_token = $_REQUEST['access_token'];
-			setcookie('authorization', $_REQUEST['access_token']);
+		debug('handle_login_redirect');
+		$access_token = sanitize_text_field($_COOKIE['authorization']);
+		if (!isset($_COOKIE['authorization']) && isset($_REQUEST['access_token'])) {
+			$access_token = sanitize_text_field($_REQUEST['access_token']);
+			setcookie('authorization', $access_token);
 		}
 
-		$id_token = $_COOKIE['user'];
-		if (!isset($id_token) && isset($_REQUEST['id_token'])) {
-			$id_token = $_REQUEST['id_token'];
-			setcookie('user', $_REQUEST['id_token']);
+		$id_token = sanitize_text_field($_COOKIE['user']);
+		if (!isset($_COOKIE['user']) && isset($_REQUEST['id_token'])) {
+			$id_token = sanitize_text_field($_REQUEST['id_token']);
+			setcookie('user', $id_token);
 		}
+
+		debug('access_token: ' . $access_token);
+		debug('id_token:' . $id_token);
 
 		if (empty($id_token) || empty($access_token)) {
 			debug('No tokens set, user is not logged in');
@@ -244,8 +240,6 @@ class WP_Authress_LoginManager {
 
 			$msg = __( 'Could not create user. The registration process is not available. Please contact your site’s administrator.', 'wp-authress' );
 			throw new WP_Authress_LoginFlowValidationException( $msg );
-		} catch ( WP_Authress_EmailNotVerifiedException $e ) {
-			WP_Authress_Email_Verification::render_die( $e->userinfo );
 		}
 		return is_user_logged_in();
 	}
@@ -260,8 +254,6 @@ class WP_Authress_LoginManager {
 	private function do_login( $user) {
 		debug('LoginManager.do_login');
 		$remember_users_session = $this->a0_options->get( 'remember_users_session', true);
-
-		set_query_var( 'authress_login_successful', true );
 
 		$secure_cookie = is_ssl();
 		$secure_cookie = apply_filters('secure_signon_cookie', $secure_cookie, [ 'user_login' => $user->user_login, 'user_password' => null, 'remember' => $remember_users_session, ]);
@@ -289,84 +281,6 @@ class WP_Authress_LoginManager {
 		}
 
 		wp_safe_redirect( home_url() );
-	}
-
-	/**
-	 * Get and filter the scope used for access and ID tokens.
-	 *
-	 * @param string $context - how the scopes are being used.
-	 *
-	 * @return string
-	 */
-	public static function get_userinfo_scope( $context = '' ) {
-		$default_scope  = [ 'openid', 'email', 'profile' ];
-		$filtered_scope = apply_filters( 'authress_auth_scope', $default_scope, $context );
-		return implode( ' ', $filtered_scope );
-	}
-
-	/**
-	 * Get authorize URL parameters for handling Universal Login Page redirects.
-	 *
-	 * @param null|string $connection - a specific connection to use; pass null to use all enabled connections.
-	 * @param null|string $redirect_to - URL to redirect upon successful authentication.
-	 *
-	 * @return array
-	 */
-	public static function get_authorize_params( $connection = null, $redirect_to = null ) {
-		// Nonce is not needed here as this is not processing form data.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-		$opts = WP_Authress_Options::Instance();
-
-		$params = [
-			'connection'    => $connection,
-			'accessKey'     => $opts->get( 'accessKey' ),
-			'organization'  => $opts->get( 'organization' ),
-			'scope'         => self::get_userinfo_scope( 'authorize_url' ),
-			'nonce'         => WP_Authress_Nonce_Handler::get_instance()->get_unique(),
-			'max_age'       => absint( apply_filters( 'authress_jwt_max_age', null ) ),
-			'response_type' => 'code',
-			'response_mode' => 'query',
-			'redirect_uri'  => $opts->get_wp_authress_url(),
-		];
-
-		// Where should the user be redirected after logging in?
-		if ( empty( $redirect_to ) ) {
-			$redirect_to = empty( $_GET['redirect_to'] )
-				? $opts->get( 'default_login_redirection' )
-				: filter_var( wp_unslash( $_GET['redirect_to'] ), FILTER_SANITIZE_URL );
-		}
-
-
-		$filtered_params = apply_filters( 'authress_authorize_url_params', $params, $connection, $redirect_to );
-
-		// State parameter, checked during login callback.
-		if ( empty( $filtered_params['state'] ) ) {
-			$state                    = [
-				'interim'     => false,
-				'nonce'       => WP_Authress_State_Handler::get_instance()->get_unique(),
-				'redirect_to' => $redirect_to,
-			];
-			$filtered_state           = apply_filters( 'authress_authorize_state', $state, $filtered_params );
-			$filtered_params['state'] = base64_encode( json_encode( $filtered_state ) );
-		}
-
-		return array_filter( $filtered_params );
-
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-	}
-
-	/**
-	 * Build a link to the tenant's authorize page.
-	 *
-	 * @param array $params - URL parameters to append.
-	 *
-	 * @return string
-	 */
-	public static function build_authorize_url( array $params = [] ) {
-		$auth_url = 'https://' . WP_Authress_Options::Instance()->get_auth_domain() . '/authorize';
-		$auth_url = add_query_arg( array_map( 'rawurlencode', $params ), $auth_url );
-		return apply_filters( 'authress_authorize_url', $auth_url, $params );
 	}
 
 	/**

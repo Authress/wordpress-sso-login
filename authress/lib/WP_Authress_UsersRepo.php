@@ -36,7 +36,6 @@ class WP_Authress_UsersRepo {
 	 * @return int|null|WP_Error
 	 *
 	 * @throws WP_Authress_CouldNotCreateUserException - When the user could not be created.
-	 * @throws WP_Authress_EmailNotVerifiedException - When a users's email is not verified but the site requires it.
 	 * @throws WP_Authress_RegistrationNotEnabledException - When registration is not turned on for this site.
 	 */
 	public function create( $userinfo ) {
