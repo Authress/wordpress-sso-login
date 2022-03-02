@@ -3,25 +3,13 @@
 	$wle = 'link';
 ?>
 
-	<script src="https://unpkg.com/authress-login@1.2.93/dist/authress.min.js"></script>
 	<script type="text/javascript">
-		const authressLoginHostUrl = "<?php echo $authress_options->get('customDomain') ?>";
-		const applicationId = "<?php echo $authress_options->get('applicationId') ?>";
-		const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
-		const currentUrl = new URL(window.location.href);
-		const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
-
-		loginClient.userSessionExists().then(userIsLoggedIn => {
-			console.log('User is logged in?', userIsLoggedIn, redirectUrl);
-			if (userIsLoggedIn) {
-				console.log('User is logged in?', userIsLoggedIn, redirectUrl);
-				window.location.replace(redirectUrl);
-			}
-		}).catch(error => {
-			console.error('Failed to check if user is logged in:', error);
-		});
-
 		function loginWithSsoDomain() {
+			const authressLoginHostUrl = "<?php echo $authress_options->get('customDomain') ?>";
+			const applicationId = "<?php echo $authress_options->get('applicationId') ?>";
+			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
+			const currentUrl = new URL(window.location.href);
+			const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
 			const ssoDomain = document.getElementById('customer_sso_domain').value;
 			loginClient.authenticate({ tenantLookupIdentifier: ssoDomain, redirectUrl })
 			.then(result => {
@@ -31,6 +19,29 @@
 			});
 			return false;
 		}
+
+		function checkIfLoaded() {
+			var script = document.querySelector('#wp_authress_login_sdk-js');
+			if (!script || !authress) {
+				return;
+			}
+			clearInterval(checkHandler);
+			const authressLoginHostUrl = "<?php echo $authress_options->get('customDomain') ?>";
+			const applicationId = "<?php echo $authress_options->get('applicationId') ?>";
+			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
+			const currentUrl = new URL(window.location.href);
+			const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
+
+			loginClient.userSessionExists().then(userIsLoggedIn => {
+				if (userIsLoggedIn) {
+					console.log('User is logged in.', redirectUrl);
+					window.location.replace(redirectUrl);
+				}
+			}).catch(error => {
+				console.error('Failed to check if user is logged in:', error);
+			});
+		};
+		var checkHandler = setInterval(checkIfLoaded, 100);
 	</script>
 	<div id="form-signin-wrapper" class="authress-login">
 		<div class="form-signin">

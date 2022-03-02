@@ -80,10 +80,6 @@ function wp_authress_uninstall_hook() {
 	$error_log = new WP_Authress_ErrorLog();
 	$error_log->delete();
 
-	delete_option( 'widget_wp_authress_popup_widget' );
-	delete_option( 'widget_wp_authress_widget' );
-	delete_option( 'widget_wp_authress_social_amplification_widget' );
-
 	delete_transient( WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME );
 }
 register_uninstall_hook( WP_AUTHRESS_PLUGIN_FILE, 'wp_authress_uninstall_hook' );
@@ -132,12 +128,6 @@ function wp_authress_enqueue_scripts() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'wp_authress_enqueue_scripts' );
-
-function wp_authress_register_widget() {
-	register_widget( 'WP_Authress_Embed_Widget' );
-	register_widget( 'WP_Authress_Popup_Widget' );
-}
-add_action( 'widgets_init', 'wp_authress_register_widget' );
 
 function wp_authress_register_query_vars( $qvars ) {
 	return array_merge( $qvars, [ 'error', 'applicationId', 'accessKey', 'customDomain'] );

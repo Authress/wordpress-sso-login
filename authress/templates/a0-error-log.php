@@ -46,10 +46,10 @@ $errors    = $error_log->get();
 				?>
 				<tr>
 					<td><?php echo date( 'm/d/Y H:i:s', $item['date'] ); ?></td>
-					<td><?php echo sanitize_text_field( $item['section'] ); ?></td>
-					<td><?php echo sanitize_text_field( $item['code'] ); ?></td>
-					<td><?php echo sanitize_text_field( $item['message'] ); ?></td>
-					<td><?php echo isset( $item['count'] ) ? intval( $item['count'] ) : 1; ?></td>
+					<td><?php echo esc_attr( $item['section'] ); ?></td>
+					<td><?php echo esc_attr( $item['code'] ); ?></td>
+					<td><?php echo esc_attr( $item['message'] ); ?></td>
+					<td><?php echo isset( $item['count'] ) ? esc_attr(intval( $item['count'] )) : 1; ?></td>
 				</tr>
 			<?php endforeach; ?>
 		<?php endif; ?>

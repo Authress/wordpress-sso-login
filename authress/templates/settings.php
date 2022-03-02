@@ -11,13 +11,13 @@
 						<?php _e( 'Configuration', 'wp-authress' ); ?>
 					</a>
 					<!-- <a id="tab-features" href="#features" class="js-a0-settings-tabs">
-						<?php _e( 'Features', 'wp-authress' ); ?>
+						< ?php _e( 'Features', 'wp-authress' ); ?>
 					</a>
 					<a id="tab-appearance" href="#appearance" class="js-a0-settings-tabs">
-						<?php _e( 'Embedded', 'wp-authress' ); ?>
+						< ?php _e( 'Embedded', 'wp-authress' ); ?>
 					</a>
 					<a id="tab-advanced" href="#advanced" class="js-a0-settings-tabs">
-						<?php _e( 'Advanced', 'wp-authress' ); ?>
+						< ?php _e( 'Advanced', 'wp-authress' ); ?>
 					</a> -->
 					<a id="tab-help" href="#help" class="js-a0-settings-tabs">
 						<?php _e( 'Help', 'wp-authress' ); ?>

@@ -27,7 +27,7 @@ class WP_Authress_InitialSetup {
 			  <p>
 				  <strong>
 					<?php _e( 'There was an error creating the Authress App. Check the errors page', 'wp-authress' ); ?>
-					  <!-- <a target="_blank" href="<php echo admin_url( 'admin.php?page=authress_errors' ); ?>"><php _e( 'error log', 'wp-authress' ); ?></a> -->
+					  <!-- <a target="_blank" href="<php echo esc_attr(admin_url( 'admin.php?page=authress_errors' )); ?>"><php _e( 'error log', 'wp-authress' ); ?></a> -->
 					<?php _e( ' for more information. If the problem persists, please follow the ', 'wp-authress' ); ?>
 					  <a target="_blank" href="https://authress.io/knowledge-base"><?php _e( 'manual setup instructions', 'wp-authress' ); ?></a>.
 				  </strong>
