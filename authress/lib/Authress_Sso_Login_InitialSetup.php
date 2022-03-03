@@ -1,10 +1,10 @@
 <?php
 
-class WP_Authress_InitialSetup {
+class Authress_Sso_Login_InitialSetup {
 
 	protected $a0_options;
 
-	public function __construct( WP_Authress_Options $a0_options ) {
+	public function __construct( Authress_Sso_Login_Options $a0_options ) {
 		$this->a0_options = $a0_options;
 	}
 

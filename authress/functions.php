@@ -19,7 +19,7 @@
  */
 
 function authress_get_configuration_data_from_key( $key, $default = null ) {
-	return WP_Authress_Options::Instance()->get( $key, $default );
+	return Authress_Sso_Login_Options::Instance()->get( $key, $default );
 }
 
 /**

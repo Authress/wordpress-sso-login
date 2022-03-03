@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . '/WP_Authress_Settings_Configuration.php';
+require __DIR__ . '/Authress_Sso_Login_Settings_Configuration.php';
 
-class WP_Authress_Admin {
+class Authress_Sso_Login_Admin {
 
 	const OPT_SECTIONS = [ 'basic', 'features', 'appearance', 'advanced' ];
 
@@ -12,12 +12,12 @@ class WP_Authress_Admin {
 
 	protected $sections = [];
 
-	public function __construct( WP_Authress_Options $a0_options, WP_Authress_Routes $router ) {
+	public function __construct( Authress_Sso_Login_Options $a0_options, Authress_Sso_Login_Routes $router ) {
 		$this->a0_options = $a0_options;
 		$this->router     = $router;
 
 		$this->sections = [
-			'basic'      => new WP_Authress_Settings_Configuration( $this->a0_options )
+			'basic'      => new Authress_Sso_Login_Settings_Configuration( $this->a0_options )
 		];
 	}
 

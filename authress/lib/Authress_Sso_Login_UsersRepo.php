@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains class WP_Authress_UsersRepo.
+ * Contains class Authress_Sso_Login_UsersRepo.
  *
  * @package WP-Authress
  *
@@ -8,23 +8,23 @@
  */
 
 /**
- * Class WP_Authress_UsersRepo.
+ * Class Authress_Sso_Login_UsersRepo.
  */
-class WP_Authress_UsersRepo {
+class Authress_Sso_Login_UsersRepo {
 
 	/**
 	 * Options instance used in this class.
 	 *
-	 * @var WP_Authress_Options
+	 * @var Authress_Sso_Login_Options
 	 */
 	protected $a0_options;
 
 	/**
-	 * WP_Authress_UsersRepo constructor.
+	 * Authress_Sso_Login_UsersRepo constructor.
 	 *
-	 * @param WP_Authress_Options $a0_options - Options instance used in this class.
+	 * @param Authress_Sso_Login_Options $a0_options - Options instance used in this class.
 	 */
-	public function __construct( WP_Authress_Options $a0_options ) {
+	public function __construct( Authress_Sso_Login_Options $a0_options ) {
 		$this->a0_options = $a0_options;
 	}
 
@@ -35,8 +35,8 @@ class WP_Authress_UsersRepo {
 	 *
 	 * @return int|null|WP_Error
 	 *
-	 * @throws WP_Authress_CouldNotCreateUserException - When the user could not be created.
-	 * @throws WP_Authress_RegistrationNotEnabledException - When registration is not turned on for this site.
+	 * @throws Authress_Sso_Login_CouldNotCreateUserException - When the user could not be created.
+	 * @throws Authress_Sso_Login_RegistrationNotEnabledException - When registration is not turned on for this site.
 	 */
 	public function create( $userinfo ) {
 
@@ -57,25 +57,25 @@ class WP_Authress_UsersRepo {
 			// If the user has a different Authress ID, we cannot join it.
 			$current_authress_id = self::get_meta( $user_id, 'authress_id' );
 			if ( ! empty( $current_authress_id ) && $authress_sub !== $current_authress_id ) {
-				throw new WP_Authress_CouldNotCreateUserException( __( 'There is a user with the same email.', 'wp-authress' ) );
+				throw new Authress_Sso_Login_CouldNotCreateUserException( __( 'There is a user with the same email.', 'wp-authress' ) );
 			}
 		} elseif ( $this->a0_options->is_wp_registration_enabled() || $this->a0_options->get( 'auto_provisioning' ) ) {
 			// WP user does not exist and registration is allowed.
-			$user_id = WP_Authress_Users::create_user( $userinfo );
+			$user_id = Authress_Sso_Login_Users::create_user( $userinfo );
 
 			// Check if user was created.
 			if ( is_wp_error( $user_id ) ) {
-				throw new WP_Authress_CouldNotCreateUserException( $user_id->get_error_message() );
+				throw new Authress_Sso_Login_CouldNotCreateUserException( $user_id->get_error_message() );
 			} elseif ( -2 === $user_id ) {
-				// Registration rejected by wp_authress_should_create_user filter in WP_Authress_Users::create_user().
-				throw new WP_Authress_CouldNotCreateUserException( __( 'Registration rejected.', 'wp-authress' ) );
+				// Registration rejected by wp_authress_should_create_user filter in Authress_Sso_Login_Users::create_user().
+				throw new Authress_Sso_Login_CouldNotCreateUserException( __( 'Registration rejected.', 'wp-authress' ) );
 			} elseif ( $user_id < 0 ) {
 				// Registration failed for another reason.
-				throw new WP_Authress_CouldNotCreateUserException();
+				throw new Authress_Sso_Login_CouldNotCreateUserException();
 			}
 		} else {
 			// Signup is not allowed.
-			throw new WP_Authress_RegistrationNotEnabledException();
+			throw new Authress_Sso_Login_RegistrationNotEnabledException();
 		}
 
 		$this->update_authress_object( $user_id, $userinfo );
@@ -93,7 +93,7 @@ class WP_Authress_UsersRepo {
 		global $wpdb;
 
 		if ( empty( $id ) ) {
-			WP_Authress_ErrorLog::insert_error( __METHOD__, __( 'Empty user id', 'wp-authress' ) );
+			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Empty user id', 'wp-authress' ) );
 
 			return null;
 		}
@@ -123,7 +123,7 @@ class WP_Authress_UsersRepo {
 		$users = get_users( $query );
 
 		if ( $users === [] ) {
-			WP_Authress_ErrorLog::insert_error( __METHOD__ . ' => get_users() ', __( 'User not found', 'wp-authress' ) );
+			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__ . ' => get_users() ', __( 'User not found', 'wp-authress' ) );
 			return null;
 		}
 
@@ -140,7 +140,7 @@ class WP_Authress_UsersRepo {
 	//phpcs:ignore
 	public static function get_authress_profile( $authress_user_id ) {
 		$profile = self::get_meta( $authress_user_id, 'authress_obj' );
-		return $profile ? WP_Authress_Serializer::unserialize( $profile ) : false;
+		return $profile ? Authress_Sso_Login_Serializer::unserialize( $profile ) : false;
 	}
 
 	/**
@@ -153,7 +153,7 @@ class WP_Authress_UsersRepo {
 		$authress_user_id = isset( $userinfo->user_id ) ? $userinfo->user_id : $userinfo->sub;
 		self::update_meta( $user_id, 'authress_id', $authress_user_id );
 
-		$userinfo_encoded = WP_Authress_Serializer::serialize( $userinfo );
+		$userinfo_encoded = Authress_Sso_Login_Serializer::serialize( $userinfo );
 		$userinfo_encoded = wp_slash( $userinfo_encoded );
 		self::update_meta( $user_id, 'authress_obj', $userinfo_encoded );
 

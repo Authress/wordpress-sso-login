@@ -1,19 +1,19 @@
 <?php
 
-class WP_Authress_Lock {
+class Authress_Sso_Login_Lock {
 
 	const LOCK_GLOBAL_JS_VAR_NAME = 'wpAuthressLockGlobal';
 
 	protected $wp_options;
 
 	/**
-	 * WP_Authress_Lock_Options constructor.
+	 * Authress_Sso_Login_Lock_Options constructor.
 	 *
 	 * @param array                 $extended_settings Argument in renderAuthressForm(), used by shortcode and widget.
-	 * @param null|WP_Authress_Options $opts WP_Authress_Options instance.
+	 * @param null|Authress_Sso_Login_Options $opts Authress_Sso_Login_Options instance.
 	 */
 	public function __construct( $extended_settings = [], $opts = null ) {
-		$this->wp_options = ! empty( $opts ) ? $opts : WP_Authress_Options::Instance();
+		$this->wp_options = ! empty( $opts ) ? $opts : Authress_Sso_Login_Options::Instance();
 	}
 
 	/**
@@ -35,7 +35,7 @@ class WP_Authress_Lock {
 		}
 
 		if ( $canShowLegacyLogin && authress_show_user_wordpress_login_form() ) {
-			add_action( 'login_footer', [ 'WP_Authress_Lock', 'render_back_to_lock' ] );
+			add_action( 'login_footer', [ 'Authress_Sso_Login_Lock', 'render_back_to_lock' ] );
 			return;
 		}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains class WP_Authress_Profile_Delete_Data.
+ * Contains class Authress_Sso_Login_Profile_Delete_Data.
  *
  * @package WP-Authress
  *
@@ -8,10 +8,10 @@
  */
 
 /**
- * Class WP_Authress_Profile_Delete_Data.
+ * Class Authress_Sso_Login_Profile_Delete_Data.
  * Provides UI and AJAX handlers to delete a user's Authress data.
  */
-class WP_Authress_Profile_Delete_Data {
+class Authress_Sso_Login_Profile_Delete_Data {
 
 	/**
 	 * Show the delete Authress user data button.
@@ -27,7 +27,7 @@ class WP_Authress_Profile_Delete_Data {
 		return;
 
 		// phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
-		$authress_user = WP_Authress_UsersRepo::get_authress_profile( $GLOBALS['user_id'] );
+		$authress_user = Authress_Sso_Login_UsersRepo::get_authress_profile( $GLOBALS['user_id'] );
 		if ( ! $authress_user ) {
 			return;
 		}
@@ -70,10 +70,10 @@ class WP_Authress_Profile_Delete_Data {
 			wp_send_json_error( [ 'error' => __( 'Forbidden', 'wp-authress' ) ] );
 		}
 
-		WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_id' );
-		WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_obj' );
-		WP_Authress_UsersRepo::delete_meta( $user_id, 'last_update' );
-		WP_Authress_UsersRepo::delete_meta( $user_id, 'authress_transient_email_update' );
+		Authress_Sso_Login_UsersRepo::delete_meta( $user_id, 'authress_id' );
+		Authress_Sso_Login_UsersRepo::delete_meta( $user_id, 'authress_obj' );
+		Authress_Sso_Login_UsersRepo::delete_meta( $user_id, 'last_update' );
+		Authress_Sso_Login_UsersRepo::delete_meta( $user_id, 'authress_transient_email_update' );
 		wp_send_json_success();
 	}
 }

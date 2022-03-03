@@ -1,6 +1,6 @@
 <?php
 /**
- * WP_Authress_LoginManager class
+ * Authress_Sso_Login_LoginManager class
  *
  * @package WordPress
  * @subpackage WP-Authress
@@ -19,29 +19,29 @@ use Lcobucci\JWT\Signer\Key\InMemory;
  *
  * @since 2.0.0
  */
-class WP_Authress_LoginManager {
+class Authress_Sso_Login_LoginManager {
 
 	/**
-	 * Instance of WP_Authress_Options.
+	 * Instance of Authress_Sso_Login_Options.
 	 *
-	 * @var null|WP_Authress_Options
+	 * @var null|Authress_Sso_Login_Options
 	 */
 	protected $a0_options;
 
 	/**
 	 * User strategy to use.
 	 *
-	 * @var WP_Authress_UsersRepo
+	 * @var Authress_Sso_Login_UsersRepo
 	 */
 	protected $users_repo;
 
 	/**
-	 * WP_Authress_LoginManager constructor.
+	 * Authress_Sso_Login_LoginManager constructor.
 	 *
-	 * @param WP_Authress_UsersRepo $users_repo - see member variable doc comment.
-	 * @param WP_Authress_Options   $a0_options - see member variable doc comment.
+	 * @param Authress_Sso_Login_UsersRepo $users_repo - see member variable doc comment.
+	 * @param Authress_Sso_Login_Options   $a0_options - see member variable doc comment.
 	 */
-	public function __construct( WP_Authress_UsersRepo $users_repo, WP_Authress_Options $a0_options ) {
+	public function __construct( Authress_Sso_Login_UsersRepo $users_repo, Authress_Sso_Login_Options $a0_options ) {
 		$this->users_repo = $users_repo;
 		$this->a0_options = $a0_options;
 	}
@@ -116,18 +116,18 @@ class WP_Authress_LoginManager {
 
 		try {
 			return $this->handle_login_redirect();
-		} catch ( WP_Authress_LoginFlowValidationException $e ) {
+		} catch ( Authress_Sso_Login_LoginFlowValidationException $e ) {
 
 			// Errors encountered during the OAuth login flow.
 			$this->die_on_login( $e->getMessage(), $e->getCode() );
-		} catch ( WP_Authress_BeforeLoginException $e ) {
+		} catch ( Authress_Sso_Login_BeforeLoginException $e ) {
 
 			// Errors encountered during the WordPress login flow.
 			$this->die_on_login( $e->getMessage(), $e->getCode() );
-		} catch ( WP_Authress_InvalidIdTokenException $e ) {
+		} catch ( Authress_Sso_Login_InvalidIdTokenException $e ) {
 			$code            = 'invalid_id_token';
 			$display_message = __( 'Invalid ID token', 'wp-authress' );
-			WP_Authress_ErrorLog::insert_error(__METHOD__ . ' L:' . __LINE__, new WP_Error( $code, $display_message . ': ' . $e->getMessage() ));
+			Authress_Sso_Login_ErrorLog::insert_error(__METHOD__ . ' L:' . __LINE__, new WP_Error( $code, $display_message . ': ' . $e->getMessage() ));
 			$this->die_on_login( $display_message, $code );
 		}
 
@@ -137,9 +137,9 @@ class WP_Authress_LoginManager {
 	/**
 	 * Main login flow using the Authorization Code Grant.
 	 *
-	 * @throws WP_Authress_LoginFlowValidationException - OAuth login flow errors.
-	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
-	 * @throws WP_Authress_InvalidIdTokenException If the ID token does not validate.
+	 * @throws Authress_Sso_Login_LoginFlowValidationException - OAuth login flow errors.
+	 * @throws Authress_Sso_Login_BeforeLoginException - Errors encountered during the authress_before_login action.
+	 * @throws Authress_Sso_Login_InvalidIdTokenException If the ID token does not validate.
 	 *
 	 */
 	public function handle_login_redirect() {
@@ -181,8 +181,8 @@ class WP_Authress_LoginManager {
 	 *
 	 * @return bool
 	 *
-	 * @throws WP_Authress_LoginFlowValidationException - OAuth login flow errors.
-	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
+	 * @throws Authress_Sso_Login_LoginFlowValidationException - OAuth login flow errors.
+	 * @throws Authress_Sso_Login_BeforeLoginException - Errors encountered during the authress_before_login action.
 	 */
 	public function login_user( $userinfo) {
 		$authress_sub        = $userinfo->sub;
@@ -227,18 +227,18 @@ class WP_Authress_LoginManager {
 		}
 		try {
 			authress_debug_log('New user: creating.');
-			$creator = new WP_Authress_UsersRepo( $this->a0_options );
+			$creator = new Authress_Sso_Login_UsersRepo( $this->a0_options );
 			$user_id = $creator->create( $userinfo);
 			$user    = get_user_by( 'id', $user_id );
 			$this->do_login( $user);
 			return is_user_logged_in();
-		} catch ( WP_Authress_CouldNotCreateUserException $e ) {
+		} catch ( Authress_Sso_Login_CouldNotCreateUserException $e ) {
 
-			throw new WP_Authress_LoginFlowValidationException( $e->getMessage() );
-		} catch ( WP_Authress_RegistrationNotEnabledException $e ) {
+			throw new Authress_Sso_Login_LoginFlowValidationException( $e->getMessage() );
+		} catch ( Authress_Sso_Login_RegistrationNotEnabledException $e ) {
 
 			$msg = __( 'Could not create user. The registration process is not available. Please contact your site’s administrator.', 'wp-authress' );
-			throw new WP_Authress_LoginFlowValidationException( $msg );
+			throw new Authress_Sso_Login_LoginFlowValidationException( $msg );
 		}
 		return is_user_logged_in();
 	}
@@ -248,7 +248,7 @@ class WP_Authress_LoginManager {
 	 *
 	 * @param object      $user - the WP user object, such as returned by get_user_by().
 	 *
-	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
+	 * @throws Authress_Sso_Login_BeforeLoginException - Errors encountered during the authress_before_login action.
 	 */
 	private function do_login( $user) {
 		authress_debug_log('LoginManager.do_login');
@@ -275,7 +275,7 @@ class WP_Authress_LoginManager {
 	 * Hooked to `wp_logout` action.
 	 * IMPORTANT: Internal callback use only, do not call this function directly!
 	 *
-	 * @see WP_Authress_LoginManager::init()
+	 * @see Authress_Sso_Login_LoginManager::init()
 	 *
 	 * @link https://codex.wordpress.org/Plugin_API/Action_Reference/wp_logout
 	 */
@@ -345,7 +345,7 @@ class WP_Authress_LoginManager {
 	/**
 	 * @param string $id_token
 	 * @return object
-	 * @throws WP_Authress_InvalidIdTokenException - Token was not valid.
+	 * @throws Authress_Sso_Login_InvalidIdTokenException - Token was not valid.
 	 */
 	private function decode_id_token( $id_token ) {
 		$expectedIss = $this->a0_options->get_auth_domain();
@@ -384,8 +384,8 @@ class WP_Authress_LoginManager {
 			$userObject = (object) $token->claims()->all();
 			return $userObject;
 		} catch (RequiredConstraintsViolated $e) {
-			WP_Authress_ErrorLog::insert_error( __METHOD__, __( 'Invalid user authentication token:', 'wp-authress' ) . $e->violations());
-			throw new WP_Authress_InvalidIdTokenException($e);
+			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Invalid user authentication token:', 'wp-authress' ) . $e->violations());
+			throw new Authress_Sso_Login_InvalidIdTokenException($e);
 		}
 	}
 

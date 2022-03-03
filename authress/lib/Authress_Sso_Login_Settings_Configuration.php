@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains WP_Authress_Settings_Configuration.
+ * Contains Authress_Sso_Login_Settings_Configuration.
  *
  * @package WP-Authress
  *
@@ -8,16 +8,16 @@
  */
 
 /**
- * Class WP_Authress_Settings_Configuration.
+ * Class Authress_Sso_Login_Settings_Configuration.
  * Fields and validations for the Basic settings tab.
  */
-class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
+class Authress_Sso_Login_Settings_Configuration extends Authress_Sso_Login_Admin_Generic {
 
 	/**
 	 * All settings in the Basic tab
 	 *
-	 * @see \WP_Authress_Admin::init_admin
-	 * @see \WP_Authress_Admin_Generic::init_option_section
+	 * @see \Authress_Sso_Login_Admin::init_admin
+	 * @see \Authress_Sso_Login_Admin_Generic::init_option_section
 	 */
 	public function init() {
 
@@ -56,7 +56,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
 	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
+	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
 	public function render_domain( $args = [] ) {
@@ -75,7 +75,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
 	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
+	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 *
 	 * @since 3.7.0
@@ -92,7 +92,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
 	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
+	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
 	public function render_access_key( $args = [] ) {
@@ -107,7 +107,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
 	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
+	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
 	public function render_application_id( $args = [] ) {
@@ -122,7 +122,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
 	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
+	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
 	public function render_cache_expiration( $args = [] ) {
@@ -151,7 +151,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	 *
 	 * @param array $args - callback args passed in from add_settings_field().
 	 *
-	 * @see WP_Authress_Admin_Generic::init_option_section()
+	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
 	 * @see add_settings_field()
 	 */
 	public function render_allow_wordpress_login( $args = [] ) {

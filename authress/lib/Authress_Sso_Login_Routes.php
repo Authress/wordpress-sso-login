@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains class WP_Authress_Routes.
+ * Contains class Authress_Sso_Login_Routes.
  *
  * @package WP-Authress
  *
@@ -8,24 +8,24 @@
  */
 
 /**
- * Class WP_Authress_Routes.
+ * Class Authress_Sso_Login_Routes.
  * Handles all custom routes used by Authress except login callback.
  */
-class WP_Authress_Routes {
+class Authress_Sso_Login_Routes {
 
 	/**
-	 * WP_Authress_Options instance for this class.
+	 * Authress_Sso_Login_Options instance for this class.
 	 *
-	 * @var WP_Authress_Options
+	 * @var Authress_Sso_Login_Options
 	 */
 	protected $a0_options;
 
 	/**
-	 * WP_Authress_Routes constructor.
+	 * Authress_Sso_Login_Routes constructor.
 	 *
-	 * @param WP_Authress_Options       $a0_options - WP_Authress_Options instance.
+	 * @param Authress_Sso_Login_Options       $a0_options - Authress_Sso_Login_Options instance.
 	 */
-	public function __construct( WP_Authress_Options $a0_options) {
+	public function __construct( Authress_Sso_Login_Options $a0_options) {
 		$this->a0_options = $a0_options;
 	}
 
@@ -130,7 +130,7 @@ class WP_Authress_Routes {
 
 		return [
 			'client_name'   => get_bloginfo( 'name' ),
-			'redirect_uris' => [ WP_Authress_InitialSetup::get_setup_redirect_uri() ],
+			'redirect_uris' => [ Authress_Sso_Login_InitialSetup::get_setup_redirect_uri() ],
 		];
 	}
 }

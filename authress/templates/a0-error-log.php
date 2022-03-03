@@ -4,10 +4,10 @@
  *
  * @package WP-Authress
  *
- * @see WP_Authress_ErrorLog::render_settings_page()
+ * @see Authress_Sso_Login_ErrorLog::render_settings_page()
  */
 
-	$authress_errors_found = (new WP_Authress_ErrorLog())->get();
+	$authress_errors_found = (new Authress_Sso_Login_ErrorLog())->get();
 ?>
 <div class="a0-wrap settings wrap">
 
@@ -16,7 +16,7 @@
 		<div class="a0-buttons">
 			<form action="<?php echo esc_attr(admin_url( 'options.php' )); ?>" method="post" class="js-a0-confirm-submit"
 						data-confirm-msg="<?php esc_attr_e( 'This will delete all error log entries. Proceed?', 'wp-authress' ); ?>">
-			<?php wp_nonce_field( WP_Authress_ErrorLog::CLEAR_LOG_NONCE ); ?>
+			<?php wp_nonce_field( Authress_Sso_Login_ErrorLog::CLEAR_LOG_NONCE ); ?>
 				<input type="hidden" name="action" value="wp_authress_clear_error_log">
 				<input type="submit" name="submit" class="button button-primary" value="Clear Log">
 			</form>

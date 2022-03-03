@@ -1,6 +1,6 @@
 <?php
 
-class WP_Authress_Admin_Generic {
+class Authress_Sso_Login_Admin_Generic {
 
 	const ERROR_FIELD_STYLE = 'border: 1px solid red;';
 
@@ -9,11 +9,11 @@ class WP_Authress_Admin_Generic {
 	protected $configurationDatabaseName;
 
 	/**
-	 * WP_Authress_Admin_Generic constructor.
+	 * Authress_Sso_Login_Admin_Generic constructor.
 	 *
-	 * @param WP_Authress_Options $options
+	 * @param Authress_Sso_Login_Options $options
 	 */
-	public function __construct( WP_Authress_Options $options ) {
+	public function __construct( Authress_Sso_Login_Options $options ) {
 		$this->options      = $options;
 		$this->configurationDatabaseName = $options->getConfigurationDatabaseName();
 	}

@@ -1,5 +1,5 @@
 <?php
-class WP_Authress_Users {
+class Authress_Sso_Login_Users {
 
 	/**
 	 * Create a WordPress user with Authress data.

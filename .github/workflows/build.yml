@@ -27,7 +27,7 @@ jobs:
     - name: Set package versioning
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       run: |
-        sed -i "s/{{VERSION}}/${VERSION}/g" authress/WP_Authress.php
+        sed -i "s/{{VERSION}}/${VERSION}/g" authress/Authress_Sso_Login.php
         sed -i "s/{{VERSION}}/${VERSION}/g" authress/readme.txt
 
     - name: Install Composer dependencies

@@ -25,12 +25,12 @@
 			</p>
 
 		<form action="options.php" method="post" id="js-a0-settings-form" class="a0-settings-form">
-			<?php settings_fields( WP_Authress_Options::Instance()->getConfigurationDatabaseName() . '_basic' ); ?>
+			<?php settings_fields( Authress_Sso_Login_Options::Instance()->getConfigurationDatabaseName() . '_basic' ); ?>
 
 			<div class="tab-content">
-				<?php foreach ( WP_Authress_Admin::OPT_SECTIONS as $admin_tab ) : ?>
+				<?php foreach ( Authress_Sso_Login_Admin::OPT_SECTIONS as $admin_tab ) : ?>
 					<div class="tab-pane" id="panel-<?php echo esc_attr($admin_tab); ?>">
-						<?php do_settings_sections( WP_Authress_Options::Instance()->getConfigurationDatabaseName() . '_' . $admin_tab ); ?>
+						<?php do_settings_sections( Authress_Sso_Login_Options::Instance()->getConfigurationDatabaseName() . '_' . $admin_tab ); ?>
 					</div>
 				<?php endforeach; ?>
 

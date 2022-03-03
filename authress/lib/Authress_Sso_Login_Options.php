@@ -1,6 +1,6 @@
 <?php
 
-class WP_Authress_Options {
+class Authress_Sso_Login_Options {
 
 	/**
 	 * Name used in options table option_name column.
@@ -24,12 +24,12 @@ class WP_Authress_Options {
 	protected $constant_opts = [];
 
 	/**
-	 * @var WP_Authress_Options
+	 * @var Authress_Sso_Login_Options
 	 */
 	protected static $static_singleton_instance = null;
 
 	/**
-	 * WP_Authress_Options constructor.
+	 * Authress_Sso_Login_Options constructor.
 	 * Finds and stores all constant-defined settings values.
 	 */
 	public function __construct() {
@@ -43,7 +43,7 @@ class WP_Authress_Options {
 	}
 
 	/**
-	 * @return WP_Authress_Options
+	 * @return Authress_Sso_Login_Options
 	 */
 	public static function Instance() {
 		if ( null === self::$static_singleton_instance ) {
@@ -60,7 +60,7 @@ class WP_Authress_Options {
 	 * @return string
 	 */
 	public function get_constant_name( $key ) {
-		// NOTE: the add_filter call must load before WP_Authress::init() so it cannot be used in a theme.
+		// NOTE: the add_filter call must load before Authress_Sso_Login::init() so it cannot be used in a theme.
 		$constant_prefix = apply_filters( 'authress_settings_constant_prefix', 'AUTHRESS_ENV_' );
 		return $constant_prefix . strtoupper( $key );
 	}

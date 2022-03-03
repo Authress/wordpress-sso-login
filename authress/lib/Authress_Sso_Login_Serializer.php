@@ -1,5 +1,5 @@
 <?php
-class WP_Authress_Serializer {
+class Authress_Sso_Login_Serializer {
 
 	public static function serialize( $o ) {
 		return wp_json_encode( $o );

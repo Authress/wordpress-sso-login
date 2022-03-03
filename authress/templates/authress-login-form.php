@@ -1,5 +1,5 @@
 <?php
-	$authress_options = WP_Authress_Options::Instance();
+	$authress_options = Authress_Sso_Login_Options::Instance();
 	$wle = 'link';
 ?>
 

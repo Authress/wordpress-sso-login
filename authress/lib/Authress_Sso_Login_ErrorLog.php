@@ -1,16 +1,16 @@
 <?php
 /**
- * Contains the WP_Authress_ErrorLog class.
+ * Contains the Authress_Sso_Login_ErrorLog class.
  *
  * @package WP-Authress
  * @since 2.0.0
  */
 
 /**
- * Class WP_Authress_ErrorLog.
+ * Class Authress_Sso_Login_ErrorLog.
  * Handles error log CRUD actions and hooks.
  */
-class WP_Authress_ErrorLog {
+class Authress_Sso_Login_ErrorLog {
 
 	/**
 	 * Option name used to store the error log.
@@ -30,7 +30,7 @@ class WP_Authress_ErrorLog {
 	/**
 	 * Render the settings page.
 	 *
-	 * @see WP_Authress_Settings_Section::init_menu()
+	 * @see Authress_Sso_Login_Settings_Section::init_menu()
 	 */
 	public function render_settings_page() {
 		include WP_AUTHRESS_PLUGIN_DIR . 'templates/a0-error-log.php';
