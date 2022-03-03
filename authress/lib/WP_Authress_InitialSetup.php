@@ -18,7 +18,7 @@ class WP_Authress_InitialSetup {
 			$this->a0_options->set( 'customDomain', sanitize_text_field($_GET['customDomain'] ));
 			$this->a0_options->set( 'applicationId', sanitize_text_field($_GET['applicationId'] ));
 		}
-		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/setup_wizard.php';
+		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/setup-wizard.php';
 	}
 
 	public function cant_create_client_message() {
@@ -26,10 +26,10 @@ class WP_Authress_InitialSetup {
 		  <div class="notice notice-error">
 			  <p>
 				  <strong>
-					<?php _e( 'There was an error creating the Authress App. Check the errors page', 'wp-authress' ); ?>
-					  <!-- <a target="_blank" href="<php echo esc_attr(admin_url( 'admin.php?page=authress_errors' )); ?>"><php _e( 'error log', 'wp-authress' ); ?></a> -->
-					<?php _e( ' for more information. If the problem persists, please follow the ', 'wp-authress' ); ?>
-					  <a target="_blank" href="https://authress.io/knowledge-base"><?php _e( 'manual setup instructions', 'wp-authress' ); ?></a>.
+					<?php esc_attr_e( 'There was an error creating the Authress App. Check the errors page', 'wp-authress' ); ?>
+					  <!-- <a target="_blank" href="<php echo esc_attr(admin_url( 'admin.php?page=authress_errors' )); ?>"><php esc_attr_e( 'error log', 'wp-authress' ); ?></a> -->
+					<?php esc_attr_e( ' for more information. If the problem persists, please follow the ', 'wp-authress' ); ?>
+					  <a target="_blank" href="https://authress.io/knowledge-base"><?php esc_attr_e( 'manual setup instructions', 'wp-authress' ); ?></a>.
 				  </strong>
 			  </p>
 		  </div>

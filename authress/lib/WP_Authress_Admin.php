@@ -54,8 +54,7 @@ class WP_Authress_Admin {
 		);
 
 		// Only checking the value, not processing.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$wp_authress_curr_page = ! empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '';
+		$wp_authress_curr_page = !empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '';
 		$wp_authress_pages     = [ 'authress', 'authress_configuration', 'authress_errors' ];
 		if ( ! in_array( $wp_authress_curr_page, $wp_authress_pages ) ) {
 			return false;
@@ -71,8 +70,6 @@ class WP_Authress_Admin {
 
 		wp_enqueue_style( 'wp_authress_admin_initial_setup' );
 		return true;
-
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 	}
 
 	public function init_admin() {
@@ -82,8 +79,8 @@ class WP_Authress_Admin {
 		}
 
 		register_setting(
-			$this->a0_options->get_options_name() . '_basic',
-			$this->a0_options->get_options_name(),
+			$this->a0_options->getConfigurationDatabaseName() . '_basic',
+			$this->a0_options->getConfigurationDatabaseName(),
 			[
 				'sanitize_callback' => [ $this, 'input_validator' ],
 			]

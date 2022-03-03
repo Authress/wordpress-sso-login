@@ -35,14 +35,14 @@ class WP_Authress_Profile_Delete_Data {
 		// <table class="form-table">
 		// 	<tr>
 		// 		<th>
-		// 			<label><?php _e( 'Delete Authress Data', 'wp-authress' ); ? ></label>
+		// 			<label><?php esc_attr_e( 'Delete Authress Data', 'wp-authress' ); ? ></label>
 		// 		</th>
 		// 		<td>
 		// 			<input type="button" id="authress_delete_data" class="button button-secondary"
-		// 				value="<?php _e( 'Delete Authress Data', 'wp-authress' ); ? >" />
+		// 				value="<?php esc_attr_e( 'Delete Authress Data', 'wp-authress' ); ? >" />
 		// 			<br><br>
 		// 			<a href="https://authress.io/app/#/setup?focus=explorer<?php echo esc_attr(rawurlencode( $authress_user->sub )); ? >" target="_blank">
-		// 				< ?php _e( 'View in Authress', 'wp-authress' ); ? >
+		// 				< ?php esc_attr_e( 'View in Authress', 'wp-authress' ); ? >
 		// 			</a>
 		// 		</td>
 		// 	</tr>

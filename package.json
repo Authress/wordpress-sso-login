@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "composer install -d authress --optimize-autoloader",
+    "install": "./composer.phar install -d authress --prefer-dist --optimize-autoloader",
+    "build": "./composer.phar install -d authress --prefer-dist --optimize-autoloader",
     "start": "sudo docker-compose up",
+    "test": "./authress/vendor/bin/phpcs -i && ./authress/vendor/bin/phpcs -s authress",
     "kill": "sudo docker-compose rm",
     "cli": "sudo docker-compose run wordpress /bin/bash",
     "package": "zip authress.zip -r authress"

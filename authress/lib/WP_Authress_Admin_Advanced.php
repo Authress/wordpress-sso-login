@@ -36,7 +36,6 @@ class WP_Authress_Admin_Advanced extends WP_Authress_Admin_Generic {
 	public function __construct( WP_Authress_Options $options, WP_Authress_Routes $router ) {
 		parent::__construct( $options );
 		$this->router                = $router;
-		$this->actions_middlewares[] = 'migration_ips_validation';
 	}
 
 	/**
@@ -349,36 +348,8 @@ class WP_Authress_Admin_Advanced extends WP_Authress_Admin_Generic {
 		$input['force_https_callback']      = $this->sanitize_switch_val( $input['force_https_callback'] ?? null );
 		$input['auto_provisioning']         = $this->sanitize_switch_val( $input['auto_provisioning'] ?? null );
 		$input['migration_ips_filter'] = $this->sanitize_switch_val( $input['migration_ips_filter'] ?? null );
-		// `migration_ips` is sanitized in $this->migration_ips_validation() below.
 		$input['valid_proxy_ip']      = ( isset( $input['valid_proxy_ip'] ) ? $input['valid_proxy_ip'] : null );
 		$input['authress_server_domain'] = $this->sanitize_text_val( $input['authress_server_domain'] ?? null );
-		return $input;
-	}
-
-	/**
-	 * Validation for the migration_ips setting.
-	 * Generates new migration tokens if none is present.
-	 *
-	 * @param array $input - New option values to validate.
-	 *
-	 * @return array
-	 */
-	public function migration_ips_validation( array $input ) {
-
-		if ( empty( $input['migration_ips'] ) ) {
-			$input['migration_ips'] = '';
-			return $input;
-		}
-
-		$ip_addresses = explode( ',', $this->sanitize_text_val( $input['migration_ips'] ) );
-		$ip_addresses = array_map( 'trim', $ip_addresses );
-		$ip_addresses = array_filter( $ip_addresses );
-		$ip_addresses = array_unique( $ip_addresses );
-
-		if ( ! empty( $input['domain'] ) ) {
-		}
-
-		$input['migration_ips'] = implode( ', ', $ip_addresses );
 		return $input;
 	}
 

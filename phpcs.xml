@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards">
+   <description>PHP_CodeSniffer Rule Set</description>
+ 
+   <!-- Exclude paths -->
+   <exclude-pattern>*/node_modules/*</exclude-pattern>
+   <exclude-pattern>vendor/*</exclude-pattern>
+   <exclude-pattern>assets/*</exclude-pattern>
+ 
+   <!-- Configs -->
+   <config name="minimum_supported_wp_version" value="7.3" />
+   <config name="testVersion" value="7.3-" />
+ 
+   <!-- Rules -->
+   <rule ref="WordPress" />
+
+   <rule ref="Squiz.Commenting.FileComment.Missing"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing.SpaceAfterOpen"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing.SpaceBeforeClose"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterOpen"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.PrecisionAlignment.Found"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeEnd"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.PHP.EmbeddedPhp.ContentAfterEnd"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.Files.FileName.InvalidClassFileName"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.ClassComment.Missing"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.VariableComment.Missing"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FunctionComment.MissingParamComment"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FunctionComment.ParamCommentFullStop"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.Arrays.DisallowShortArraySyntax.Found"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FunctionComment.Missing"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceBeforeCloseParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+
+   <rule ref="Squiz.Commenting.InlineComment.InvalidEndChar"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.CodeAnalysis.AssignmentInCondition.Found"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.Commenting.DocComment.MissingShort"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Generic.Commenting.DocComment.SpacingAfter"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.Arrays.CommaAfterArrayItem.NoComma"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   
+
+ 
+   <!-- <rule ref="WordPress.WP.I18n">
+      <properties>
+         <property name="text_domain" type="array" value="my-plugin-textdomain" />
+      </properties>
+   </rule> -->
+</ruleset>

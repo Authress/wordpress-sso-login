@@ -5,8 +5,8 @@
 
 	<script type="text/javascript">
 		function loginWithSsoDomain() {
-			const authressLoginHostUrl = "<?php echo $authress_options->get('customDomain') ?>";
-			const applicationId = "<?php echo $authress_options->get('applicationId') ?>";
+			const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
+			const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
 			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
 			const currentUrl = new URL(window.location.href);
 			const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
@@ -26,8 +26,8 @@
 				return;
 			}
 			clearInterval(checkHandler);
-			const authressLoginHostUrl = "<?php echo $authress_options->get('customDomain') ?>";
-			const applicationId = "<?php echo $authress_options->get('applicationId') ?>";
+			const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
+			const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
 			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
 			const currentUrl = new URL(window.location.href);
 			const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
@@ -59,8 +59,8 @@
 			</div>
 			<?php if ( 'link' === $wle && function_exists( 'login_header' ) ) : ?>
 			  <div id="extra-options">
-				  <a href="<?php echo wp_login_url(); ?>?wle">
-					<?php _e( 'Login with WordPress username', 'wp-authress' ); ?>
+				  <a href="<?php echo esc_url(wp_login_url()); ?>?wle">
+					<?php esc_attr_e( 'Login with WordPress username', 'wp-authress' ); ?>
 				  </a>
 			  </div>
 			<?php endif ?>
@@ -68,5 +68,5 @@
 	</div>
 
 	<style type="text/css">
-		<?php echo apply_filters( 'authress_login_css', '' ); ?>
+		<?php echo esc_attr(apply_filters( 'authress_login_css', '' )); ?>
 	</style>

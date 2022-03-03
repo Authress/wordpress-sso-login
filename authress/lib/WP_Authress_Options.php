@@ -7,14 +7,14 @@ class WP_Authress_Options {
 	 *
 	 * @var string
 	 */
-	protected $_options_name = 'authress_settings';
+	protected $configurationDatabaseName = 'authress_settings';
 
 	/**
 	 * Current array of options stored in memory.
 	 *
 	 * @var null|array
 	 */
-	private $_opts = null;
+	private $cached_opts = null;
 
 	/**
 	 * Array of options overridden by constants.
@@ -26,7 +26,7 @@ class WP_Authress_Options {
 	/**
 	 * @var WP_Authress_Options
 	 */
-	protected static $_instance = null;
+	protected static $static_singleton_instance = null;
 
 	/**
 	 * WP_Authress_Options constructor.
@@ -46,10 +46,10 @@ class WP_Authress_Options {
 	 * @return WP_Authress_Options
 	 */
 	public static function Instance() {
-		if ( null === self::$_instance ) {
-			self::$_instance = new self();
+		if ( null === self::$static_singleton_instance ) {
+			self::$static_singleton_instance = new self();
 		}
-		return self::$_instance;
+		return self::$static_singleton_instance;
 	}
 
 	/**
@@ -101,8 +101,8 @@ class WP_Authress_Options {
 	 *
 	 * @return string
 	 */
-	public function get_options_name() {
-		return $this->_options_name;
+	public function getConfigurationDatabaseName() {
+		return $this->configurationDatabaseName;
 	}
 
 	/**
@@ -111,8 +111,8 @@ class WP_Authress_Options {
 	 * @return array
 	 */
 	public function get_options() {
-		if ( empty( $this->_opts ) ) {
-			$options = get_option( $this->_options_name, [] );
+		if ( empty( $this->cached_opt ) ) {
+			$options = get_option( $this->configurationDatabaseName, [] );
 			// Brand new install, no saved options so get all defaults.
 			if ( empty( $options ) || ! is_array( $options ) ) {
 				$options = $this->defaults();
@@ -122,9 +122,9 @@ class WP_Authress_Options {
 			if ( ! empty( $this->constant_opts ) ) {
 				$options = array_replace_recursive( $options, $this->constant_opts );
 			}
-			$this->_opts = $options;
+			$this->cached_opt = $options;
 		}
-		return $this->_opts;
+		return $this->cached_opt;
 	}
 
 	/**
@@ -161,7 +161,7 @@ class WP_Authress_Options {
 
 		$options         = $this->get_options();
 		$options[ $key ] = $value;
-		$this->_opts     = $options;
+		$this->cached_opt     = $options;
 
 		// No database update so process completed successfully.
 		if ( ! $should_update ) {
@@ -185,7 +185,7 @@ class WP_Authress_Options {
 
 		$options = $this->get_options();
 		unset( $options[ $key ] );
-		$this->_opts = $options;
+		$this->cached_opt = $options;
 	}
 
 	/**
@@ -199,7 +199,7 @@ class WP_Authress_Options {
 		foreach ( $this->get_all_constant_keys() as $key ) {
 			unset( $options[ $key ] );
 		}
-		return update_option( $this->_options_name, $options );
+		return update_option( $this->configurationDatabaseName, $options );
 	}
 
 	/**
@@ -216,14 +216,14 @@ class WP_Authress_Options {
 	 * @return bool
 	 */
 	public function delete() {
-		return delete_option( $this->_options_name );
+		return delete_option( $this->configurationDatabaseName );
 	}
 
 	/**
 	 * Reset options to defaults.
 	 */
 	public function reset() {
-		$this->_opts = null;
+		$this->cached_opt = null;
 		$this->delete();
 		$this->save();
 	}
@@ -354,7 +354,7 @@ class WP_Authress_Options {
 
 		$skip_strategies = explode( ',', $skip_strategies );
 		$skip_strategies = array_map( 'trim', $skip_strategies );
-		return in_array( $strategy, $skip_strategies );
+		return in_array( $strategy, $skip_strategies, true);
 	}
 
 	/**
@@ -374,7 +374,7 @@ class WP_Authress_Options {
 
             'last_step'                 => 1,
             'db_connection_name'        => '',
- 
+
             // Basic
             'domain'                    => '',
             'client_secret'             => '',
@@ -382,14 +382,14 @@ class WP_Authress_Options {
             'cache_expiration'          => 1440,
             'wordpress_login_enabled'   => 'link',
             'wle_code'                  => '',
- 
+
             // Features
             // AutoLogin means automatically redirect the user to a login location, but we actually don't want that, we want to check if the user logged
 			'auto_login'                => true,
             'auto_login_method'         => '',
             'singlelogout'              => true,
             'override_wp_avatars'       => true,
- 
+
             // Embedded
             'passwordless_enabled'      => false,
             'icon_url'                  => '',
@@ -400,7 +400,7 @@ class WP_Authress_Options {
             'extra_conf'                => '',
             'custom_cdn_url'            => false,
             'lock_connections'          => '',
- 
+
             // Advanced
             'requires_verified_email'   => true,
             'skip_strategies'           => '',

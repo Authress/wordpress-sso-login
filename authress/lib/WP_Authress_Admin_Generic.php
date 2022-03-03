@@ -6,16 +6,7 @@ class WP_Authress_Admin_Generic {
 
 	protected $options;
 
-	protected $_option_name;
-
-	protected $_textarea_rows = 4;
-
-	/**
-	 * Validation methods to run in individual settings classes.
-	 *
-	 * @var array
-	 */
-	protected $actions_middlewares = [ 'basic_validation' ];
+	protected $configurationDatabaseName;
 
 	/**
 	 * WP_Authress_Admin_Generic constructor.
@@ -24,18 +15,18 @@ class WP_Authress_Admin_Generic {
 	 */
 	public function __construct( WP_Authress_Options $options ) {
 		$this->options      = $options;
-		$this->_option_name = $options->get_options_name();
+		$this->configurationDatabaseName = $options->getConfigurationDatabaseName();
 	}
 
 	/**
 	 * Add settings section and fields for each of the settings screen
 	 *
-	 * @param string $section_name - name used for the settings section (usually empty)
-	 * @param string $id - settings screen id
-	 * @param array  $options - array of settings fields
+	 * @param string $section_name - name used for the settings section (usually empty).
+	 * @param string $id - settings screen id.
+	 * @param array  $options - array of settings fields.
 	 */
 	protected function init_option_section( $section_name, $id, $options ) {
-		$options_name = $this->_option_name . '_' . strtolower( $id );
+		$options_name = $this->configurationDatabaseName . '_' . strtolower( $id );
 		$section_id   = "wp_authress_{$id}_settings_section";
 
 		add_settings_section($section_id, $section_name, null, $options_name);
@@ -60,12 +51,7 @@ class WP_Authress_Admin_Generic {
 	}
 
 	public function input_validator( $input ) {
-
-		foreach ( $this->actions_middlewares as $action ) {
-			$input = $this->$action( $input );
-		}
-
-		return $input;
+		return $this->basic_validation( $input );
 	}
 
 	/**
@@ -76,8 +62,8 @@ class WP_Authress_Admin_Generic {
 	 */
 	protected function add_validation_error( $error, $type = 'error' ) {
 		add_settings_error(
-			$this->_option_name,
-			$this->_option_name,
+			$this->configurationDatabaseName,
+			$this->configurationDatabaseName,
 			$error,
 			$type
 		);
@@ -92,18 +78,19 @@ class WP_Authress_Admin_Generic {
 	 */
 	protected function render_switch( $id, $input_name, $expand_id = '' ) {
 		$value = $this->options->get( $input_name );
-		if ( $field_is_const = $this->options->has_constant_val( $input_name ) ) {
+		$field_is_const = $this->options->has_constant_val( $input_name );
+		if ($field_is_const) {
 			$this->render_const_notice( $input_name );
 		}
 		printf(
 			'<div class="a0-switch"><input type="checkbox" name="%s[%s]" id="%s" data-expand="%s" value="1" %s %s>
 			<label for="%s"></label></div>',
-			esc_attr( $this->_option_name ),
+			esc_attr( $this->configurationDatabaseName ),
 			esc_attr( $input_name ),
 			esc_attr( $id ),
 			! empty( $expand_id ) ? esc_attr( $expand_id ) : '',
 			checked( empty( $value ), false, false ),
-			$field_is_const ? 'disabled' : '',
+			esc_attr($field_is_const ? 'disabled' : ''),
 			esc_attr( $id )
 		);
 	}
@@ -131,13 +118,13 @@ class WP_Authress_Admin_Generic {
 		printf(
 			'<input type="%s" name="%s[%s]" id="%s" value="%s" placeholder="%s" style="%s" %s>',
 			esc_attr( $type ),
-			esc_attr( $this->_option_name ),
+			esc_attr( $this->configurationDatabaseName ),
 			esc_attr( $input_name ),
 			esc_attr( $id ),
 			esc_attr( $value ),
 			$placeholder ? esc_attr( $placeholder ) : '',
-			$style ? esc_attr( $style ) : '',
-			$field_is_const ? 'disabled' : ''
+			esc_attr($style ? $style : ''),
+			esc_attr($field_is_const ? 'disabled' : '')
 		);
 	}
 
@@ -154,10 +141,10 @@ class WP_Authress_Admin_Generic {
 		}
 		printf(
 			'<textarea name="%s[%s]" id="%s" rows="%d" class="code" %s>%s</textarea>',
-			esc_attr( $this->_option_name ),
+			esc_attr( $this->configurationDatabaseName ),
 			esc_attr( $input_name ),
 			esc_attr( $id ),
-			$this->_textarea_rows,
+			4,
 			$field_is_const ? 'disabled' : '',
 			esc_textarea( $value )
 		);
@@ -183,16 +170,16 @@ class WP_Authress_Admin_Generic {
 			$desc    = isset( $button['desc'] ) ? '<p class="description">' . $button['desc'] . '</p>' : '';
 			printf(
 				'%s<label for="%s"><input type="radio" name="%s[%s]" id="%s" value="%s" %s %s>%s</label> %s',
-				$vert ? '<div class="a0-vert-radio">' : '',
+				esc_attr($vert ? '<div class="a0-vert-radio">' : ''),
 				esc_attr( $id_attr ),
-				esc_attr( $this->_option_name ),
+				esc_attr( $this->configurationDatabaseName ),
 				esc_attr( $input_name ),
 				esc_attr( $id_attr ),
 				esc_attr( $value ),
 				checked( $value === $curr_value, true, false ),
-				$field_is_const ? 'disabled' : '',
-				sanitize_text_field( $label ),
-				$vert ? $desc . '</div>' : ''
+				esc_attr($field_is_const ? 'disabled' : ''),
+				esc_attr( $label ),
+				esc_attr($vert ? $desc . '</div>' : '')
 			);
 		}
 	}
@@ -203,8 +190,8 @@ class WP_Authress_Admin_Generic {
 	 * @param string $text - description text to display
 	 */
 	protected function render_field_description( $text ) {
-		$period = ! in_array( $text[ strlen( $text ) - 1 ], [ '.', ':' ] ) ? '.' : '';
-		printf( '<div class="subelement"><span class="description">%s%s</span></div>', $text, $period );
+		$period = ! in_array( $text[ strlen( $text ) - 1 ], [ '.', ':' ], true ) ? '.' : '';
+		printf( '<div class="subelement"><span class="description">%s%s</span></div>', esc_attr($text), esc_attr($period) );
 	}
 
 	/**
@@ -215,8 +202,8 @@ class WP_Authress_Admin_Generic {
 	protected function render_const_notice( $input_name ) {
 		printf(
 			'<p class="const-setting-notice"><span class="description">%s <code>%s</code></span></p>',
-			__( 'Value is set in the constant ', 'wp-authress' ),
-			$this->options->get_constant_name( $input_name )
+			esc_attr_e( 'Value is set in the constant ', 'wp-authress' ),
+			esc_attr($this->options->get_constant_name( $input_name ))
 		);
 	}
 

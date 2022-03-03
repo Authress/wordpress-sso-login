@@ -7,16 +7,15 @@
  * @see WP_Authress_ErrorLog::render_settings_page()
  */
 
-$error_log = new WP_Authress_ErrorLog();
-$errors    = $error_log->get();
+	$authress_errors_found = (new WP_Authress_ErrorLog())->get();
 ?>
 <div class="a0-wrap settings wrap">
 
-		<h1><?php _e( 'Error Log', 'wp-authress' ); ?></h1>
-		<?php if ( ! empty( $errors ) ) : ?>
+		<h1><?php esc_attr_e( 'Error Log', 'wp-authress' ); ?></h1>
+		<?php if ( ! empty( $authress_errors_found ) ) : ?>
 		<div class="a0-buttons">
-			<form action="<?php echo admin_url( 'options.php' ); ?>" method="post" class="js-a0-confirm-submit"
-						data-confirm-msg="<?php _e( 'This will delete all error log entries. Proceed?', 'wp-authress' ); ?>">
+			<form action="<?php echo esc_attr(admin_url( 'options.php' )); ?>" method="post" class="js-a0-confirm-submit"
+						data-confirm-msg="<?php esc_attr_e( 'This will delete all error log entries. Proceed?', 'wp-authress' ); ?>">
 			<?php wp_nonce_field( WP_Authress_ErrorLog::CLEAR_LOG_NONCE ); ?>
 				<input type="hidden" name="action" value="wp_authress_clear_error_log">
 				<input type="submit" name="submit" class="button button-primary" value="Clear Log">
@@ -27,25 +26,25 @@ $errors    = $error_log->get();
 	<table class="widefat top-margin">
 		<thead>
 		<tr>
-			<th><?php _e( 'Date', 'wp-authress' ); ?></th>
-			<th><?php _e( 'Section', 'wp-authress' ); ?></th>
-			<th><?php _e( 'Error code', 'wp-authress' ); ?></th>
-			<th><?php _e( 'Message', 'wp-authress' ); ?></th>
-			<th><?php _e( 'Count', 'wp-authress' ); ?></th>
+			<th><?php esc_attr_e( 'Date', 'wp-authress' ); ?></th>
+			<th><?php esc_attr_e( 'Section', 'wp-authress' ); ?></th>
+			<th><?php esc_attr_e( 'Error code', 'wp-authress' ); ?></th>
+			<th><?php esc_attr_e( 'Message', 'wp-authress' ); ?></th>
+			<th><?php esc_attr_e( 'Count', 'wp-authress' ); ?></th>
 		</tr>
 		</thead>
 
 		<tbody>
-		<?php if ( empty( $errors ) ) : ?>
+		<?php if ( empty( $authress_errors_found ) ) : ?>
 			<tr>
-				<td class="message" colspan="5"><?php _e( 'No errors', 'wp-authress' ); ?></td>
+				<td class="message" colspan="5"><?php esc_attr_e( 'No errors', 'wp-authress' ); ?></td>
 			</tr>
 		<?php else : ?>
 			<?php
-			foreach ( $errors as $item ) :
+			foreach ( $authress_errors_found as $item ) :
 				?>
 				<tr>
-					<td><?php echo date( 'm/d/Y H:i:s', $item['date'] ); ?></td>
+					<td><?php echo esc_attr(gmdate( 'm/d/Y H:i:s', $item['date'] )); ?></td>
 					<td><?php echo esc_attr( $item['section'] ); ?></td>
 					<td><?php echo esc_attr( $item['code'] ); ?></td>
 					<td><?php echo esc_attr( $item['message'] ); ?></td>

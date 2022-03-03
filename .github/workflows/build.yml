@@ -32,6 +32,12 @@ jobs:
 
     - name: Install Composer dependencies
       run: ./composer.phar install -d authress --prefer-dist --optimize-autoloader
+
+    - name: Run Lint
+      run: ./authress/vendor/bin/phpcs -i && ./authress/vendor/bin/phpcs -s
+
+    - name: Clean workspace
+      run: ./composer.phar install -d authress --prefer-dist --optimize-autoloader --no-dev
     - name: Create Archive
       run: zip authress.zip -r authress
     - name: Create Release
