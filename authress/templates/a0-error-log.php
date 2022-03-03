@@ -17,7 +17,7 @@
 			<form action="<?php echo esc_attr(admin_url( 'options.php' )); ?>" method="post" class="js-a0-confirm-submit"
 						data-confirm-msg="<?php esc_attr_e( 'This will delete all error log entries. Proceed?', 'wp-authress' ); ?>">
 			<?php wp_nonce_field( Authress_Sso_Login_ErrorLog::CLEAR_LOG_NONCE ); ?>
-				<input type="hidden" name="action" value="wp_authress_clear_error_log">
+				<input type="hidden" name="action" value="authress_sso_login_clear_error_log">
 				<input type="submit" name="submit" class="button button-primary" value="Clear Log">
 			</form>
 		</div>

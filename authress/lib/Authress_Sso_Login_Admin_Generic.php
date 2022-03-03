@@ -27,7 +27,7 @@ class Authress_Sso_Login_Admin_Generic {
 	 */
 	protected function init_option_section( $section_name, $id, $options ) {
 		$options_name = $this->configurationDatabaseName . '_' . strtolower( $id );
-		$section_id   = "wp_authress_{$id}_settings_section";
+		$section_id   = "authress_sso_login_{$id}_settings_section";
 
 		add_settings_section($section_id, $section_name, null, $options_name);
 

@@ -20,7 +20,7 @@ class Authress_Sso_Login_ErrorLog {
 	/**
 	 * Option name used to store the error log.
 	 */
-	const CLEAR_LOG_NONCE = 'wp_authress_clear_error_log';
+	const CLEAR_LOG_NONCE = 'authress_sso_login_clear_error_log';
 
 	/**
 	 * Limit of the error logs that can be stored

@@ -21,7 +21,7 @@
 		}
 
 		function checkIfLoaded() {
-			var script = document.querySelector('#wp_authress_login_sdk-js');
+			var script = document.querySelector('#authress_sso_login_login_sdk-js');
 			if (!script || !authress) {
 				return;
 			}

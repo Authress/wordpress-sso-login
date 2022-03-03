@@ -17,7 +17,7 @@ class Authress_Sso_Login_Users {
 			$email = 'change_this_email@' . uniqid() . '.com';
 		}
 
-		$valid_user = apply_filters( 'wp_authress_should_create_user', true, $userinfo );
+		$valid_user = apply_filters( 'authress_sso_login_should_create_user', true, $userinfo );
 		if ( ! $valid_user ) {
 			return -2;
 		}
@@ -92,7 +92,7 @@ class Authress_Sso_Login_Users {
 			return $user_id;
 		}
 
-		do_action( 'wp_authress_user_created', $user_id, $email, $password, $firstname, $lastname );
+		do_action( 'authress_sso_login_user_created', $user_id, $email, $password, $firstname, $lastname );
 
 		// Return the user ID
 		return $user_id;

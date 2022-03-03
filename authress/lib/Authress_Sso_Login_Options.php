@@ -277,7 +277,7 @@ class Authress_Sso_Login_Options {
 	 *
 	 * @return string
 	 */
-	public function get_wp_authress_url( $protocol = null ) {
+	public function get_authress_sso_login_url( $protocol = null ) {
 		if ( is_null( $protocol ) && $this->get( 'force_https_callback' ) ) {
 			$protocol = 'https';
 		}

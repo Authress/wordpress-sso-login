@@ -29,14 +29,14 @@ class Authress_Sso_Login_Admin {
 		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
 		// Register admin styles
-		wp_register_style( 'wp_authress_admin_initial_setup', AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL . 'initial-setup.css', false, AUTHRESS_SSO_LOGIN_VERSION );
+		wp_register_style( 'authress_sso_login_admin_initial_setup', AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL . 'initial-setup.css', false, AUTHRESS_SSO_LOGIN_VERSION );
 
 		// Register admin scripts
-		wp_register_script( 'wp_authress_async', AUTHRESS_SSO_LOGIN_PLUGIN_LIB_URL . 'async.min.js', false, AUTHRESS_SSO_LOGIN_VERSION, false);
-		wp_register_script( 'wp_authress_admin', AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL . 'admin.js', [ 'jquery' ], AUTHRESS_SSO_LOGIN_VERSION, false);
+		wp_register_script( 'authress_sso_login_async', AUTHRESS_SSO_LOGIN_PLUGIN_LIB_URL . 'async.min.js', false, AUTHRESS_SSO_LOGIN_VERSION, false);
+		wp_register_script( 'authress_sso_login_admin', AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL . 'admin.js', [ 'jquery' ], AUTHRESS_SSO_LOGIN_VERSION, false);
 		wp_localize_script(
-			'wp_authress_admin',
-			'wp_authress',
+			'authress_sso_login_admin',
+			'authress_sso_login',
 			[
 				'media_title'             => __( 'Choose your icon', 'wp-authress' ),
 				'media_button'            => __( 'Choose icon', 'wp-authress' ),
@@ -51,21 +51,21 @@ class Authress_Sso_Login_Admin {
 		);
 
 		// Only checking the value, not processing.
-		$wp_authress_curr_page = sanitize_text_field(!empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '');
-		$wp_authress_pages     = [ 'authress', 'authress_configuration', 'authress_errors' ];
-		if ( ! in_array( $wp_authress_curr_page, $wp_authress_pages, true) ) {
+		$authress_sso_login_curr_page = sanitize_text_field(!empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '');
+		$authress_sso_login_pages     = [ 'authress', 'authress_configuration', 'authress_errors' ];
+		if ( ! in_array( $authress_sso_login_curr_page, $authress_sso_login_pages, true) ) {
 			return false;
 		}
 
-		wp_enqueue_script( 'wp_authress_admin' );
-		wp_enqueue_script( 'wp_authress_async' );
+		wp_enqueue_script( 'authress_sso_login_admin' );
+		wp_enqueue_script( 'authress_sso_login_async' );
 
-		if ( 'wp_authress' === $wp_authress_curr_page ) {
+		if ( 'authress_sso_login' === $authress_sso_login_curr_page ) {
 			wp_enqueue_media();
 			wp_enqueue_style( 'media' );
 		}
 
-		wp_enqueue_style( 'wp_authress_admin_initial_setup' );
+		wp_enqueue_style( 'authress_sso_login_admin_initial_setup' );
 		return true;
 	}
 

@@ -67,7 +67,7 @@ class Authress_Sso_Login_UsersRepo {
 			if ( is_wp_error( $user_id ) ) {
 				throw new Authress_Sso_Login_CouldNotCreateUserException( $user_id->get_error_message() );
 			} elseif ( -2 === $user_id ) {
-				// Registration rejected by wp_authress_should_create_user filter in Authress_Sso_Login_Users::create_user().
+				// Registration rejected by authress_sso_login_should_create_user filter in Authress_Sso_Login_Users::create_user().
 				throw new Authress_Sso_Login_CouldNotCreateUserException( __( 'Registration rejected.', 'wp-authress' ) );
 			} elseif ( $user_id < 0 ) {
 				// Registration failed for another reason.

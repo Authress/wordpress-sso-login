@@ -25,25 +25,25 @@ class Authress_Sso_Login_Settings_Configuration extends Authress_Sso_Login_Admin
 			[
 				'name'     => __( 'Custom Domain', 'wp-authress' ),
 				'opt'      => 'customDomain',
-				'id'       => 'wp_authress_custom_domain',
+				'id'       => 'authress_sso_login_custom_domain',
 				'function' => 'render_custom_domain',
 			],
 			[
 				'name'     => __( 'API Access Key', 'wp-authress' ),
 				'opt'      => 'accessKey',
-				'id'       => 'wp_authress_access_key',
+				'id'       => 'authress_sso_login_access_key',
 				'function' => 'render_access_key',
 			],
 			[
 				'name'     => __( 'Application ID', 'wp-authress' ),
 				'opt'      => 'applicationId',
-				'id'       => 'wp_authress_application_id',
+				'id'       => 'authress_sso_login_application_id',
 				'function' => 'render_application_id',
 			]
 			// [
 			// 	'name'     => __( 'Original Login Form on wp-login.php', 'wp-authress' ),
 			// 	'opt'      => 'wordpress_login_enabled',
-			// 	'id'       => 'wp_authress_login_enabled',
+			// 	'id'       => 'authress_sso_login_login_enabled',
 			// 	'function' => 'render_allow_wordpress_login',
 			// ],
 		];

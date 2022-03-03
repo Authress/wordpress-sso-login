@@ -23,7 +23,7 @@
 			<hr>
 
 			<form action="options.php" method="POST">
-				<input type="hidden" name="action" value="wp_authress_callback_step1" />
+				<input type="hidden" name="action" value="authress_sso_login_callback_step1" />
 				<h3><?php esc_attr_e( 'Automated Setup', 'wp-authress' ); ?></h3>
 
 				<p>
@@ -38,7 +38,7 @@
 			<p><?php esc_attr_e( 'Once configured, this plugin replaces the WordPress login screen, by many additional features to make login easier and more secure your users.', 'wp-authress' ); ?></p>
 
 			<form action="options.php" method="POST">
-				<input type="hidden" name="action" value="wp_authress_callback_step1" />
+				<input type="hidden" name="action" value="authress_sso_login_callback_step1" />
 				<h3><?php esc_attr_e( 'Automated Setup', 'wp-authress' ); ?></h3>
 
 				<p>
