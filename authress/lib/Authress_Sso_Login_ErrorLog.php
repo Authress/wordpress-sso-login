@@ -33,7 +33,7 @@ class Authress_Sso_Login_ErrorLog {
 	 * @see Authress_Sso_Login_Settings_Section::init_menu()
 	 */
 	public function render_settings_page() {
-		include WP_AUTHRESS_PLUGIN_DIR . 'templates/a0-error-log.php';
+		include AUTHRESS_SSO_LOGIN_PLUGIN_DIR . 'templates/a0-error-log.php';
 	}
 
 	/**

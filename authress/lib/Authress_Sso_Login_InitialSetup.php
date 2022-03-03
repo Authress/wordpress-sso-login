@@ -18,7 +18,7 @@ class Authress_Sso_Login_InitialSetup {
 			$this->a0_options->set( 'customDomain', sanitize_text_field(wp_unslash(isset($_GET['customDomain']) ? $_GET['customDomain'] : '')));
 			$this->a0_options->set( 'applicationId', sanitize_text_field(wp_unslash(isset($_GET['applicationId']) ? $_GET['applicationId'] : '')));
 		}
-		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/setup-wizard.php';
+		include AUTHRESS_SSO_LOGIN_PLUGIN_DIR . 'templates/initial-setup/setup-wizard.php';
 	}
 
 	public function cant_create_client_message() {

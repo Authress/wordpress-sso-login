@@ -45,7 +45,7 @@
 	</script>
 	<div id="form-signin-wrapper" class="authress-login">
 		<div class="form-signin">
-			<div id="<?php echo esc_attr( WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID ); ?>">
+			<div id="<?php echo esc_attr( AUTHRESS_SSO_LOGIN_AUTHRESS_LOGIN_FORM_ID ); ?>">
 				<form onsubmit="return loginWithSsoDomain()">
 					<p>
 						<label for="customer_sso_domain">Enter SSO Domain</label>

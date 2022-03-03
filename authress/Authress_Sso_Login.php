@@ -10,21 +10,21 @@
 	License URI:  https://www.apache.org/licenses/LICENSE-2.0
 */
 
-define( 'WP_AUTHRESS_VERSION', '{{VERSION}}' );
+define( 'AUTHRESS_SSO_LOGIN_VERSION', '{{VERSION}}' );
 
-define( 'WP_AUTHRESS_PLUGIN_FILE', __FILE__ );
-define( 'WP_AUTHRESS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); // Includes trailing slash
-define( 'WP_AUTHRESS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'WP_AUTHRESS_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'WP_AUTHRESS_PLUGIN_JS_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/js/' );
-define( 'WP_AUTHRESS_PLUGIN_CSS_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/css/' );
-define( 'WP_AUTHRESS_PLUGIN_IMG_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/img/' );
-define( 'WP_AUTHRESS_PLUGIN_LIB_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/lib/' );
-define( 'WP_AUTHRESS_PLUGIN_BS_URL', WP_AUTHRESS_PLUGIN_URL . 'assets/bootstrap/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_FILE', __FILE__ );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); // Includes trailing slash
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/js/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/css/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_IMG_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/img/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_LIB_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/lib/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_BS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/bootstrap/' );
 
-define( 'WP_AUTHRESS_AUTHRESS_LOGIN_FORM_ID', 'authress-login-form' );
-define( 'WP_AUTHRESS_CACHE_GROUP', 'wp_authress' );
-define( 'WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME', 'Authress_Sso_Login_JWKS_cache' );
+define( 'AUTHRESS_SSO_LOGIN_AUTHRESS_LOGIN_FORM_ID', 'authress-login-form' );
+define( 'AUTHRESS_SSO_LOGIN_CACHE_GROUP', 'wp_authress' );
+define( 'AUTHRESS_SSO_LOGIN_JWKS_CACHE_TRANSIENT_NAME', 'Authress_Sso_Login_JWKS_cache' );
 
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/vendor/autoload.php';
@@ -66,12 +66,12 @@ function wp_authress_activation_hook() {
 
 	flush_rewrite_rules();
 }
-register_activation_hook( WP_AUTHRESS_PLUGIN_FILE, 'wp_authress_activation_hook' );
+register_activation_hook( AUTHRESS_SSO_LOGIN_PLUGIN_FILE, 'wp_authress_activation_hook' );
 
 function wp_authress_deactivation_hook() {
 	flush_rewrite_rules();
 }
-register_deactivation_hook( WP_AUTHRESS_PLUGIN_FILE, 'wp_authress_deactivation_hook' );
+register_deactivation_hook( AUTHRESS_SSO_LOGIN_PLUGIN_FILE, 'wp_authress_deactivation_hook' );
 
 function wp_authress_uninstall_hook() {
 	$a0_options = Authress_Sso_Login_Options::Instance();
@@ -80,13 +80,13 @@ function wp_authress_uninstall_hook() {
 	$error_log = new Authress_Sso_Login_ErrorLog();
 	$error_log->delete();
 
-	delete_transient( WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME );
+	delete_transient( AUTHRESS_SSO_LOGIN_JWKS_CACHE_TRANSIENT_NAME );
 }
-register_uninstall_hook( WP_AUTHRESS_PLUGIN_FILE, 'wp_authress_uninstall_hook' );
+register_uninstall_hook( AUTHRESS_SSO_LOGIN_PLUGIN_FILE, 'wp_authress_uninstall_hook' );
 
 function wp_authress_activated_plugin_redirect( $plugin ) {
 
-	if ( defined( 'WP_CLI' ) || $plugin !== WP_AUTHRESS_PLUGIN_BASENAME ) {
+	if ( defined( 'WP_CLI' ) || $plugin !== AUTHRESS_SSO_LOGIN_PLUGIN_BASENAME ) {
 		return;
 	}
 
@@ -116,7 +116,7 @@ add_filter( 'allowed_redirect_hosts', 'wp_authress_add_allowed_redirect_hosts' )
  */
 function wp_authress_login_enqueue_scripts() {
 	if ( authress_plugin_has_been_fully_configured() ) {
-		wp_enqueue_style( 'authress', WP_AUTHRESS_PLUGIN_CSS_URL . 'login.css', false, WP_AUTHRESS_VERSION );
+		wp_enqueue_style( 'authress', AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL . 'login.css', false, AUTHRESS_SSO_LOGIN_VERSION );
 	}
 }
 add_action( 'login_enqueue_scripts', 'wp_authress_login_enqueue_scripts' );
@@ -126,7 +126,7 @@ add_action( 'login_enqueue_scripts', 'wp_authress_login_enqueue_scripts' );
  */
 function wp_authress_enqueue_scripts() {
 	if ( authress_plugin_has_been_fully_configured() ) {
-		wp_enqueue_style( 'authress-widget', WP_AUTHRESS_PLUGIN_CSS_URL . 'main.css', false, WP_AUTHRESS_VERSION);
+		wp_enqueue_style( 'authress-widget', AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL . 'main.css', false, AUTHRESS_SSO_LOGIN_VERSION);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'wp_authress_enqueue_scripts' );
@@ -168,7 +168,7 @@ function wp_authress_plugin_action_links( $links ) {
 
 	return $links;
 }
-add_filter( 'plugin_action_links_' . WP_AUTHRESS_PLUGIN_BASENAME, 'wp_authress_plugin_action_links' );
+add_filter( 'plugin_action_links_' . AUTHRESS_SSO_LOGIN_PLUGIN_BASENAME, 'wp_authress_plugin_action_links' );
 
 /**
  * Filter the avatar to use the Authress profile image
@@ -326,7 +326,7 @@ function wp_authress_init_admin_menu() {
 	$menu_parent = $setup_slug;
 	$cap         = 'manage_options';
 
-	add_menu_page('Authress', 'Authress', $cap, $menu_parent, $setup_func, WP_AUTHRESS_PLUGIN_IMG_URL . 'logo_16x16.png', 86);
+	add_menu_page('Authress', 'Authress', $cap, $menu_parent, $setup_func, AUTHRESS_SSO_LOGIN_PLUGIN_IMG_URL . 'logo_16x16.png', 86);
 
 	add_submenu_page($menu_parent, $setup_title, $setup_title, $cap, $setup_slug, $setup_func );
 	add_submenu_page($menu_parent, $settings_title, $settings_title, $cap, $settings_slug, $settings_func );
@@ -386,9 +386,9 @@ function wp_authress_profile_enqueue_scripts() {
 
 	wp_enqueue_script(
 		'wp_authress_user_profile',
-		WP_AUTHRESS_PLUGIN_JS_URL . 'edit-user-profile.js',
+		AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL . 'edit-user-profile.js',
 		[ 'jquery' ],
-		WP_AUTHRESS_VERSION,
+		AUTHRESS_SSO_LOGIN_VERSION,
 		false
 	);
 
@@ -448,7 +448,7 @@ add_action( 'wp_logout', 'wp_authress_process_logout' );
 
 function wp_authress_ajax_delete_cache_transient() {
 	check_ajax_referer( 'authress_delete_cache_transient' );
-	delete_transient( WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME );
+	delete_transient( AUTHRESS_SSO_LOGIN_JWKS_CACHE_TRANSIENT_NAME );
 	wp_send_json_success();
 }
 add_action( 'wp_ajax_authress_delete_cache_transient', 'wp_authress_ajax_delete_cache_transient' );

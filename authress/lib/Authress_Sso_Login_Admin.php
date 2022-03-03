@@ -29,11 +29,11 @@ class Authress_Sso_Login_Admin {
 		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
 		// Register admin styles
-		wp_register_style( 'wp_authress_admin_initial_setup', WP_AUTHRESS_PLUGIN_CSS_URL . 'initial-setup.css', false, WP_AUTHRESS_VERSION );
+		wp_register_style( 'wp_authress_admin_initial_setup', AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL . 'initial-setup.css', false, AUTHRESS_SSO_LOGIN_VERSION );
 
 		// Register admin scripts
-		wp_register_script( 'wp_authress_async', WP_AUTHRESS_PLUGIN_LIB_URL . 'async.min.js', false, WP_AUTHRESS_VERSION, false);
-		wp_register_script( 'wp_authress_admin', WP_AUTHRESS_PLUGIN_JS_URL . 'admin.js', [ 'jquery' ], WP_AUTHRESS_VERSION, false);
+		wp_register_script( 'wp_authress_async', AUTHRESS_SSO_LOGIN_PLUGIN_LIB_URL . 'async.min.js', false, AUTHRESS_SSO_LOGIN_VERSION, false);
+		wp_register_script( 'wp_authress_admin', AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL . 'admin.js', [ 'jquery' ], AUTHRESS_SSO_LOGIN_VERSION, false);
 		wp_localize_script(
 			'wp_authress_admin',
 			'wp_authress',
@@ -135,6 +135,6 @@ class Authress_Sso_Login_Admin {
 	}
 
 	public function render_settings_page() {
-		include WP_AUTHRESS_PLUGIN_DIR . 'templates/settings.php';
+		include AUTHRESS_SSO_LOGIN_PLUGIN_DIR . 'templates/settings.php';
 	}
 }
