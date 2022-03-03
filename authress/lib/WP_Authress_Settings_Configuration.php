@@ -228,11 +228,6 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 		}
 		$input['cache_expiration'] = absint( $input['cache_expiration'] ?? 0 );
 
-		// $wle = $input['wordpress_login_enabled'] ?? null;
-		// if ( ! in_array( $wle, [ 'link', 'isset', 'code', 'no' ] ) ) {
-		// 	$input['wordpress_login_enabled'] = $this->options->get_default( 'wordpress_login_enabled' );
-		// }
-
 		return $input;
 	}
 }

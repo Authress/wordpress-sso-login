@@ -144,7 +144,7 @@ add_filter( 'query_vars', 'wp_authress_register_query_vars' );
  * @return string
  */
 function wp_authress_render_lock_form( $html ) {
-	debug('wp_authress_render_lock_form');
+	authress_debug_log('wp_authress_render_lock_form');
 	ob_start();
 	\WP_Authress_Lock::render();
 	$authress_form = ob_get_clean();
@@ -254,22 +254,22 @@ function wp_authress_errorlog_clear_error_log() {
 add_action( 'admin_action_wp_authress_clear_error_log', 'wp_authress_errorlog_clear_error_log' );
 
 function wp_authress_initial_setup_init() {
-	debug('wp_authress_initial_setup_init');
+	authress_debug_log('wp_authress_initial_setup_init');
 	return false;
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 }
 add_action( 'init', 'wp_authress_initial_setup_init', 1 );
 
 function wp_authress_init() {
-	debug('wp_authress_init()');
+	authress_debug_log('wp_authress_init()');
 	$router = new WP_Authress_Routes( WP_Authress_Options::Instance() );
 	$router->setup_rewrites();
 }
 add_action( 'init', 'wp_authress_init');
 
 function check_for_user_logged_in() {
-	debug('check_for_user_logged_in');
-	debug(sanitize_text_field($_REQUEST['nonce']));
+	authress_debug_log('check_for_user_logged_in');
+	authress_debug_log(sanitize_text_field($_REQUEST['nonce']));
 	
 	if (!is_user_logged_in() && $_REQUEST['nonce']) {
 		$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
@@ -280,12 +280,12 @@ function check_for_user_logged_in() {
 
 		// if (is_user_logged_in()) {
 		// 	wp_safe_redirect(home_url());
-		// 	debug('User successfully now logged in during handler');
+		// 	authress_debug_log('User successfully now logged in during handler');
 		// } else {
-		// 	debug('User NOT logged in during handler');
+		// 	authress_debug_log('User NOT logged in during handler');
 		// }
 		// wp_safe_redirect();
-		// debug($_REQUEST['redirect_to']);
+		// authress_debug_log($_REQUEST['redirect_to']);
 		// if ($_REQUEST['redirect_to']) {
 		// 	// wp_redirect(urldecode($_REQUEST['redirect_to']));
 		// 	wp_safe_redirect(urldecode($_REQUEST['redirect_to']));
@@ -310,7 +310,7 @@ function wp_authress_delete_user_data() {
 add_action( 'wp_ajax_authress_delete_data', 'wp_authress_delete_user_data' );
 
 function wp_authress_init_admin_menu() {
-	debug('wp_authress_init_admin_menu');
+	authress_debug_log('wp_authress_init_admin_menu');
 	if (is_admin() && !empty($_REQUEST['page']) && 'authress_help' === $_REQUEST['page']) {
 		wp_safe_redirect( admin_url( 'admin.php?page=authress_configuration#help' ), 301 );
 		exit;
@@ -365,7 +365,7 @@ function wp_authress_create_account_message() {
 add_action( 'admin_notices', 'wp_authress_create_account_message' );
 
 function wp_authress_init_admin() {
-	debug('wp_authress_init_admin');
+	authress_debug_log('wp_authress_init_admin');
 	$options = WP_Authress_Options::Instance();
 	$routes  = new WP_Authress_Routes( $options );
 	$admin   = new WP_Authress_Admin( $options, $routes );
@@ -374,7 +374,7 @@ function wp_authress_init_admin() {
 add_action( 'admin_init', 'wp_authress_init_admin' );
 
 function wp_authress_admin_enqueue_scripts() {
-	debug('wp_authress_admin_enqueue_scripts');
+	authress_debug_log('wp_authress_admin_enqueue_scripts');
 	$options = WP_Authress_Options::Instance();
 	$routes  = new WP_Authress_Routes( $options );
 	$admin   = new WP_Authress_Admin( $options, $routes );
@@ -389,7 +389,7 @@ function wp_authress_custom_requests( $wp, $return = false ) {
 add_action( 'parse_request', 'wp_authress_custom_requests' );
 
 function wp_authress_profile_enqueue_scripts() {
-	debug('wp_authress_profile_enqueue_scripts');
+	authress_debug_log('wp_authress_profile_enqueue_scripts');
 	global $pagenow;
 
 	if ( ! in_array( $pagenow, [ 'profile.php', 'user-edit.php' ] ) ) {
@@ -430,7 +430,7 @@ add_action( 'admin_enqueue_scripts', 'wp_authress_profile_enqueue_scripts' );
 function page_loaded() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 	$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
-	debug('page_loaded');
+	authress_debug_log('page_loaded');
 	return $login_manager->init_authress();
 }
 
@@ -444,7 +444,7 @@ add_action( 'template_redirect', 'page_loaded', 1 );
 function login_widget_loaded() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 	$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
-	debug('login_widget_loaded');
+	authress_debug_log('login_widget_loaded');
 	return $login_manager->login_auto();
 }
 add_action( 'login_init', 'login_widget_loaded' );

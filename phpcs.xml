@@ -47,12 +47,12 @@
    <rule ref="Generic.Commenting.DocComment.SpacingAfter"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.Arrays.CommaAfterArrayItem.NoComma"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.InlineComment.SpacingBefore"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.InlineComment.SpacingAfter"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FunctionComment.SpacingAfterParamType"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.PHP.CommentedOutCode.Found"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
    

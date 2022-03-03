@@ -53,7 +53,7 @@ class WP_Authress_LoginManager {
 	 * @return bool
 	 */
 	public function login_auto() {
-		debug('login_auto');
+		authress_debug_log('login_auto');
 		// Not processing form data, just using a redirect parameter if present.
 		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
@@ -90,7 +90,7 @@ class WP_Authress_LoginManager {
 	 * Handles errors and state validation
 	 */
 	public function init_authress() {
-		debug('init_authress');
+		authress_debug_log('init_authress');
 		// Not an Authress login process or settings are not configured to allow logins.
 		if ( ! wp_authress_is_ready() ) {
 			return false;
@@ -110,7 +110,7 @@ class WP_Authress_LoginManager {
 		// No need to process a login if the user is already logged in and there is no error.
 		if ( is_user_logged_in() ) {
 			// wp_safe_redirect( $this->a0_options->get( 'default_login_redirection' ) );
-			debug('user_logged_in: returning without further setup');
+			authress_debug_log('user_logged_in: returning without further setup');
 			return true;
 		}
 
@@ -143,7 +143,7 @@ class WP_Authress_LoginManager {
 	 *
 	 */
 	public function handle_login_redirect() {
-		debug('handle_login_redirect');
+		authress_debug_log('handle_login_redirect');
 		$access_token = sanitize_text_field($_COOKIE['authorization']);
 		if (!isset($_COOKIE['authorization']) && isset($_REQUEST['access_token'])) {
 			$access_token = sanitize_text_field($_REQUEST['access_token']);
@@ -156,11 +156,11 @@ class WP_Authress_LoginManager {
 			setcookie('user', $id_token);
 		}
 
-		debug('access_token: ' . $access_token);
-		debug('id_token:' . $id_token);
+		authress_debug_log('access_token: ' . $access_token);
+		authress_debug_log('id_token:' . $id_token);
 
 		if (empty($id_token) || empty($access_token)) {
-			debug('No tokens set, user is not logged in');
+			authress_debug_log('No tokens set, user is not logged in');
 			return false;
 		}
 
@@ -169,7 +169,7 @@ class WP_Authress_LoginManager {
 		$userinfo = $this->clean_id_token( $decoded_token );
 
 		if ( $this->login_user($userinfo) ) {
-			debug('Tokens set, user is logged in');
+			authress_debug_log('Tokens set, user is logged in');
 			return true;
 		}
 	}
@@ -193,7 +193,7 @@ class WP_Authress_LoginManager {
 		$user = apply_filters( 'authress_get_wp_user', $user, $userinfo );
 
 		if ( ! is_null( $user ) ) {
-			debug('Existing user: updating');
+			authress_debug_log('Existing user: updating');
 			// User exists so log them in.
 			if ( isset( $userinfo->email ) && $user->data->user_email !== $userinfo->email ) {
 				$description = $user->data->description;
@@ -227,7 +227,7 @@ class WP_Authress_LoginManager {
 			return is_user_logged_in();
 		}
 		try {
-			debug('New user: creating.');
+			authress_debug_log('New user: creating.');
 			$creator = new WP_Authress_UsersRepo( $this->a0_options );
 			$user_id = $creator->create( $userinfo);
 			$user    = get_user_by( 'id', $user_id );
@@ -252,13 +252,13 @@ class WP_Authress_LoginManager {
 	 * @throws WP_Authress_BeforeLoginException - Errors encountered during the authress_before_login action.
 	 */
 	private function do_login( $user) {
-		debug('LoginManager.do_login');
+		authress_debug_log('LoginManager.do_login');
 		$remember_users_session = $this->a0_options->get( 'remember_users_session', true);
 
 		$secure_cookie = is_ssl();
 		$secure_cookie = apply_filters('secure_signon_cookie', $secure_cookie, [ 'user_login' => $user->user_login, 'user_password' => null, 'remember' => $remember_users_session, ]);
 
-		debug($user->user_login);
+		authress_debug_log($user->user_login);
 
 		wp_set_auth_cookie( $user->ID, $remember_users_session, $secure_cookie );
 		do_action( 'wp_login', $user->user_login, $user );
@@ -320,7 +320,7 @@ class WP_Authress_LoginManager {
 	 * @param string|int $code - error code, if given.
 	 */
 	protected function die_on_login( $msg = '', $code = 0 ) {
-		debug('Ending User Session.');
+		authress_debug_log('Ending User Session.');
 
 		// Log the user out completely.
 		wp_destroy_current_session();

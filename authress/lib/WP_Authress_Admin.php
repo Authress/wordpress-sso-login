@@ -17,10 +17,7 @@ class WP_Authress_Admin {
 		$this->router     = $router;
 
 		$this->sections = [
-			'basic'      => new WP_Authress_Settings_Configuration( $this->a0_options ),
-			// 'features'   => new WP_Authress_Admin_Features( $this->a0_options ),
-			// 'appearance' => new WP_Authress_Admin_Appearance( $this->a0_options ),
-			// 'advanced'   => new WP_Authress_Admin_Advanced( $this->a0_options, $this->router ),
+			'basic'      => new WP_Authress_Settings_Configuration( $this->a0_options )
 		];
 	}
 
@@ -47,7 +44,7 @@ class WP_Authress_Admin {
 				'ajax_done'               => __( 'Done!', 'wp-authress' ),
 				'refresh_prompt'          => __( 'Save or refresh this page to see changes.', 'wp-authress' ),
 				'clear_cache_nonce'       => wp_create_nonce( 'authress_delete_cache_transient' ),
-				'rotate_token_nonce'      => wp_create_nonce( WP_Authress_Admin_Advanced::ROTATE_TOKEN_NONCE_ACTION ),
+				'rotate_token_nonce'      => wp_create_nonce( 'authress_rotate_migration_token' ),
 				'form_confirm_submit_msg' => __( 'Are you sure?', 'wp-authress' ),
 				'ajax_url'                => admin_url( 'admin-ajax.php' ),
 			]
