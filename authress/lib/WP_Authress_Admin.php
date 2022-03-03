@@ -32,8 +32,8 @@ class WP_Authress_Admin {
 		wp_register_style( 'wp_authress_admin_initial_setup', WP_AUTHRESS_PLUGIN_CSS_URL . 'initial-setup.css', false, WP_AUTHRESS_VERSION );
 
 		// Register admin scripts
-		wp_register_script( 'wp_authress_async', WP_AUTHRESS_PLUGIN_LIB_URL . 'async.min.js', false, WP_AUTHRESS_VERSION );
-		wp_register_script( 'wp_authress_admin', WP_AUTHRESS_PLUGIN_JS_URL . 'admin.js', [ 'jquery' ], WP_AUTHRESS_VERSION );
+		wp_register_script( 'wp_authress_async', WP_AUTHRESS_PLUGIN_LIB_URL . 'async.min.js', false, WP_AUTHRESS_VERSION, false);
+		wp_register_script( 'wp_authress_admin', WP_AUTHRESS_PLUGIN_JS_URL . 'admin.js', [ 'jquery' ], WP_AUTHRESS_VERSION, false);
 		wp_localize_script(
 			'wp_authress_admin',
 			'wp_authress',
@@ -51,9 +51,9 @@ class WP_Authress_Admin {
 		);
 
 		// Only checking the value, not processing.
-		$wp_authress_curr_page = !empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '';
+		$wp_authress_curr_page = sanitize_text_field(!empty( $_REQUEST['page'] ) ? wp_unslash( $_REQUEST['page'] ) : '');
 		$wp_authress_pages     = [ 'authress', 'authress_configuration', 'authress_errors' ];
-		if ( ! in_array( $wp_authress_curr_page, $wp_authress_pages ) ) {
+		if ( ! in_array( $wp_authress_curr_page, $wp_authress_pages, true) ) {
 			return false;
 		}
 
@@ -117,7 +117,7 @@ class WP_Authress_Admin {
 
 		// Remove unknown keys.
 		foreach ( $input as $key => $val ) {
-			if ( ! in_array( $key, $option_keys ) ) {
+			if ( ! in_array( $key, $option_keys, true) ) {
 				unset( $input[ $key ] );
 			}
 		}

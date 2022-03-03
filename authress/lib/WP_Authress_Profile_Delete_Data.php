@@ -27,7 +27,7 @@ class WP_Authress_Profile_Delete_Data {
 		return;
 
 		// phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
-		$authress_user = get_authressuserinfo( $GLOBALS['user_id'] );
+		$authress_user = WP_Authress_UsersRepo::get_authress_profile( $GLOBALS['user_id'] );
 		if ( ! $authress_user ) {
 			return;
 		}

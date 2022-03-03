@@ -58,12 +58,12 @@ class WP_Authress_LoginManager {
 		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
 		// Do not redirect anywhere if this is a logout action.
-		if ( wp_authress_is_current_login_action( [ 'logout' ] ) ) {
+		if ( authress_user_is_currently_on_login_action( [ 'logout' ] ) ) {
 			return false;
 		}
 
 		// Do not redirect login page override.
-		if ( wp_authress_can_show_wp_login_form() ) {
+		if ( authress_show_user_wordpress_login_form() ) {
 			return false;
 		}
 
@@ -92,7 +92,7 @@ class WP_Authress_LoginManager {
 	public function init_authress() {
 		authress_debug_log('init_authress');
 		// Not an Authress login process or settings are not configured to allow logins.
-		if ( ! wp_authress_is_ready() ) {
+		if ( ! authress_plugin_has_been_fully_configured() ) {
 			return false;
 		}
 
@@ -144,15 +144,15 @@ class WP_Authress_LoginManager {
 	 */
 	public function handle_login_redirect() {
 		authress_debug_log('handle_login_redirect');
-		$access_token = sanitize_text_field($_COOKIE['authorization']);
+		$access_token = sanitize_text_field(isset($_COOKIE['authorization']) ? wp_unslash($_COOKIE['authorization']) : '');
 		if (!isset($_COOKIE['authorization']) && isset($_REQUEST['access_token'])) {
-			$access_token = sanitize_text_field($_REQUEST['access_token']);
+			$access_token = sanitize_text_field(wp_unslash($_REQUEST['access_token']));
 			setcookie('authorization', $access_token);
 		}
 
-		$id_token = sanitize_text_field($_COOKIE['user']);
+		$id_token = sanitize_text_field(wp_unslash(isset($_COOKIE['user']) ? $_COOKIE['user'] : ''));
 		if (!isset($_COOKIE['user']) && isset($_REQUEST['id_token'])) {
-			$id_token = sanitize_text_field($_REQUEST['id_token']);
+			$id_token = sanitize_text_field(wp_unslash($_REQUEST['id_token']));
 			setcookie('user', $id_token);
 		}
 
@@ -178,7 +178,6 @@ class WP_Authress_LoginManager {
 	 * Attempts to log the user in and create a new user, if possible/needed.
 	 *
 	 * @param object      $userinfo - Authress profile of the user.
-	 * @param null|string $access_token - user's access token if returned from Authress.
 	 *
 	 * @return bool
 	 *
@@ -256,7 +255,14 @@ class WP_Authress_LoginManager {
 		$remember_users_session = $this->a0_options->get( 'remember_users_session', true);
 
 		$secure_cookie = is_ssl();
-		$secure_cookie = apply_filters('secure_signon_cookie', $secure_cookie, [ 'user_login' => $user->user_login, 'user_password' => null, 'remember' => $remember_users_session, ]);
+		$secure_cookie = apply_filters('secure_signon_cookie',
+			$secure_cookie,
+			[
+				'user_login' => $user->user_login,
+				'user_password' => null,
+				'remember' => $remember_users_session
+			]
+		);
 
 		authress_debug_log($user->user_login);
 
@@ -276,7 +282,7 @@ class WP_Authress_LoginManager {
 	public function logout() {
 		setcookie('user', '');
 		setcookie('authorization', '');
-		if ( ! wp_authress_is_ready() ) {
+		if ( ! authress_plugin_has_been_fully_configured() ) {
 			return;
 		}
 
@@ -293,10 +299,6 @@ class WP_Authress_LoginManager {
 	 * @return string|null
 	 */
 	protected function query_vars( $key ) {
-		// Neither nonce nor sanitization is needed here as this is not processing form data, just returning it.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
 		global $wp_query;
 
 		if ( isset( $wp_query->query_vars[ $key ] ) ) {
@@ -304,13 +306,10 @@ class WP_Authress_LoginManager {
 		}
 
 		if ( isset( $_REQUEST[ $key ] ) ) {
-			return wp_unslash( $_REQUEST[ $key ] );
+			return sanitize_text_field(wp_unslash( $_REQUEST[ $key ] ));
 		}
 
 		return null;
-
-		// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	}
 
 	/**
@@ -340,13 +339,13 @@ class WP_Authress_LoginManager {
 		);
 
 		$html = apply_filters( 'authress_die_on_login_output', $html, $msg, $code, false );
-		wp_die( $html );
+		wp_die( esc_html($html) );
 	}
 
 	/**
 	 * @param string $id_token
 	 * @return object
-	 * @throws WP_Authress_InvalidIdTokenException
+	 * @throws WP_Authress_InvalidIdTokenException - Token was not valid.
 	 */
 	private function decode_id_token( $id_token ) {
 		$expectedIss = $this->a0_options->get_auth_domain();
@@ -366,8 +365,8 @@ class WP_Authress_LoginManager {
 		$jwk = null;
 		$signer = new Signer\Eddsa();
 		foreach ( $keys as $element ) {
-			if ( $keyId == $element->kid ) {
-				$jwk = json_decode(json_encode($element), true);
+			if ( $keyId === $element->kid ) {
+				$jwk = json_decode(wp_json_encode($element), true);
 				if ($element->alg === 'RS512') {
 					$signer = new Signer\Rsa\Sha512();
 				}
@@ -385,9 +384,8 @@ class WP_Authress_LoginManager {
 			$userObject = (object) $token->claims()->all();
 			return $userObject;
 		} catch (RequiredConstraintsViolated $e) {
-			// list of constraints violation exceptions:
-			var_dump($e->violations());
-			throw $e;
+			WP_Authress_ErrorLog::insert_error( __METHOD__, __( 'Invalid user authentication token:', 'wp-authress' ) . $e->violations());
+			throw new WP_Authress_InvalidIdTokenException($e);
 		}
 	}
 

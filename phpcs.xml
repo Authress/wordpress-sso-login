@@ -53,10 +53,21 @@
    <rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="Squiz.PHP.CommentedOutCode.Found"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   <rule ref="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis"><exclude-pattern>*</exclude-pattern></rule>
-   
-
+   <rule ref="WordPress.WhiteSpace.OperatorSpacing.NoSpaceAfter"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.OperatorSpacing.NoSpaceBefore"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.Security.NonceVerification.Recommended"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.Security.NonceVerification.Missing"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.DocCommentAlignment.SpaceBeforeStar"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FunctionComment.SpacingAfter"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FunctionCommentThrowTag.WrongNumber"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.PHP.YodaConditions.NotYoda"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WhiteSpace.DisallowInlineTabs.NonIndentTabsUsed"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.WP.I18n.MissingTranslatorsComment"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="Squiz.Commenting.FileComment.WrongStyle"><exclude-pattern>*</exclude-pattern></rule>
  
    <!-- <rule ref="WordPress.WP.I18n">
       <properties>

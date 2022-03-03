@@ -2,7 +2,7 @@
 class WP_Authress_Serializer {
 
 	public static function serialize( $o ) {
-		return json_encode( $o );
+		return wp_json_encode( $o );
 	}
 
 	public static function unserialize( $s ) {
@@ -10,11 +10,11 @@ class WP_Authress_Serializer {
 			return null;
 		}
 
-		if ( $s[0] === '{' ) {
+		try {
 			return json_decode( $s );
+		} catch ( Exception $e ) {
+			return null;
 		}
-
-		return @unserialize( $s );
 	}
 
 }

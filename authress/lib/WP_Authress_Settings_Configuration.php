@@ -113,7 +113,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 	public function render_application_id( $args = [] ) {
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
 		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
-		$this->render_field_description(__( 'Identifier for this wordpress deployment, found in your Application settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'applications' ));
+		$this->render_field_description(__( 'Identifier for this WordPress deployment, found in your Application settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'applications' ));
 	}
 
 	/**
@@ -130,7 +130,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 		$this->render_text_field( $args['label_for'], $args['opt_name'], 'number' );
 		printf(
 			' <button id="authress_delete_cache_transient" class="button button-secondary">%s</button>',
-			__( 'Delete Cache', 'wp-authress' )
+			esc_attr_e( 'Delete Cache', 'wp-authress' )
 		);
 		$this->render_field_description( __( 'JWKS cache expiration in minutes (use 0 for no caching)', 'wp-authress' ) );
 		$domain = $this->options->get( 'domain' );
@@ -189,7 +189,7 @@ class WP_Authress_Settings_Configuration extends WP_Authress_Admin_Generic {
 		];
 		printf(
 			'<div class="subelement"><span class="description">%s.</span></div><br>',
-			__( 'Logins and signups using the original form will NOT be pushed to Authress', 'wp-authress' )
+			esc_attr_e( 'Logins and signups using the original form will NOT be pushed to Authress', 'wp-authress' )
 		);
 		$this->render_radio_buttons(
 			$buttons,

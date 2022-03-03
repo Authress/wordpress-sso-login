@@ -32,9 +32,9 @@ class WP_Authress_Users {
 			// Split the name into first- and lastname
 			$names = explode( ' ', $userinfo->name );
 
-			if ( count( $names ) == 1 ) {
+			if ( count( $names ) === 1 ) {
 				$firstname = $userinfo->name;
-			} elseif ( count( $names ) == 2 ) {
+			} elseif ( count( $names ) === 2 ) {
 				$firstname = $names[0];
 				$lastname  = $names[1];
 			} else {
@@ -53,7 +53,7 @@ class WP_Authress_Users {
 			$username = $email;
 		}
 		while ( username_exists( $username ) ) {
-			$username = $username . rand( 0, 9 );
+			$username = $username . wp_rand( 0, 9 );
 		}
 
 		$description = '';

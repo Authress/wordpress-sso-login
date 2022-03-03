@@ -45,7 +45,6 @@ class WP_Authress_UsersRepo {
 		$wp_user        = null;
 		$user_id        = null;
 
-
 		// WP user to join with incoming Authress user.
 		if ( ! empty( $userinfo->email ) ) {
 			$wp_user = get_user_by( 'email', $userinfo->email );
@@ -132,6 +131,19 @@ class WP_Authress_UsersRepo {
 	}
 
 	/**
+	 * Get the Authress profile from the database, if one exists.
+	 *
+	 * @param string $authress_user_id - Authress user ID to find.
+	 *
+	 * @return mixed
+	 */
+	//phpcs:ignore
+	public static function get_authress_profile( $authress_user_id ) {
+		$profile = self::get_meta( $authress_user_id, 'authress_obj' );
+		return $profile ? WP_Authress_Serializer::unserialize( $profile ) : false;
+	}
+
+	/**
 	 * Update all Authress meta fields for a WordPress user.
 	 *
 	 * @param int      $user_id - WordPress user ID.
@@ -145,7 +157,7 @@ class WP_Authress_UsersRepo {
 		$userinfo_encoded = wp_slash( $userinfo_encoded );
 		self::update_meta( $user_id, 'authress_obj', $userinfo_encoded );
 
-		self::update_meta( $user_id, 'last_update', date( 'c' ) );
+		self::update_meta( $user_id, 'last_update', gmdate( 'c' ) );
 	}
 
 	/**

@@ -139,7 +139,7 @@ class WP_Authress_Options {
 	public function get( $key, $default = null ) {
 		$options = $this->get_options();
 		$value   = isset( $options[ $key ] ) ? $options[ $key ] : $default;
-		return apply_filters( 'wp_authress_get_option', $value, $key );
+		return apply_filters( 'authress_get_configuration_data_from_key', $value, $key );
 	}
 
 	/**

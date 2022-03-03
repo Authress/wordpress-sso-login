@@ -71,7 +71,7 @@ class WP_Authress_ErrorLog {
 			$last_entry = array_diff_key( $last_entry, array_flip( [ 'date', 'count' ] ) );
 		}
 
-		if ( serialize( $last_entry ) === serialize( $new_entry ) ) {
+		if ( wp_json_encode( $last_entry ) === wp_json_encode( $new_entry ) ) {
 			// New error and last error are the same so set the current time and increment the counter.
 			$log[0]['date']  = time();
 			$log[0]['count'] = isset( $log[0]['count'] ) ? intval( $log[0]['count'] ) + 1 : 2;
@@ -147,7 +147,7 @@ class WP_Authress_ErrorLog {
 				$new_entry['message'] = sanitize_text_field( $error['response']['message'] );
 			}
 		} else {
-			$new_entry['message'] = is_object( $error ) || is_array( $error ) ? serialize( $error ) : $error;
+			$new_entry['message'] = is_object( $error ) || is_array( $error ) ? wp_json_encode( $error ) : $error;
 		}
 
 		do_action( 'authress_insert_error', $new_entry, $error, $section );

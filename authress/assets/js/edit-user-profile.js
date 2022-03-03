@@ -9,6 +9,11 @@ jQuery(function($) {
     var emailField = $('input[name=email]');
     var deleteUserDataButton = $('#authress_delete_data');
 
+    var userLoginDescription = $('#user_login + span.description');
+    if (userLoginDescription.length) {
+        userLoginDescription.hide();
+    }
+
     /**
      * Hide the password field if not an authress strategy.
      */
@@ -33,11 +38,18 @@ jQuery(function($) {
     /**
      * Disable email changes if not an authress connection.
      */
-    if ( emailField.length && wp_authressUserProfile.userStrategy && 'authress' === wp_authressUserProfile.userStrategy ) {
-        emailField.prop( 'readonly', true );
-        $('<p>' + wp_authressUserProfile.i18n.cannotChangeEmail + '</p>')
-            .addClass('description')
-            .insertAfter(emailField);
+    if (wp_authressUserProfile.userStrategy && 'authress' === wp_authressUserProfile.userStrategy ) {
+        if (emailField.length) {
+            emailField.prop( 'readonly', true );
+            $('<p>' + wp_authressUserProfile.i18n.cannotChangeEmail + '</p>')
+                .addClass('description')
+                .insertAfter(emailField);
+        }
+
+        var emailDescription = $('#email-description');
+        if (emailDescription.length) {
+            emailDescription.hide();
+        }
     }
 
     /**

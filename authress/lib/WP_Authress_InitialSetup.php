@@ -9,14 +9,14 @@ class WP_Authress_InitialSetup {
 	}
 
 	public function notify_error( $error ) {
-		printf( '<div class="notice notice-error"><p><strong>%s</strong></p></div>', sanitize_text_field( $error ) );
+		printf( '<div class="notice notice-error"><p><strong>%s</strong></p></div>', esc_attr( $error ) );
 	}
 
 	public function render_setup_page() {
 		if (isset($_GET['accessKey'])) {
-			$this->a0_options->set( 'accessKey', sanitize_text_field($_GET['accessKey']));
-			$this->a0_options->set( 'customDomain', sanitize_text_field($_GET['customDomain'] ));
-			$this->a0_options->set( 'applicationId', sanitize_text_field($_GET['applicationId'] ));
+			$this->a0_options->set( 'accessKey', sanitize_text_field(wp_unslash(isset($_GET['accessKey']) ? $_GET['accessKey'] : '')));
+			$this->a0_options->set( 'customDomain', sanitize_text_field(wp_unslash(isset($_GET['customDomain']) ? $_GET['customDomain'] : '')));
+			$this->a0_options->set( 'applicationId', sanitize_text_field(wp_unslash(isset($_GET['applicationId']) ? $_GET['applicationId'] : '')));
 		}
 		include WP_AUTHRESS_PLUGIN_DIR . 'templates/initial-setup/setup-wizard.php';
 	}

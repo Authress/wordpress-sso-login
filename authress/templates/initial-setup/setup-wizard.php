@@ -1,7 +1,7 @@
 <div class="a0-wrap settings wrap">
   	<div class="container-fluid">
 	  <h1><?php esc_attr_e( 'Authress Setup Wizard', 'wp-authress' ); ?></h1>
-		<?php if ( wp_authress_is_ready() ) : ?>
+		<?php if ( authress_plugin_has_been_fully_configured() ) : ?>
 			<h3>Your integration has successfully completed!
 			<p>
 				<h3>Next steps:</h3>

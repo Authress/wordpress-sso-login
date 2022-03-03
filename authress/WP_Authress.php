@@ -10,7 +10,7 @@
 	License URI:  https://www.apache.org/licenses/LICENSE-2.0
 */
 
-define( 'WP_AUTHRESS_VERSION', '4.3.1' );
+define( 'WP_AUTHRESS_VERSION', '{{VERSION}}' );
 
 define( 'WP_AUTHRESS_PLUGIN_FILE', __FILE__ );
 define( 'WP_AUTHRESS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); // Includes trailing slash
@@ -29,7 +29,7 @@ define( 'WP_AUTHRESS_JWKS_CACHE_TRANSIENT_NAME', 'WP_Authress_JWKS_cache' );
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
-/*
+/**
  * Startup
  */
 
@@ -53,7 +53,7 @@ add_action( 'plugins_loaded', 'wp_authress_plugins_loaded' );
 // }
 // add_shortcode( 'authress', 'wp_authress_shortcode' );
 
-/*
+/**
  * Plugin install/uninstall/update actions
  */
 
@@ -95,15 +95,17 @@ function wp_authress_activated_plugin_redirect( $plugin ) {
 }
 add_action( 'activated_plugin', 'wp_authress_activated_plugin_redirect' );
 
-/*
+/**
  * Core WP hooks
+ * 
+ * @param string $hosts
  */
 
 function wp_authress_add_allowed_redirect_hosts( $hosts ) {
 	$hosts[] = 'authress.io';
-	$hosts[] = wp_authress_get_option( 'domain' );
-	$hosts[] = wp_authress_get_option( 'customDomain' );
-	$hosts[] = wp_authress_get_option( 'authress_server_domain' );
+	$hosts[] = authress_get_configuration_data_from_key( 'domain' );
+	$hosts[] = authress_get_configuration_data_from_key( 'customDomain' );
+	$hosts[] = authress_get_configuration_data_from_key( 'authress_server_domain' );
 	return $hosts;
 }
 
@@ -113,7 +115,7 @@ add_filter( 'allowed_redirect_hosts', 'wp_authress_add_allowed_redirect_hosts' )
  * Enqueue login page CSS if plugin is configured.
  */
 function wp_authress_login_enqueue_scripts() {
-	if ( wp_authress_is_ready() ) {
+	if ( authress_plugin_has_been_fully_configured() ) {
 		wp_enqueue_style( 'authress', WP_AUTHRESS_PLUGIN_CSS_URL . 'login.css', false, WP_AUTHRESS_VERSION );
 	}
 }
@@ -123,14 +125,14 @@ add_action( 'login_enqueue_scripts', 'wp_authress_login_enqueue_scripts' );
  * Enqueue login widget CSS if plugin is configured.
  */
 function wp_authress_enqueue_scripts() {
-	if ( wp_authress_is_ready() ) {
-		wp_enqueue_style( 'authress-widget', WP_AUTHRESS_PLUGIN_CSS_URL . 'main.css' );
+	if ( authress_plugin_has_been_fully_configured() ) {
+		wp_enqueue_style( 'authress-widget', WP_AUTHRESS_PLUGIN_CSS_URL . 'main.css', false, WP_AUTHRESS_VERSION);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'wp_authress_enqueue_scripts' );
 
 function wp_authress_register_query_vars( $qvars ) {
-	return array_merge( $qvars, [ 'error', 'applicationId', 'accessKey', 'customDomain'] );
+	return array_merge( $qvars, [ 'error', 'applicationId', 'accessKey', 'customDomain' ]);
 }
 add_filter( 'query_vars', 'wp_authress_register_query_vars' );
 
@@ -154,11 +156,13 @@ add_filter( 'login_message', 'wp_authress_render_lock_form', 5 );
 
 /**
  * Add settings link on plugin page.
+ * 
+ * @param string $links
  */
 function wp_authress_plugin_action_links( $links ) {
 	array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Settings', 'wp-authress' )));
 
-	if ( ! wp_authress_is_ready() ) {
+	if ( ! authress_plugin_has_been_fully_configured() ) {
 		array_unshift($links, sprintf('<a href="%s">%s</a>', admin_url( 'admin.php?page=authress' ), __( 'Setup Wizard', 'wp-authress' )));
 	}
 
@@ -178,7 +182,7 @@ add_filter( 'plugin_action_links_' . WP_AUTHRESS_PLUGIN_BASENAME, 'wp_authress_p
  * @return string
  */
 function wp_authress_filter_get_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
-	if ( ! wp_authress_get_option( 'override_wp_avatars' ) ) {
+	if ( ! authress_get_configuration_data_from_key( 'override_wp_avatars' ) ) {
 		return $avatar;
 	}
 
@@ -204,7 +208,7 @@ function wp_authress_filter_get_avatar( $avatar, $id_or_email, $size, $default, 
 		return $avatar;
 	}
 
-	$authressProfile = get_authressuserinfo( $user_id );
+	$authressProfile = WP_Authress_UsersRepo::get_authress_profile( $user_id );
 
 	if ( ! $authressProfile || empty( $authressProfile->picture ) ) {
 		return $avatar;
@@ -222,7 +226,7 @@ function wp_authress_filter_get_avatar( $avatar, $id_or_email, $size, $default, 
 add_filter( 'get_avatar', 'wp_authress_filter_get_avatar', 1, 5 );
 
 function wp_authress_callback_step1() {
-	$consent_url = sprintf('https://authress.io/app/#/wordpress?hostedUrl=%s', urlencode(admin_url( 'admin.php?page=authress')));
+	$consent_url = sprintf('https://authress.io/app/#/wordpress?hostedUrl=%s', rawurlencode(admin_url( 'admin.php?page=authress')));
 	wp_safe_redirect( $consent_url );
 	exit();
 }
@@ -234,15 +238,8 @@ add_action( 'admin_action_wp_authress_callback_step1', 'wp_authress_callback_ste
  * @hook admin_action_wp_authress_clear_error_log
  */
 function wp_authress_errorlog_clear_error_log() {
-
-	// Null coalescing validates input variable.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	if ( ! wp_verify_nonce( wp_unslash( $_POST['_wpnonce'] ?? '' ), WP_Authress_ErrorLog::CLEAR_LOG_NONCE ) ) {
-		wp_die( __( 'Not allowed.', 'wp-authress' ) );
-	}
-
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( __( 'Not authorized.', 'wp-authress' ) );
+		wp_die(esc_attr_e( 'Not authorized.', 'wp-authress' ) );
 	}
 
 	$error_log = new WP_Authress_ErrorLog();
@@ -256,7 +253,6 @@ add_action( 'admin_action_wp_authress_clear_error_log', 'wp_authress_errorlog_cl
 function wp_authress_initial_setup_init() {
 	authress_debug_log('wp_authress_initial_setup_init');
 	return false;
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 }
 add_action( 'init', 'wp_authress_initial_setup_init', 1 );
 
@@ -269,9 +265,8 @@ add_action( 'init', 'wp_authress_init');
 
 function check_for_user_logged_in() {
 	authress_debug_log('check_for_user_logged_in');
-	authress_debug_log(sanitize_text_field($_REQUEST['nonce']));
 	
-	if (!is_user_logged_in() && $_REQUEST['nonce']) {
+	if (!is_user_logged_in() && isset($_REQUEST['nonce'])) {
 		$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 		$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
 		$login_manager->init_authress();
@@ -294,7 +289,6 @@ function check_for_user_logged_in() {
 	}
 }
 add_action('init', 'check_for_user_logged_in');
-// add_action('login_init', 'check_for_user_logged_in');
 
 function wp_authress_show_delete_identity() {
 	$profile_delete_data = new WP_Authress_Profile_Delete_Data();
@@ -342,25 +336,19 @@ function wp_authress_init_admin_menu() {
 add_action( 'admin_menu', 'wp_authress_init_admin_menu', 96, 0 );
 
 function wp_authress_create_account_message() {
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
 	// Null coalescing validates input variable.
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	$current_page     = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : null;
-	$is_correct_admin = in_array( $current_page, ['authress_configuration', 'authress_errors' ] );
-	if ( wp_authress_is_ready() || ! $is_correct_admin ) {
+	$current_page     = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : null;
+	$is_correct_admin = in_array( $current_page, [ 'authress_configuration', 'authress_errors' ], true);
+	if ( authress_plugin_has_been_fully_configured() || ! $is_correct_admin ) {
 		return false;
 	}
 
 	printf('<div class="update-nag">%s<strong><a href="%s">%s</a></strong>.</div>',
-		__( 'SSO Login is not yet configured. Please use the ', 'wp-authress' ),
-		admin_url( 'admin.php?page=authress' ),
-		__( 'Setup Wizard', 'wp-authress' )
+		esc_attr_e( 'SSO Login is not yet configured. Please use the ', 'wp-authress' ),
+		esc_url(admin_url( 'admin.php?page=authress' )),
+		esc_attr_e( 'Setup Wizard', 'wp-authress' )
 	);
 	return true;
-
-	// phpcs:enable WordPress.Security.NonceVerification.NoNonceVerification
 }
 add_action( 'admin_notices', 'wp_authress_create_account_message' );
 
@@ -392,7 +380,7 @@ function wp_authress_profile_enqueue_scripts() {
 	authress_debug_log('wp_authress_profile_enqueue_scripts');
 	global $pagenow;
 
-	if ( ! in_array( $pagenow, [ 'profile.php', 'user-edit.php' ] ) ) {
+	if ( ! in_array( $pagenow, [ 'profile.php', 'user-edit.php' ], true) ) {
 		return false;
 	}
 
@@ -400,10 +388,11 @@ function wp_authress_profile_enqueue_scripts() {
 		'wp_authress_user_profile',
 		WP_AUTHRESS_PLUGIN_JS_URL . 'edit-user-profile.js',
 		[ 'jquery' ],
-		WP_AUTHRESS_VERSION
+		WP_AUTHRESS_VERSION,
+		false
 	);
 
-	$profile  = get_authressuserinfo( $GLOBALS['user_id'] );
+	$profile  = WP_Authress_UsersRepo::get_authress_profile( $GLOBALS['user_id'] );
 	$strategy = isset( $profile->sub ) ? WP_Authress_Users::get_strategy( $profile->sub ) : '';
 
 	wp_localize_script(
@@ -418,7 +407,7 @@ function wp_authress_profile_enqueue_scripts() {
 				'confirmDeleteId'   => __( 'Are you sure you want to delete the Authress user data for this user?', 'wp-authress' ),
 				'actionComplete'    => __( 'Deleted', 'wp-authress' ),
 				'actionFailed'      => __( 'Action failed, please see the Authress error log for details.', 'wp-authress' ),
-				'cannotChangeEmail' => __( 'Email cannot be changed for non-database connections.', 'wp-authress' ),
+				'cannotChangeEmail' => __( 'This email is attached to SSO Login provider, and must be changed there.', 'wp-authress' ),
 			],
 		]
 	);
@@ -427,27 +416,27 @@ function wp_authress_profile_enqueue_scripts() {
 }
 add_action( 'admin_enqueue_scripts', 'wp_authress_profile_enqueue_scripts' );
 
-function page_loaded() {
+function authress_wp_page_loaded() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 	$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
-	authress_debug_log('page_loaded');
+	authress_debug_log('authress_wp_page_loaded');
 	return $login_manager->init_authress();
 }
 
-function redirect_handled($location) {
+function authress_wp_redirect_handled($location) {
 	return $location;
 }
 
-add_action( 'wp_redirect', 'redirect_handled', 1 );
-add_action( 'template_redirect', 'page_loaded', 1 );
+add_action( 'wp_redirect', 'authress_wp_redirect_handled', 1 );
+add_action( 'template_redirect', 'authress_wp_page_loaded', 1 );
 
-function login_widget_loaded() {
+function authress_wp_login_widget_loaded() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
 	$login_manager = new WP_Authress_LoginManager( $users_repo, WP_Authress_Options::Instance() );
-	authress_debug_log('login_widget_loaded');
+	authress_debug_log('authress_wp_login_widget_loaded');
 	return $login_manager->login_auto();
 }
-add_action( 'login_init', 'login_widget_loaded' );
+add_action( 'login_init', 'authress_wp_login_widget_loaded' );
 
 function wp_authress_process_logout() {
 	$users_repo    = new WP_Authress_UsersRepo( WP_Authress_Options::Instance() );
@@ -475,7 +464,7 @@ function wp_authress_filter_login_override_url( $wp_login_url ) {
 	// Not processing form data, just using a redirect parameter if present.
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
-	if ( wp_authress_can_show_wp_login_form() && isset( $_REQUEST['wle'] ) ) {
+	if ( authress_show_user_wordpress_login_form() && isset( $_REQUEST['wle'] ) ) {
 		// We are on an override page.
 		$wp_login_url = add_query_arg( 'wle', sanitize_text_field( wp_unslash( $_REQUEST['wle'] ) ), $wp_login_url );
 	}
@@ -494,7 +483,7 @@ function wp_authress_filter_login_override_form() {
 	// Not processing form data, just using a redirect parameter if present.
 	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 
-	if ( wp_authress_can_show_wp_login_form() && isset( $_REQUEST['wle'] ) ) {
+	if ( authress_show_user_wordpress_login_form() && isset( $_REQUEST['wle'] ) ) {
 		// Input is being output, not stored.
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		printf( '<input type="hidden" name="wle" value="%s" />', esc_attr( wp_unslash( $_REQUEST['wle'] ) ) );
@@ -514,7 +503,7 @@ add_action( 'lostpassword_form', 'wp_authress_filter_login_override_form', 100 )
  * @return array
  */
 function wp_authress_filter_body_class( array $classes ) {
-	if ( wp_authress_can_show_wp_login_form() ) {
+	if ( authress_show_user_wordpress_login_form() ) {
 		$classes[] = 'a0-show-core-login';
 	}
 	return $classes;
