@@ -24,12 +24,6 @@ jobs:
         php-version: 7.4
         extensions: mbstring, xml, ctype, iconv, intl
         coverage: xdebug
-    - name: Set package versioning
-      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
-      run: |
-        sed -i "s/{{VERSION}}/${VERSION}/g" Authress_Sso_Login.php
-        sed -i "s/{{VERSION}}/${VERSION}/g" wordpress/readme.txt
-        cp wordpress/readme.txt readme.txt
 
     - name: Install Composer dependencies
       run: ./composer.phar install --prefer-dist --optimize-autoloader
@@ -39,6 +33,13 @@ jobs:
 
     - name: Clean workspace
       run: ./composer.phar install --prefer-dist --optimize-autoloader --no-dev
+
+    - name: Set package versioning
+      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
+      run: |
+        sed -i "s/{{VERSION}}/${VERSION}/g" Authress_Sso_Login.php
+        sed -i "s/{{VERSION}}/${VERSION}/g" wordpress/readme.txt
+        cp wordpress/readme.txt readme.txt
     
     - name: WordPress.org plugin deployment
       id: wordpress_deploy

@@ -1,6 +1,6 @@
 === SSO Login - Universal (OAuth + SAML) ===
 Contributors: authress
-Tags: Login, SSO, OAuth, SAML, OpenID, Google, Azure AD, Social Login, security, Single Sign-on
+Tags: Login, SSO, OAuth, SAML, Single Sign-on
 Requires at least: 5.5
 Requires PHP: 7.4
 Tested up to: 5.9.1
