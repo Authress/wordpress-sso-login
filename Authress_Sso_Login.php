@@ -16,11 +16,10 @@ define( 'AUTHRESS_SSO_LOGIN_PLUGIN_FILE', __FILE__ );
 define( 'AUTHRESS_SSO_LOGIN_PLUGIN_DIR', plugin_dir_path( __FILE__ ) ); // Includes trailing slash
 define( 'AUTHRESS_SSO_LOGIN_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'AUTHRESS_SSO_LOGIN_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/js/' );
-define( 'AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/css/' );
-define( 'AUTHRESS_SSO_LOGIN_PLUGIN_IMG_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/img/' );
-define( 'AUTHRESS_SSO_LOGIN_PLUGIN_LIB_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/lib/' );
-define( 'AUTHRESS_SSO_LOGIN_PLUGIN_BS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'assets/bootstrap/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'templates/assets/js/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_CSS_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'templates/assets/css/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_IMG_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'templates/assets/img/' );
+define( 'AUTHRESS_SSO_LOGIN_PLUGIN_LIB_URL', AUTHRESS_SSO_LOGIN_PLUGIN_URL . 'templates/assets/lib/' );
 
 define( 'AUTHRESS_SSO_LOGIN_AUTHRESS_LOGIN_FORM_ID', 'authress-login-form' );
 define( 'AUTHRESS_SSO_LOGIN_CACHE_GROUP', 'authress_sso_login' );

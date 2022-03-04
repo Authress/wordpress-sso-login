@@ -1,6 +1,6 @@
-=== Authress ===
+=== SSO Login - Universal (OAuth + SAML) ===
 Contributors: authress
-Tags: authentication, SSO, oauth2, openid, saml, Google Workspaces, Azure AD, Social Login, security, single sign-on
+Tags: Login, SSO, OAuth, SAML, OpenID, Google, Azure AD, Social Login, security, Single Sign-on
 Requires at least: 5.5
 Requires PHP: 7.4
 Tested up to: 5.9.1
@@ -12,7 +12,7 @@ SSO Login provides user login, business authentication, SSO, Social login, and S
 
 == Description ==
 
-This plugin replaces standard WordPress login forms with one powered by [Authress](https://authress.io) that enables:
+This plugin upgrades the standard **WordPress login** forms with one powered by [Authress](https://authress.io) that enables:
 
 - **Universal authentication**
     - Over 40 social login providers
@@ -23,32 +23,37 @@ This plugin replaces standard WordPress login forms with one powered by [Authres
     - Security access policies
     - Mitigate brute force attacks
 
+Which includes:
+- Azure AD and B2C
+- Office 365
+- WSO2
+- Ping Identity
+- Okta
+- Auth0
+- Keyclock
+- LinkedIn
+- Salesforce
+- Twitter
+- Googl Workspace
+- And any custom OAuth2.1, OpenID, or SAML provider
+
+With **SSO Login**, you can automatically support business and enterprise customers that have important security requirements for their users to use your site and platform.
+
 == Installation ==
 
 This plugin requires an [Authress account](https://authress.io).
 
 1. [Sign up here](https://authress.io/app/#/signup).
-2. Follow the installation instructions below.
+2. Follow the installation instructions the WordPress plugin during installation.
 
 == Technical Notes ==
-
-**IMPORTANT**: By using this plugin you are delegating the site authentication and profile handling to Authress. That means that you won't need to use the WordPress database to authenticate users and the default WordPress login forms will be upgraded to support this.
+By using this plugin you are delegating the site authentication and profile handling to Authress. That means that you won't need to use the WordPress database to authenticate users and the default WordPress login forms will be upgraded to support the new SSO Login flow.
 
 Please see our [knowledge base](https://authress.io/knowledge-base/) for more information on how Authress authenticates and manages your users.
 
 = Migrating Existing Users =
 
 Authress allows multiple authentication providers. You can have social providers like Facebook, Twitter, Google+, a database of users and passwords (just like WordPress), or you can use an Enterprise directories like, Office365, Google Apps, SAML, OpenID, OAuth2.1. All those authentication providers are supported and more.
-
-= Use the SSO Widget =
-Add the Authress widget via a shortcode in your editor. Just add the following to use the global settings:
-
-    [authress]
-
-All for your customer admin user, make sure to direct them to the Authress SSO administrative page to configure their SSO settings for their whole tenant:
-
-    [authress admin="true"]
-
 
 == Frequently Asked Questions ==
 

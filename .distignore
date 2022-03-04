@@ -1,0 +1,15 @@
+/.wordpress-org
+/.git
+/.github
+/.vscode
+/node_modules
+
+.distignore
+.gitignore
+README.md
+
+/composer.*
+phpcs.xml
+docker-compose.yml
+yarn.lock
+package.json
