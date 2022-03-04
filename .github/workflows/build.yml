@@ -41,7 +41,7 @@ jobs:
     
     - name: WordPress.org plugin deployment
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
-      uses: 10up/action-wordpress-plugin-asset-update@stable
+      uses: 10up/action-wordpress-plugin-deploy@2a5e2c14244768a9e9b2396ca8e70e739061c9ec
       env:
         SVN_PASSWORD: ${{ secrets.WORDPRESS_SVN_PASSWORD }}
         SVN_USERNAME: ${{ secrets.WORDPRESS_SVN_USERNAME }}
