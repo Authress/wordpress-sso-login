@@ -34,7 +34,7 @@ jobs:
       run: ./composer.phar install --prefer-dist --optimize-autoloader
 
     - name: Run Lint
-      run: ./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s authress
+      run: ./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .
 
     - name: Clean workspace
       run: ./composer.phar install --prefer-dist --optimize-autoloader --no-dev
