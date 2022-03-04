@@ -29,6 +29,7 @@ jobs:
       run: |
         sed -i "s/{{VERSION}}/${VERSION}/g" Authress_Sso_Login.php
         sed -i "s/{{VERSION}}/${VERSION}/g" wordpress/readme.txt
+        cp wordpress/readme.txt readme.txt
 
     - name: Install Composer dependencies
       run: ./composer.phar install --prefer-dist --optimize-autoloader
