@@ -136,7 +136,7 @@ function authress_sso_login_register_query_vars( $qvars ) {
 add_filter( 'query_vars', 'authress_sso_login_register_query_vars' );
 
 /**
- * Output the Authress form on wp-login.php
+ * Output the Authress form on wp-login.php, Renders above the WordPress login form.
  *
  * @hook filter:login_message
  *
@@ -146,10 +146,15 @@ add_filter( 'query_vars', 'authress_sso_login_register_query_vars' );
  */
 function authress_sso_login_render_lock_form( $html ) {
 	authress_debug_log('authress_sso_login_render_lock_form');
+
 	ob_start();
 	\Authress_Sso_Login_Lock::render();
 	$authress_form = ob_get_clean();
-	return $authress_form ? $authress_form : $html;
+	if ($authress_form) {
+		return $authress_form;
+	}
+
+	return $html;
 }
 add_filter( 'login_message', 'authress_sso_login_render_lock_form', 5 );
 

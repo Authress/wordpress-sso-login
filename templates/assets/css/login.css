@@ -72,6 +72,10 @@ body.a0-widget-open > * {
   display: none;
 }
 
+/* .login label[for="user_login"] {
+  display: none !important;
+} */
+
 .a0-show-core-login #registerform,
 .a0-show-core-login #loginform,
 .a0-show-core-login #lostpasswordform,

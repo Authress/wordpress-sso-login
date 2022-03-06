@@ -20,7 +20,7 @@ class Authress_Sso_Login_Lock {
 	 * Render a link at the bottom of a WordPress core login form back to Lock.
 	 */
 	public static function render_back_to_lock() {
-		printf('<div id="extra-options"><a href="?">%s</a></div>', esc_html(sprintf( __( '← Back to %s', 'wp-authress' ), 'SSO Login')));
+		printf('<div id="extra-options"><a href="?">%s</a></div>', esc_html(sprintf( __( '← Login with email', 'wp-authress' ), 'SSO Login')));
 	}
 
 	/**

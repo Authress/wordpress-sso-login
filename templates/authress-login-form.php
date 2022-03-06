@@ -10,7 +10,7 @@
 			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
 			const currentUrl = new URL(window.location.href);
 			const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
-			const ssoDomain = document.getElementById('customer_sso_domain').value;
+			const ssoDomain = (document.getElementById('customer_sso_domain').value || '').replace(/[^@]+@(.*)$/, '$1');
 			loginClient.authenticate({ tenantLookupIdentifier: ssoDomain, redirectUrl })
 			.then(result => {
 				window.location.replace(redirectUrl);
@@ -43,30 +43,35 @@
 		};
 		var checkHandler = setInterval(checkIfLoaded, 100);
 	</script>
-	<div id="form-signin-wrapper" class="authress-login">
+	<div class="authress-login">
 		<div class="form-signin">
 			<div id="<?php echo esc_attr( AUTHRESS_SSO_LOGIN_AUTHRESS_LOGIN_FORM_ID ); ?>">
 				<form onsubmit="return loginWithSsoDomain()">
 					<p>
-						<label for="customer_sso_domain">Enter SSO Domain</label>
+						<label for="customer_sso_domain">Enter email</label>
 						<input type="text" name="sso_domain" autocomplete="on" id="customer_sso_domain" class="input" value="" size="20" autocapitalize="off" autocomplete="off" style="background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" required>
 					</p>
 
 					<p class="submit">
-						<input type="submit" name="wp-submit" class="button button-primary button-large" value="Continue to SSO Provider">
+						<input type="submit" name="wp-submit" class="button button-primary button-large" value="Next">
 					</p>
 				</form>
 			</div>
 			<?php if ( 'link' === $wle && function_exists( 'login_header' ) ) : ?>
 			  <div id="extra-options">
 				  <a href="<?php echo esc_url(wp_login_url()); ?>?wle">
-					<?php esc_attr_e( '← Login with username', 'wp-authress' ); ?>
+					<?php esc_attr_e( '← Sign up with username and password', 'wp-authress' ); ?>
 				  </a>
 			  </div>
 			<?php endif ?>
 		</div>
 	</div>
 
+	<style type="text/css">
+		#customer_sso_domain {
+			font-size: 18px;
+		}
+	</style>
 	<style type="text/css">
 		<?php echo esc_attr(apply_filters( 'authress::user_login_template::css::formatter', '' )); ?>
 	</style>
