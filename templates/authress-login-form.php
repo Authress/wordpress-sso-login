@@ -10,6 +10,8 @@
 				return true;
 			}
 
+			var loginClickNextButton = document.getElementById('loginClickNextButtonLoader');
+			loginClickNextButton.classList.toggle('loader');
 			const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
 			const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
 			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
@@ -21,6 +23,7 @@
 			.then(result => {
 				window.location.replace(redirectUrl);
 			}).catch(error => {
+				loginClickNextButton.classList.toggle('loader');
 				console.log('Failed to redirect user to SSO login:', error.code);
 				if (error.code === 'InvalidConnection') {
 					window.location.assign(`<?php echo esc_url(wp_login_url()); ?>?login=${userEmailAddress}`);
@@ -36,6 +39,7 @@
 			if (!script || !authress) {
 				return;
 			}
+
 			clearInterval(checkHandler);
 			const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
 			const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
@@ -56,14 +60,15 @@
 	</script>
 
 	<div>
-		<?php if (!isset($_REQUEST['action'])): ?>
-			<form name="loginform-custom" id="loginform-custom" action="<?php echo esc_url(wp_login_url()) ?>" method="post" onsubmit="return loginWithSsoDomain()">
+		<?php if (!isset($_REQUEST['action'])) : ?>
+			<form name="loginform-custom" id="loginform-custom" action="<?php echo esc_url(wp_login_url()); ?>" method="post" onsubmit="return loginWithSsoDomain()">
 				<p class="login-username">
 					<label for="userLogin">Enter your email</label>
-					<input type="text" autocomplete="username" name="log" id="userLogin" class="input" value="<?php echo esc_attr($_GET['login']) ?>" size="20" />
+					<input type="text" autocomplete="username" name="log" id="userLogin" class="input"
+						value="<?php echo isset($_GET['login']) ? esc_attr(sanitize_text_field(wp_unslash($_GET['login']))) : ''; ?>" size="20" />
 				</p>
 				
-				<?php if ($loginFlowIsPassword) :?>
+				<?php if ($loginFlowIsPassword) : ?>
 					<p class="login-password">
 						<label for="userPassword">Password</label>
 						<input autofocus autocomplete="current-password" type="password" name="pwd" id="userPassword" class="input" value="" size="20" />
@@ -73,16 +78,16 @@
 					<input name="rememberme" type="hidden" id="rememberMeValue" value="forever" />
 				</p>
 				<p class="login-submit">
-					<?php if ($loginFlowIsPassword) :?>
+					<?php if ($loginFlowIsPassword) : ?>
 						<input type="submit" name="wp-submit" id="loginButton" class="button button-primary" value="Login" />
 					<?php else : ?>
-						<input type="submit" name="wp-submit" id="nextButton" class="button button-primary" value="Next" />
+						<button type="submit" id="loginClickNextButton" class="button button-primary"><div id="loginClickNextButtonLoader">Next</div></button>
 					<?php endif ?>
-					<input type="hidden" name="redirect_to" value="<?php echo esc_url(wp_login_url()) ?>" />
+					<input type="hidden" name="redirect_to" value="<?php echo esc_url(wp_login_url()); ?>" />
 				</p>
 
 				<br>
-				<?php if ($loginFlowIsPassword) :?>
+				<?php if ($loginFlowIsPassword) : ?>
 					<p id="nav" style="display: block">
 						<a href="?">← Login with identity provider</a>
 					</p>
@@ -109,6 +114,71 @@
 		.login #nav {
 			padding-left: 0;
 		}
+
+		#loginClickNextButton {
+			display: flex;
+			height: 30px !important;
+			min-width: 50px;
+		}
+
+		/* #loginClickNextButtonLoader {
+			display: inline: block;
+		} */
+		.loader,
+		.loader:before,
+		.loader:after {
+			background: #ffffff;
+			-webkit-animation: load1 1s infinite ease-in-out;
+			animation: load1 1.1s infinite ease-in-out;
+			width: 0.6em;
+			height: 0.25em;
+		}
+		.loader {
+			color: #ffffff;
+			text-indent: -9999em;
+			margin: 14px auto;
+			position: relative;
+			font-size: 11px;
+			-webkit-transform: translateZ(0);
+			-ms-transform: translateZ(0);
+			transform: translateZ(0);
+			-webkit-animation-delay: -0.16s;
+			animation-delay: -0.16s;
+		}
+		.loader:before, .loader:after {
+			position: absolute;
+			top: 0;
+			content: '';
+		}
+		.loader:before {
+			left: -0.8em;
+			-webkit-animation-delay: -0.32s;
+			animation-delay: -0.32s;
+		}
+		.loader:after {
+			left: 0.8em;
+		}
+		@-webkit-keyframes load1 {
+			0%, 80%, 100% {
+				box-shadow: 0 0;
+				height: 0.25em;
+			}
+			40% {
+				box-shadow: 0 -0.75em;
+				height: 0.9em;
+			}
+		}
+		@keyframes load1 {
+			0%, 80%, 100% {
+				box-shadow: 0 0;
+				height: 0.25em;
+			}
+			40% {
+				box-shadow: 0 -0.75em;
+				height: 0.9em;
+			}
+		}
+
 	</style>
 	<style type="text/css">
 		<?php echo esc_attr(apply_filters( 'authress::user_login_template::css::formatter', '' )); ?>
