@@ -154,6 +154,7 @@ function authress_sso_login_render_lock_form( $html ) {
 		return $authress_form;
 	}
 
+	authress_debug_log('Falling back to wp login form');
 	return $html;
 }
 add_filter( 'login_message', 'authress_sso_login_render_lock_form', 5 );
@@ -458,29 +459,6 @@ function authress_sso_login_ajax_delete_cache_transient() {
 add_action( 'wp_ajax_authress_delete_cache_transient', 'authress_sso_login_ajax_delete_cache_transient' );
 
 /**
- * Add an override code to the lost password URL if authorized.
- *
- * @param string $wp_login_url - Existing lost password URL.
- *
- * @return string
- */
-function authress_sso_login_filter_login_override_url( $wp_login_url ) {
-	// Not processing form data, just using a redirect parameter if present.
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-
-	if ( authress_show_user_wordpress_login_form() && isset( $_REQUEST['wle'] ) ) {
-		// We are on an override page.
-		$wp_login_url = add_query_arg( 'wle', sanitize_text_field( wp_unslash( $_REQUEST['wle'] ) ), $wp_login_url );
-	}
-	return $wp_login_url;
-
-	// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
-}
-
-add_filter( 'lostpassword_url', 'authress_sso_login_filter_login_override_url', 100 );
-add_filter( 'login_url', 'authress_sso_login_filter_login_override_url', 100 );
-
-/**
  * Add the core WP form override to the lost password and login forms.
  */
 function authress_sso_login_filter_login_override_form() {
@@ -507,9 +485,7 @@ add_action( 'lostpassword_form', 'authress_sso_login_filter_login_override_form'
  * @return array
  */
 function authress_sso_login_filter_body_class( array $classes ) {
-	if ( authress_show_user_wordpress_login_form() ) {
-		$classes[] = 'a0-show-core-login';
-	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'authress_sso_login_filter_body_class' );

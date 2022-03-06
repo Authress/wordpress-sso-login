@@ -1,21 +1,32 @@
 <?php
 	$authress_options = Authress_Sso_Login_Options::Instance();
 	$wle = 'link';
+	$loginFlowIsPassword = isset($_REQUEST['login']);
 ?>
 
 	<script type="text/javascript">
 		function loginWithSsoDomain() {
+			if (window.location.search.includes('login')) {
+				return true;
+			}
+
 			const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
 			const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
 			const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
 			const currentUrl = new URL(window.location.href);
 			const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
-			const ssoDomain = (document.getElementById('customer_sso_domain').value || '').replace(/[^@]+@(.*)$/, '$1');
+			const userEmailAddress = (document.getElementById('userLogin').value || '');
+			const ssoDomain = userEmailAddress.replace(/[^@]+@(.*)$/, '$1');
 			loginClient.authenticate({ tenantLookupIdentifier: ssoDomain, redirectUrl })
 			.then(result => {
 				window.location.replace(redirectUrl);
 			}).catch(error => {
-				console.error('Failed to redirect user to SSO login:', error);
+				console.log('Failed to redirect user to SSO login:', error.code);
+				if (error.code === 'InvalidConnection') {
+					window.location.assign(`<?php echo esc_url(wp_login_url()); ?>?login=${userEmailAddress}`);
+					return false;
+				}
+				
 			});
 			return false;
 		}
@@ -43,33 +54,60 @@
 		};
 		var checkHandler = setInterval(checkIfLoaded, 100);
 	</script>
-	<div class="authress-login">
-		<div class="form-signin">
-			<div id="<?php echo esc_attr( AUTHRESS_SSO_LOGIN_AUTHRESS_LOGIN_FORM_ID ); ?>">
-				<form onsubmit="return loginWithSsoDomain()">
-					<p>
-						<label for="customer_sso_domain">Enter email</label>
-						<input type="text" name="sso_domain" autocomplete="on" id="customer_sso_domain" class="input" value="" size="20" autocapitalize="off" autocomplete="off" style="background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" required>
-					</p>
 
-					<p class="submit">
-						<input type="submit" name="wp-submit" class="button button-primary button-large" value="Next">
+	<div>
+		<?php if (!isset($_REQUEST['action'])): ?>
+			<form name="loginform-custom" id="loginform-custom" action="<?php echo esc_url(wp_login_url()) ?>" method="post" onsubmit="return loginWithSsoDomain()">
+				<p class="login-username">
+					<label for="userLogin">Enter your email</label>
+					<input type="text" autocomplete="username" name="log" id="userLogin" class="input" value="<?php echo esc_attr($_GET['login']) ?>" size="20" />
+				</p>
+				
+				<?php if ($loginFlowIsPassword) :?>
+					<p class="login-password">
+						<label for="userPassword">Password</label>
+						<input autofocus autocomplete="current-password" type="password" name="pwd" id="userPassword" class="input" value="" size="20" />
 					</p>
-				</form>
-			</div>
-			<?php if ( 'link' === $wle && function_exists( 'login_header' ) ) : ?>
-			  <div id="extra-options">
-				  <a href="<?php echo esc_url(wp_login_url()); ?>?wle">
-					<?php esc_attr_e( '← Sign up with username and password', 'wp-authress' ); ?>
-				  </a>
-			  </div>
-			<?php endif ?>
-		</div>
+				<?php endif ?>
+				<p class="login-remember">
+					<input name="rememberme" type="hidden" id="rememberMeValue" value="forever" />
+				</p>
+				<p class="login-submit">
+					<?php if ($loginFlowIsPassword) :?>
+						<input type="submit" name="wp-submit" id="loginButton" class="button button-primary" value="Login" />
+					<?php else : ?>
+						<input type="submit" name="wp-submit" id="nextButton" class="button button-primary" value="Next" />
+					<?php endif ?>
+					<input type="hidden" name="redirect_to" value="<?php echo esc_url(wp_login_url()) ?>" />
+				</p>
+
+				<br>
+				<?php if ($loginFlowIsPassword) :?>
+					<p id="nav" style="display: block">
+						<a href="?">← Login with identity provider</a>
+					</p>
+				<?php endif ?>
+			</form>
+		<?php else : ?>
+			<div></div>
+		<?php endif; ?>
 	</div>
 
 	<style type="text/css">
 		#customer_sso_domain {
 			font-size: 18px;
+		}
+		.enable-on-password {
+			display: block;
+		}
+		.hide-on-password {
+			display: none;
+		}
+		#loginform {
+			display: none;
+		}
+		.login #nav {
+			padding-left: 0;
 		}
 	</style>
 	<style type="text/css">
