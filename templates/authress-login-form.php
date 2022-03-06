@@ -60,7 +60,7 @@
 			<?php if ( 'link' === $wle && function_exists( 'login_header' ) ) : ?>
 			  <div id="extra-options">
 				  <a href="<?php echo esc_url(wp_login_url()); ?>?wle">
-					<?php esc_attr_e( 'Login with WordPress username', 'wp-authress' ); ?>
+					<?php esc_attr_e( '← Login with username', 'wp-authress' ); ?>
 				  </a>
 			  </div>
 			<?php endif ?>

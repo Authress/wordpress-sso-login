@@ -404,7 +404,7 @@ class Authress_Sso_Login_Options {
             // Advanced
             'requires_verified_email'   => true,
             'skip_strategies'           => '',
-            'remember_users_session'    => false,
+            'remember_users_session'    => true,
             'default_login_redirection' => home_url(),
 			'auto_provisioning'         => false,
             'valid_proxy_ip'            => ''
