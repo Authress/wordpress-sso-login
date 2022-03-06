@@ -68,6 +68,7 @@
    <rule ref="WordPress.WP.I18n.MissingTranslatorsComment"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="Squiz.Commenting.FileComment.WrongStyle"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.NamingConventions.ValidHookName.UseUnderscores"><exclude-pattern>*</exclude-pattern></rule>
  
    <!-- <rule ref="WordPress.WP.I18n">
       <properties>
