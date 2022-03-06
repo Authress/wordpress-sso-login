@@ -13,10 +13,18 @@
 
 			<h3><?php esc_attr_e( 'Automated Setup', 'wp-authress' ); ?></h3>
 
-			<p><?php esc_attr_e( 'Want to see the SSO login page?', 'wp-authress' ); ?></p>
-			<p><?php esc_attr_e( "(Note: You won't be able to actually log in until you configure a tenant identity provider:", 'wp-authress' );
-				printf(' <strong><a href="https://authress.io/knowledge-base/user-oauth-authentication-quick-start" target="_blank">%s</a></strong>', esc_attr_e( 'Configure identity provider', 'wp-authress' ));
-			?>)</p>
+			<p><?php esc_attr_e( 'The next step is to configure an SSO Connection', 'wp-authress' ); ?></p>
+			<p><?php esc_attr_e( "Every business will configure their own connection with their SSO provider and enable it in Authress. However, to test out the SSO Login, it is recommended you configure a test one for your WordPress administrators.", 'wp-authress' ); ?>)</p>
+			<p>Fill in all the connection details with values for an SSO provider. We recommend Google Workspace as an initial test. Make sure to set the <strong>Audience Identifier</strong> property of the Authress connection to be <strong>wordpress-admin</strong>.</p>
+			<p><?php esc_attr_e( "Then navigate to the SSO Login prompt and enter that same value.", 'wp-authress' ); ?></p>
+
+			<a href="https://authress.io/app/#/setup?focus=connections" target="_blank"><button class="button button-primary">Create an SSO Connection</button></a>
+
+			<br><br>
+			<p>Finish that step or want to se the SSO login page?
+				<br>	
+				<small>(Note: You won't be able to actually log in until you configure a tenant identity provider above.)</small>
+			</p>
 
 			<a href="/wp-login.php?action=logout"><button class="button button-primary">Try the SSO login</button></a>
 
