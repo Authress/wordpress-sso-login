@@ -83,7 +83,7 @@ function authress_plugin_has_been_fully_configured() {
 function authress_debug_log($message) {
 	if (getenv('DEVELOPMENT_DEBUG')) {
 		// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		error_log("****************************************************************           " . wp_json_encode($message) . "           ****************************************************************");
+		error_log("*********************           " . wp_json_encode($message));
 		// phpcs:enable WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}
 }

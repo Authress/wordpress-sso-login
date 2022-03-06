@@ -189,8 +189,6 @@ class Authress_Sso_Login_LoginManager {
 		list( $strategy ) = explode( '|', $authress_sub );
 		$user = $this->users_repo->find_authress_user( $authress_sub );
 
-		$user = apply_filters( 'authress_get_wp_user', $user, $userinfo );
-
 		if ( ! is_null( $user ) ) {
 			authress_debug_log('Existing user: updating');
 			// User exists so log them in.
@@ -221,7 +219,6 @@ class Authress_Sso_Login_LoginManager {
 			}
 
 			$this->users_repo->update_authress_object( $user->data->ID, $userinfo );
-			$user = apply_filters( 'authress_get_wp_user', $user, $userinfo );
 			$this->do_login( $user);
 			return is_user_logged_in();
 		}
@@ -338,7 +335,6 @@ class Authress_Sso_Login_LoginManager {
 			__( '← Login', 'wp-authress' )
 		);
 
-		$html = apply_filters( 'authress_die_on_login_output', $html, $msg, $code, false );
 		wp_die( esc_html($html) );
 	}
 

@@ -17,11 +17,6 @@ class Authress_Sso_Login_Users {
 			$email = 'change_this_email@' . uniqid() . '.com';
 		}
 
-		$valid_user = apply_filters( 'authress_sso_login_should_create_user', true, $userinfo );
-		if ( ! $valid_user ) {
-			return -2;
-		}
-
 		// Generate a random password
 		$password = wp_generate_password(1024);
 
@@ -83,16 +78,12 @@ class Authress_Sso_Login_Users {
 			'description'  => $description,
 		];
 
-		$user_data = apply_filters( 'authress_create_user_data', $user_data, $userinfo );
-
 		// Update the user
 		$user_id = wp_insert_user( $user_data );
 
 		if ( ! is_numeric( $user_id ) ) {
 			return $user_id;
 		}
-
-		do_action( 'authress_sso_login_user_created', $user_id, $email, $password, $firstname, $lastname );
 
 		// Return the user ID
 		return $user_id;

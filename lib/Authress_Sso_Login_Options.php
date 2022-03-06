@@ -60,8 +60,7 @@ class Authress_Sso_Login_Options {
 	 * @return string
 	 */
 	public function get_constant_name( $key ) {
-		// NOTE: the add_filter call must load before Authress_Sso_Login::init() so it cannot be used in a theme.
-		$constant_prefix = apply_filters( 'authress_settings_constant_prefix', 'AUTHRESS_ENV_' );
+		$constant_prefix = 'AUTHRESS_ENV_';
 		return $constant_prefix . strtoupper( $key );
 	}
 
@@ -139,7 +138,7 @@ class Authress_Sso_Login_Options {
 	public function get( $key, $default = null ) {
 		$options = $this->get_options();
 		$value   = isset( $options[ $key ] ) ? $options[ $key ] : $default;
-		return apply_filters( 'authress_get_configuration_data_from_key', $value, $key );
+		return $value;
 	}
 
 	/**

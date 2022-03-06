@@ -4,7 +4,7 @@ require __DIR__ . '/Authress_Sso_Login_Settings_Configuration.php';
 
 class Authress_Sso_Login_Admin {
 
-	const OPT_SECTIONS = [ 'basic', 'features', 'appearance', 'advanced' ];
+	const OPT_SECTIONS = [ 'basic' ];
 
 	protected $a0_options;
 
@@ -101,19 +101,6 @@ class Authress_Sso_Login_Admin {
 		}
 
 		$option_keys = $this->a0_options->get_defaults( true );
-
-		// Look for custom settings fields.
-		$custom_opts = [];
-		foreach ( self::OPT_SECTIONS as $section ) {
-			$custom_opts = array_merge( $custom_opts, apply_filters( 'authress_settings_fields', [], $section ) );
-		}
-
-		// Merge in any custom setting option keys.
-		foreach ( $custom_opts as $custom_opt ) {
-			if ( $custom_opt && $custom_opt['opt'] ) {
-				$option_keys[] = $custom_opt['opt'];
-			}
-		}
 
 		// Remove unknown keys.
 		foreach ( $input as $key => $val ) {

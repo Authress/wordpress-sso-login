@@ -31,8 +31,6 @@ class Authress_Sso_Login_Admin_Generic {
 
 		add_settings_section($section_id, $section_name, null, $options_name);
 
-		$options = apply_filters( 'authress_settings_fields', $options, $id );
-
 		foreach ( $options as $setting ) {
 			$callback = function_exists( $setting['function'] ) ? $setting['function'] : [ $this, $setting['function'] ];
 

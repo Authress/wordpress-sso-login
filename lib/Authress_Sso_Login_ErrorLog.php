@@ -150,7 +150,6 @@ class Authress_Sso_Login_ErrorLog {
 			$new_entry['message'] = is_object( $error ) || is_array( $error ) ? wp_json_encode( $error ) : $error;
 		}
 
-		do_action( 'authress_insert_error', $new_entry, $error, $section );
 		return ( new self() )->add( $new_entry );
 	}
 }

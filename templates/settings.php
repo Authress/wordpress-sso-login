@@ -10,15 +10,6 @@
 					<a id="tab-basic" href="#basic" class="js-a0-settings-tabs">
 						<?php esc_attr_e( 'Configuration', 'wp-authress' ); ?>
 					</a>
-					<!-- <a id="tab-features" href="#features" class="js-a0-settings-tabs">
-						< ?php esc_attr_e( 'Features', 'wp-authress' ); ?>
-					</a>
-					<a id="tab-appearance" href="#appearance" class="js-a0-settings-tabs">
-						< ?php esc_attr_e( 'Embedded', 'wp-authress' ); ?>
-					</a>
-					<a id="tab-advanced" href="#advanced" class="js-a0-settings-tabs">
-						< ?php esc_attr_e( 'Advanced', 'wp-authress' ); ?>
-					</a> -->
 					<a id="tab-help" href="#help" class="js-a0-settings-tabs">
 						<?php esc_attr_e( 'Help', 'wp-authress' ); ?>
 					</a>

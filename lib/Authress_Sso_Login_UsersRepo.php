@@ -66,9 +66,6 @@ class Authress_Sso_Login_UsersRepo {
 			// Check if user was created.
 			if ( is_wp_error( $user_id ) ) {
 				throw new Authress_Sso_Login_CouldNotCreateUserException( $user_id->get_error_message() );
-			} elseif ( -2 === $user_id ) {
-				// Registration rejected by authress_sso_login_should_create_user filter in Authress_Sso_Login_Users::create_user().
-				throw new Authress_Sso_Login_CouldNotCreateUserException( __( 'Registration rejected.', 'wp-authress' ) );
 			} elseif ( $user_id < 0 ) {
 				// Registration failed for another reason.
 				throw new Authress_Sso_Login_CouldNotCreateUserException();
@@ -96,18 +93,6 @@ class Authress_Sso_Login_UsersRepo {
 			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Empty user id', 'wp-authress' ) );
 
 			return null;
-		}
-
-		/**
-		 * Short-circuits the user query below.
-		 *
-		 * Returning a WP_User object will stop the method here and use the returned user.
-		 *
-		 * @param string $id The Authress ID.
-		 */
-		$check = apply_filters( 'find_authress_user', null, $id );
-		if ( $check instanceof WP_User ) {
-			return $check;
 		}
 
 		$query = [
@@ -171,20 +156,6 @@ class Authress_Sso_Login_UsersRepo {
 	 * @since 3.8.0
 	 */
 	public static function get_meta( $user_id, $key ) {
-
-		/**
-		 * Short circuits the return value of the Authress user meta field.
-		 *
-		 * Returning a non null value will stop the method here and use the returned value.
-		 *
-		 * @param integer $user_id The user ID.
-		 * @param string  $key     The meta key.
-		 */
-		$check = apply_filters( 'authress_get_meta', null, $user_id, $key );
-		if ( $check !== null ) {
-			return $check;
-		}
-
 		global $wpdb;
 		return get_user_meta( $user_id, $wpdb->prefix . $key, true );
 	}
@@ -201,21 +172,6 @@ class Authress_Sso_Login_UsersRepo {
 	 * @since 3.11.0
 	 */
 	public static function update_meta( $user_id, $key, $value ) {
-
-		/**
-		 * Short circuits updating a user's Authress meta values.
-		 *
-		 * Returning a non null value will stop the method here.
-		 * The returned value is a boolean indicating whether or not the update was successful.
-		 *
-		 * @param integer $user_id The user ID.
-		 * @param string  $key     The meta key.
-		 */
-		$check = apply_filters( 'authress_update_meta', null, $user_id, $key );
-		if ( $check !== null ) {
-			return (bool) $check;
-		}
-
 		global $wpdb;
 		return update_user_meta( $user_id, $wpdb->prefix . $key, $value );
 	}
@@ -231,20 +187,6 @@ class Authress_Sso_Login_UsersRepo {
 	 * @since 3.11.0
 	 */
 	public static function delete_meta( $user_id, $key ) {
-
-		/**
-		 * Short circuits deleting a user's Authress meta values.
-		 *
-		 * Returning a non null value will stop the method here.
-		 * The returned value is a boolean indicating whether or not the deletion was successful.
-		 *
-		 * @param integer $user_id The user ID.
-		 * @param string  $key     The meta key.
-		 */
-		$check = apply_filters( 'authress_delete_meta', null, $user_id, $key );
-		if ( $check !== null ) {
-			return (bool) $check;
-		}
 		global $wpdb;
 		return delete_user_meta( $user_id, $wpdb->prefix . $key );
 	}

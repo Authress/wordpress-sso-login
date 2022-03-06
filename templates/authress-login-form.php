@@ -68,5 +68,5 @@
 	</div>
 
 	<style type="text/css">
-		<?php echo esc_attr(apply_filters( 'authress_login_css', '' )); ?>
+		<?php echo esc_attr(apply_filters( 'authress::user_login_template::css::formatter', '' )); ?>
 	</style>
