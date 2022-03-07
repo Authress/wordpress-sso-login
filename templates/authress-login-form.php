@@ -164,6 +164,9 @@
 		display: flex;
 		justify-content: center;
 	}
+	.login #nav a, .login #backtoblog a {
+		padding: 0 0.25rem
+	}
 	.login form {
 		margin-top: 0px;
 		padding: 26px 24px;
