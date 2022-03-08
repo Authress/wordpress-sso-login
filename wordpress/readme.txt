@@ -76,6 +76,11 @@ No problem, you can directly connect with the Authress development team in our [
 
 1. Enable your users to login with their email for any domain.
 
+== How to customize this plugin ==
+
+This plugin provides extension points to make it easier to configure it exactly as you need. Check out the full docs:
+* [SSO Login customizations](https://github.com/Authress/wordpress-sso-login/blob/main/docs/customizations.md)
+
 == Changelog ==
 
 [Complete list of changes for this and other releases](https://github.com/Authress/wordpress-sso-login)

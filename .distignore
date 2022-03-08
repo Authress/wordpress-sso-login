@@ -1,12 +1,13 @@
-/.wordpress-org
 /.git
 /.github
 /.vscode
 /node_modules
 
+README.md
+/docs
+
 .distignore
 .gitignore
-README.md
 
 /composer.*
 phpcs.xml
