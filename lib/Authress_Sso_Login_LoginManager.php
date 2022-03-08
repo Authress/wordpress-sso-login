@@ -91,6 +91,7 @@ class Authress_Sso_Login_LoginManager {
 	 */
 	public function init_authress() {
 		authress_debug_log('init_authress');
+
 		// Not an Authress login process or settings are not configured to allow logins.
 		if ( ! authress_plugin_has_been_fully_configured() ) {
 			return false;
@@ -320,22 +321,25 @@ class Authress_Sso_Login_LoginManager {
 
 		// Log the user out completely.
 		wp_destroy_current_session();
+		wp_logout();
 		wp_clear_auth_cookie();
 		wp_set_current_user( 0 );
+		wp_safe_redirect(wp_login_url());
+		exit;
 
-		$html = sprintf(
-			'%s: %s [%s: %s]<br><br><a href="%s">%s</a>',
-			__( 'There was a problem with your log in', 'wp-authress' ),
-			! empty( $msg )
-				? sanitize_text_field( $msg )
-				: __( 'Please see the site administrator', 'wp-authress' ),
-			__( 'error code', 'wp-authress' ),
-			$code ? sanitize_text_field( $code ) : __( 'unknown', 'wp-authress' ),
-			$this->authress_logout_url( wp_login_url() ),
-			__( '← Login', 'wp-authress' )
-		);
+		// $html = sprintf(
+		// 	'%s: %s [%s: %s]<br><br><a href="%s">%s</a>',
+		// 	__( 'There was a problem with your log in', 'wp-authress' ),
+		// 	! empty( $msg )
+		// 		? sanitize_text_field( $msg )
+		// 		: __( 'Please see the site administrator', 'wp-authress' ),
+		// 	__( 'error code', 'wp-authress' ),
+		// 	$code ? sanitize_text_field( $code ) : __( 'unknown', 'wp-authress' ),
+		// 	$this->authress_logout_url( wp_login_url() ),
+		// 	__( '← Login', 'wp-authress' )
+		// );
 
-		wp_die( esc_html($html) );
+		// wp_die($html);
 	}
 
 	/**
@@ -367,6 +371,10 @@ class Authress_Sso_Login_LoginManager {
 					$signer = new Signer\Rsa\Sha512();
 				}
 			}
+		}
+
+		if ($jwk === null) {
+			throw new Authress_Sso_Login_InvalidIdTokenException();
 		}
 
 		$jwkConverter = new CoderCat\JWKToPEM\JWKConverter();		

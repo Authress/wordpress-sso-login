@@ -71,6 +71,15 @@ All social providers and business login directories are supported. For more deta
 
 No problem, you can directly connect with the Authress development team in our [user community](https://authress.io/community), and we'll help you get squared away.
 
+
+== Screenshots ==
+
+1. Enable your users to login with their email for any domain.
+
 == Changelog ==
 
 [Complete list of changes for this and other releases](https://github.com/Authress/wordpress-sso-login)
+
+= 0.2 =
+* Added additional support for Google and GitHub SSO.
+* Enabled custom configuration of the login form via standard WordPress hooks.
