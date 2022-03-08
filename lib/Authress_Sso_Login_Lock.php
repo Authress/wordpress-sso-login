@@ -35,7 +35,13 @@ class Authress_Sso_Login_Lock {
 		wp_enqueue_script('authress_sso_login_login_sdk', AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL . 'authress-login-sdk.min.js', [], AUTHRESS_SSO_LOGIN_VERSION, false);
 		// wp_enqueue_script('authress_sso_login_login_auto_load', AUTHRESS_SSO_LOGIN_PLUGIN_JS_URL . 'login.js', [ 'authress_sso_login_login_sdk' ], AUTHRESS_SSO_LOGIN_VERSION);
 		$login_tpl = AUTHRESS_SSO_LOGIN_PLUGIN_DIR . 'templates/authress-login-form.php';
-		$login_tpl = apply_filters( 'authress::user_login_template::html::formatter', $login_tpl);
+
+		$authress_options = Authress_Sso_Login_Options::Instance();
+		$options = [
+			'custom_domain' => $authress_options->get('customDomain'),
+			'application_id' => $authress_options->get('applicationId')
+		];
+		$login_tpl = apply_filters( 'authress::user_login_template::html::formatter', $login_tpl, $options);
 		require $login_tpl;
 	}
 }

@@ -138,13 +138,15 @@
 	#loginform-custom {
 		width: 320px;
 	}
-	#registerform, #lostpasswordform, #login .message, #login #login_error {
+	#registerform, #lostpasswordform {
 		width: 320px;
 		margin-left: auto;
 		margin-right: auto;
 	}
 	#login .message, #login #login_error {
-		width: 342px;
+		max-width: 342px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	#customer_sso_domain {
