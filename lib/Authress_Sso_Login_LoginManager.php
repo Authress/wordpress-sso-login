@@ -363,32 +363,43 @@ class Authress_Sso_Login_LoginManager {
 		$keys = json_decode($response->getBody()->getContents())->keys;
 
 		$jwk = null;
-		$signer = new Signer\Eddsa();
+		$signer = null;
 		foreach ( $keys as $element ) {
-			if ( $keyId === $element->kid ) {
-				$jwk = json_decode(wp_json_encode($element), true);
-				if ($element->alg === 'RS512') {
-					$signer = new Signer\Rsa\Sha512();
-				}
+			if ( $keyId !== $element->kid ) {
+				continue;
+			}
+
+			if ($element->alg === 'RS512') {
+				$signer = new Signer\Rsa\Sha512();
+				$jwkConverter = new CoderCat\JWKToPEM\JWKConverter();
+				$jwk = InMemory::plainText($jwkConverter->toPEM(json_decode(wp_json_encode($element), true)));
+			} else {
+				$signer = new Signer\Eddsa();
+				$jwk = InMemory::plainText(base64_decode(strtr($element->x, '-_', '+/')), true);
 			}
 		}
 
-		if ($jwk === null) {
+		if (empty($jwk) || $jwk === null) {
+			authress_debug_log('   No $JWK found: ' . wp_json_encode($keys));
 			throw new Authress_Sso_Login_InvalidIdTokenException();
 		}
 
-		$jwkConverter = new CoderCat\JWKToPEM\JWKConverter();		
-
 		$config->setValidationConstraints(new Constraint\LooseValidAt(SystemClock::fromUTC()));
 		$config->setValidationConstraints(new Constraint\IssuedBy($expectedIss));
-		$config->setValidationConstraints(new Constraint\SignedWith($signer, InMemory::plainText($jwkConverter->toPEM($jwk))));
+		$config->setValidationConstraints(new Constraint\SignedWith($signer, $jwk));
 		$constraints = $config->validationConstraints();
+
 		try {
 			$config->validator()->assert($token, ...$constraints);
 			$userObject = (object) $token->claims()->all();
 			return $userObject;
 		} catch (RequiredConstraintsViolated $e) {
+			authress_debug_log('   Invalid user authentication token. Error:' . $e->violations());
 			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Invalid user authentication token:', 'wp-authress' ) . $e->violations());
+			throw new Authress_Sso_Login_InvalidIdTokenException($e);
+		} catch (Exception $e) {
+			authress_debug_log('   Invalid user authentication token. Error:' . $e->getMessage());
+			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Failed to verify authentication token:', 'wp-authress' ) . $e->getMessage());
 			throw new Authress_Sso_Login_InvalidIdTokenException($e);
 		}
 	}

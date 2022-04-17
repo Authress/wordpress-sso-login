@@ -63,6 +63,7 @@
    <rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.PHP.YodaConditions.NotYoda"><exclude-pattern>*</exclude-pattern></rule>
+   <rule ref="WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.WhiteSpace.DisallowInlineTabs.NonIndentTabsUsed"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"><exclude-pattern>*</exclude-pattern></rule>
    <rule ref="WordPress.WP.I18n.MissingTranslatorsComment"><exclude-pattern>*</exclude-pattern></rule>
