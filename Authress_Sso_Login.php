@@ -145,7 +145,7 @@ add_filter( 'query_vars', 'authress_sso_login_register_query_vars' );
  * @return string
  */
 function authress_sso_login_render_lock_form( $html ) {
-	authress_debug_log('authress_sso_login_render_lock_form');
+	authress_debug_log('=> authress_sso_login_render_lock_form');
 
 	ob_start();
 	\Authress_Sso_Login_Lock::render();
@@ -154,7 +154,7 @@ function authress_sso_login_render_lock_form( $html ) {
 		return $authress_form;
 	}
 
-	authress_debug_log('Falling back to wp login form');
+	authress_debug_log('=> Falling back to wp login form');
 	return $html;
 }
 add_filter( 'login_message', 'authress_sso_login_render_lock_form', 5 );
@@ -256,20 +256,20 @@ function authress_sso_login_errorlog_clear_error_log() {
 add_action( 'admin_action_authress_sso_login_clear_error_log', 'authress_sso_login_errorlog_clear_error_log' );
 
 function authress_sso_login_initial_setup_init() {
-	authress_debug_log('authress_sso_login_initial_setup_init');
+	authress_debug_log('=> authress_sso_login_initial_setup_init');
 	return false;
 }
 add_action( 'init', 'authress_sso_login_initial_setup_init', 1 );
 
 function authress_sso_login_init() {
-	authress_debug_log('authress_sso_login_init()');
+	authress_debug_log('=> authress_sso_login_init()');
 	$router = new Authress_Sso_Login_Routes( Authress_Sso_Login_Options::Instance() );
 	$router->setup_rewrites();
 }
 add_action( 'init', 'authress_sso_login_init');
 
 function check_for_user_logged_in() {
-	authress_debug_log('check_for_user_logged_in');
+	authress_debug_log('=> check_for_user_logged_in');
 	
 	if (!is_user_logged_in() && isset($_REQUEST['nonce'])) {
 		$users_repo    = new Authress_Sso_Login_UsersRepo( Authress_Sso_Login_Options::Instance() );
@@ -280,9 +280,9 @@ function check_for_user_logged_in() {
 
 		// if (is_user_logged_in()) {
 		// 	wp_safe_redirect(home_url());
-		// 	authress_debug_log('User successfully now logged in during handler');
+		// 	authress_debug_log('=> User successfully now logged in during handler');
 		// } else {
-		// 	authress_debug_log('User NOT logged in during handler');
+		// 	authress_debug_log('=> User NOT logged in during handler');
 		// }
 		// wp_safe_redirect();
 		// authress_debug_log($_REQUEST['redirect_to']);
@@ -309,7 +309,7 @@ function authress_sso_login_delete_user_data() {
 add_action( 'wp_ajax_authress_delete_data', 'authress_sso_login_delete_user_data' );
 
 function authress_sso_login_init_admin_menu() {
-	authress_debug_log('authress_sso_login_init_admin_menu');
+	authress_debug_log('=> authress_sso_login_init_admin_menu');
 	if (is_admin() && !empty($_REQUEST['page']) && 'authress_help' === $_REQUEST['page']) {
 		wp_safe_redirect( admin_url( 'admin.php?page=authress_configuration#help' ), 301 );
 		exit;
@@ -358,7 +358,7 @@ function authress_sso_login_create_account_message() {
 add_action( 'admin_notices', 'authress_sso_login_create_account_message' );
 
 function authress_sso_login_init_admin() {
-	authress_debug_log('authress_sso_login_init_admin');
+	authress_debug_log('=> authress_sso_login_init_admin');
 	$options = Authress_Sso_Login_Options::Instance();
 	$routes  = new Authress_Sso_Login_Routes( $options );
 	$admin   = new Authress_Sso_Login_Admin( $options, $routes );
@@ -367,7 +367,7 @@ function authress_sso_login_init_admin() {
 add_action( 'admin_init', 'authress_sso_login_init_admin' );
 
 function authress_sso_login_admin_enqueue_scripts() {
-	authress_debug_log('authress_sso_login_admin_enqueue_scripts');
+	authress_debug_log('=> authress_sso_login_admin_enqueue_scripts');
 	$options = Authress_Sso_Login_Options::Instance();
 	$routes  = new Authress_Sso_Login_Routes( $options );
 	$admin   = new Authress_Sso_Login_Admin( $options, $routes );
@@ -382,7 +382,7 @@ function authress_sso_login_custom_requests( $wp, $return = false ) {
 add_action( 'parse_request', 'authress_sso_login_custom_requests' );
 
 function authress_sso_login_profile_enqueue_scripts() {
-	authress_debug_log('authress_sso_login_profile_enqueue_scripts');
+	authress_debug_log('=> authress_sso_login_profile_enqueue_scripts');
 	global $pagenow;
 
 	if ( ! in_array( $pagenow, [ 'profile.php', 'user-edit.php' ], true) ) {
@@ -424,7 +424,7 @@ add_action( 'admin_enqueue_scripts', 'authress_sso_login_profile_enqueue_scripts
 function authress_wp_page_loaded() {
 	$users_repo    = new Authress_Sso_Login_UsersRepo( Authress_Sso_Login_Options::Instance() );
 	$login_manager = new Authress_Sso_Login_LoginManager( $users_repo, Authress_Sso_Login_Options::Instance() );
-	authress_debug_log('authress_wp_page_loaded');
+	authress_debug_log('=> authress_wp_page_loaded');
 	return $login_manager->init_authress();
 }
 
@@ -438,7 +438,7 @@ add_action( 'template_redirect', 'authress_wp_page_loaded', 1 );
 function authress_wp_login_widget_loaded() {
 	$users_repo    = new Authress_Sso_Login_UsersRepo( Authress_Sso_Login_Options::Instance() );
 	$login_manager = new Authress_Sso_Login_LoginManager( $users_repo, Authress_Sso_Login_Options::Instance() );
-	authress_debug_log('authress_wp_login_widget_loaded');
+	authress_debug_log('=> authress_wp_login_widget_loaded');
 	return $login_manager->login_auto();
 }
 add_action( 'login_init', 'authress_wp_login_widget_loaded' );
