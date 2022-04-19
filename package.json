@@ -8,7 +8,7 @@
     "build": "./composer.phar install --prefer-dist --optimize-autoloader",
     "start": "sudo docker-compose up",
     "lint": "./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .",
-    "kill": "sudo docker-compose rm",
+    "kill": "sudo docker-compose rm --stop --force",
     "cli": "sudo docker-compose run wordpress /bin/bash",
     "package": "zip authress.zip -r ."
   },
