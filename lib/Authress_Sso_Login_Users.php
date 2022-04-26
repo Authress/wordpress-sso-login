@@ -71,6 +71,7 @@ class Authress_Sso_Login_Users {
 			'user_pass'    => $password,
 			'first_name'   => $firstname,
 			'last_name'    => $lastname,
+			'nickname'     => $displayName,
 			'display_name' => $displayName,
 			'description'  => $description
 		];

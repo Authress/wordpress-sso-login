@@ -111,7 +111,6 @@ class Authress_Sso_Login_LoginManager {
 
 		// No need to process a login if the user is already logged in and there is no error.
 		if ( is_user_logged_in() ) {
-			// wp_safe_redirect( $this->a0_options->get( 'default_login_redirection' ) );
 			authress_debug_log('    returning without further setup');
 			return true;
 		}
