@@ -209,16 +209,10 @@ class Authress_Sso_Login_LoginManager {
 						$description = $userinfo->about;
 					}
 				}
-
-				wp_update_user(
-					(object) [
-						'ID'          => $user->data->ID,
-						'user_email'  => $userinfo->email,
-						'description' => $description,
-					]
-				);
 			}
 
+			$updater = new Authress_Sso_Login_UsersRepo( $this->a0_options );
+			$user_id = $updater->update($user->data->ID, $userinfo);
 			$this->users_repo->update_authress_object( $user->data->ID, $userinfo );
 			$this->do_login( $user);
 			return is_user_logged_in();
@@ -278,7 +272,7 @@ class Authress_Sso_Login_LoginManager {
 	 * @link https://codex.wordpress.org/Plugin_API/Action_Reference/wp_logout
 	 */
 	public function logout() {
-		authress_debug_log('=> LoginManager.logout');
+		authress_debug_log('=> LoginManager.logout          ' . wp_parse_url(get_site_url())['host']);
 
 		if (!isset($_COOKIE['user']) && !isset($_COOKIE['authorization'])) {
 			authress_debug_log("    User not logged in, going to login screen.");

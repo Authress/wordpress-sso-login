@@ -162,7 +162,6 @@
 		display: none;
 	}
 	.login #nav, .login #backtoblog {
-		padding-left: 0;
 		display: flex;
 		justify-content: center;
 	}

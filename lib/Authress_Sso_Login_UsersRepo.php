@@ -29,6 +29,18 @@ class Authress_Sso_Login_UsersRepo {
 	}
 
 	/**
+	 * Update WP user with an incoming Authress one or reject with an exception.
+	 *
+	 * @param object $ID - WordPress user Id
+	 * @param object $userinfo - Profile object from Authress.
+	 *
+	 */
+	public function update( $ID, $userinfo ) {
+
+		$user_id = Authress_Sso_Login_Users::update_user($ID, $userinfo);
+	}
+
+	/**
 	 * Create or join a WP user with an incoming Authress one or reject with an exception.
 	 *
 	 * @param object $userinfo - Profile object from Authress.
