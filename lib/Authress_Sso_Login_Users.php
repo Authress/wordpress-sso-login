@@ -37,17 +37,15 @@ class Authress_Sso_Login_Users {
 			}
 		}
 
-		$username = '';
-		if ( isset( $userinfo->username ) ) {
-			$username = $userinfo->username;
-		} elseif ( isset( $userinfo->nickname ) ) {
-			$username = $userinfo->nickname;
-		}
-		if ( empty( $username ) ) {
-			$username = $email;
-		}
-		while ( username_exists( $username ) ) {
-			$username = $username . wp_rand( 0, 9 );
+		$displayName = '';
+		if ( isset( $userinfo->nickname ) ) {
+			$displayName = $userinfo->nickname;
+		} elseif ( isset( $userinfo->name ) ) {
+			$displayName = $userinfo->name;
+		} elseif ( isset( $userinfo->username ) ) {
+			$displayName = $userinfo->username;
+		} elseif ( isset( $userinfo->sub ) ) {
+			$displayName = $userinfo->sub;
 		}
 
 		$description = '';
@@ -69,11 +67,11 @@ class Authress_Sso_Login_Users {
 		// Create the user data array for updating first- and lastname
 		$user_data = [
 			'user_email'   => $email,
-			'user_login'   => $username,
+			'user_login'   => $userinfo->sub,
 			'user_pass'    => $password,
 			'first_name'   => $firstname,
 			'last_name'    => $lastname,
-			'display_name' => $username,
+			'display_name' => $displayName,
 			'description'  => $description
 		];
 
@@ -96,53 +94,39 @@ class Authress_Sso_Login_Users {
 			$email = $userinfo->email;
 		}
 
-		$firstname = '';
-		$lastname  = '';
+		// $firstname = '';
+		// $lastname  = '';
 
-		if ( isset( $userinfo->name ) ) {
-			// Split the name into first- and lastname
-			$names = explode( ' ', $userinfo->name );
+		// if ( isset( $userinfo->name ) ) {
+		// 	// Split the name into first- and lastname
+		// 	$names = explode( ' ', $userinfo->name );
 
-			if ( count( $names ) === 1 ) {
-				$firstname = $userinfo->name;
-			} elseif ( count( $names ) === 2 ) {
-				$firstname = $names[0];
-				$lastname  = $names[1];
-			} else {
-				$lastname  = array_pop( $names );
-				$firstname = implode( ' ', $names );
-			}
-		}
+		// 	if ( count( $names ) === 1 ) {
+		// 		$firstname = $userinfo->name;
+		// 	} elseif ( count( $names ) === 2 ) {
+		// 		$firstname = $names[0];
+		// 		$lastname  = $names[1];
+		// 	} else {
+		// 		$lastname  = array_pop( $names );
+		// 		$firstname = implode( ' ', $names );
+		// 	}
+		// }
 
-		$username = '';
-		if ( isset( $userinfo->username ) ) {
-			$username = $userinfo->username;
-		} elseif ( isset( $userinfo->nickname ) ) {
-			$username = $userinfo->nickname;
-		}
-		if ( empty( $username ) ) {
-			$username = $email;
-		}
-		while ( username_exists( $username ) ) {
-			$username = $username . wp_rand( 0, 9 );
-		}
-
-		$description = '';
-
-		if ( empty( $description ) ) {
-			if ( isset( $userinfo->headline ) ) {
-				$description = $userinfo->headline;
-			}
-			if ( isset( $userinfo->description ) ) {
-				$description = $userinfo->description;
-			}
-			if ( isset( $userinfo->bio ) ) {
-				$description = $userinfo->bio;
-			}
-			if ( isset( $userinfo->about ) ) {
-				$description = $userinfo->about;
-			}
-		}
+		// $description = '';
+		// if ( empty( $description ) ) {
+		// 	if ( isset( $userinfo->headline ) ) {
+		// 		$description = $userinfo->headline;
+		// 	}
+		// 	if ( isset( $userinfo->description ) ) {
+		// 		$description = $userinfo->description;
+		// 	}
+		// 	if ( isset( $userinfo->bio ) ) {
+		// 		$description = $userinfo->bio;
+		// 	}
+		// 	if ( isset( $userinfo->about ) ) {
+		// 		$description = $userinfo->about;
+		// 	}
+		// }
 
 		$updatedUserObject = (object) [
 			'ID' => $ID
