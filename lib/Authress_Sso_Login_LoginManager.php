@@ -281,7 +281,7 @@ class Authress_Sso_Login_LoginManager {
 		authress_debug_log('=> LoginManager.logout');
 
 		if (!isset($_COOKIE['user']) && !isset($_COOKIE['authorization'])) {
-			authress_debug_log("    User not logged in, going to login screen: " . $_COOKIE['user']);
+			authress_debug_log("    User not logged in, going to login screen.");
 			wp_safe_redirect(wp_login_url());
 			exit();
 		}
@@ -303,7 +303,6 @@ class Authress_Sso_Login_LoginManager {
 		authress_debug_log("     Logout Redirect: " . $authressLogoutUrl);
 
 		wp_safe_redirect( $authressLogoutUrl );
-		// wp_redirect( $authressLogoutUrl );
 		exit();
 	}
 

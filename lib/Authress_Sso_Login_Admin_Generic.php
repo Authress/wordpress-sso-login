@@ -189,6 +189,8 @@ class Authress_Sso_Login_Admin_Generic {
 	 */
 	protected function render_field_description( $text ) {
 		$period = ! in_array( $text[ strlen( $text ) - 1 ], [ '.', ':' ], true ) ? '.' : '';
+		// The field descriptions are already sanitized no reason to force this to happen again, and often are being passed in html as well, which should not be sanitized.
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		printf( '<div class="subelement"><span class="description">%s%s</span></div>', $text, esc_attr($period) );
 	}
 
@@ -209,11 +211,12 @@ class Authress_Sso_Login_Admin_Generic {
 	 * Output translated dashboard HTML link
 	 *
 	 * @param string $path - dashboard sub-section, if any
+	 * @param string $name - name of location in Authress management portal
 	 *
 	 * @return string
 	 */
 	protected function get_dashboard_link( $path = '', $name = 'management portal') {
-		return sprintf('<a href="https://authress.io/app/#/setup?focus=%s" target="_blank">%s</a>', $path, __( 'Authress ' . $name, 'wp-authress' ));
+		return sprintf('<a href="https://authress.io/app/#/setup?focus=%s" target="_blank">%s</a>', $path, __( 'Authress ', 'wp-authress' ) . $name);
 	}
 
 	/**
