@@ -99,6 +99,7 @@ class Authress_Sso_Login_LoginManager {
 
 		// Catch any incoming errors and stop the login process.
 		if ( ! empty( $_REQUEST['error'] ) || ! empty( $_REQUEST['error_description'] ) ) {
+			setcookie('authress-authorization-step', 'log');
 			// Input variable is sanitized.
 			// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$error_msg  = sanitize_text_field( rawurldecode( wp_unslash( $_REQUEST['error_description'] ) ) );
@@ -144,6 +145,7 @@ class Authress_Sso_Login_LoginManager {
 	 *
 	 */
 	public function handle_login_redirect() {
+		setcookie('authress-authorization-step', 'parse');
 		authress_debug_log('=> handle_login_redirect');
 		$access_token = sanitize_text_field(isset($_COOKIE['authorization']) ? wp_unslash($_COOKIE['authorization']) : '');
 		if (!isset($_COOKIE['authorization']) && isset($_REQUEST['access_token'])) {
@@ -168,6 +170,7 @@ class Authress_Sso_Login_LoginManager {
 		// Decode the incoming ID token for the Authress user.
 		$decoded_token = $this->decode_id_token( $id_token );
 		$userinfo = $this->clean_id_token( $decoded_token );
+		setcookie('authress-authorization-step', 'valid');
 
 		if ( $this->login_user($userinfo) ) {
 			authress_debug_log('    Tokens set, user is logged in');
@@ -191,6 +194,7 @@ class Authress_Sso_Login_LoginManager {
 		$user = $this->users_repo->find_authress_user( $authress_sub );
 
 		if ( ! is_null( $user ) ) {
+			setcookie('authress-authorization-step', 'update');
 			authress_debug_log('    Existing user: updating');
 			// User exists so log them in.
 			if ( isset( $userinfo->email ) && $user->data->user_email !== $userinfo->email ) {
@@ -210,15 +214,18 @@ class Authress_Sso_Login_LoginManager {
 					}
 				}
 
+				setcookie('authress-authorization-step', 'propagate');
 				$updater = new Authress_Sso_Login_UsersRepo( $this->a0_options );
 				$updater->update($user->data->ID, $userinfo);
 			}
 
+			setcookie('authress-authorization-step', 'store');
 			$this->users_repo->update_authress_object( $user->data->ID, $userinfo );
 			$this->do_login( $user);
 			return is_user_logged_in();
 		}
 		try {
+			setcookie('authress-authorization-step', 'create');
 			authress_debug_log('    New user: creating.');
 			$creator = new Authress_Sso_Login_UsersRepo( $this->a0_options );
 			$user_id = $creator->create( $userinfo);
@@ -259,6 +266,7 @@ class Authress_Sso_Login_LoginManager {
 
 		authress_debug_log($user->user_login);
 
+		setcookie('authress-authorization-step', 'complete');
 		wp_set_auth_cookie( $user->ID, $remember_users_session, $secure_cookie );
 		do_action( 'wp_login', $user->user_login, $user );
 	}

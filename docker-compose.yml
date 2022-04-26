@@ -19,6 +19,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ./:/var/www/html/wp-content/plugins/authress
+      #- /tmp/wordpress:/var/www/html/wp-content/plugins/authress
 
     ports:
       - "8080:80"
