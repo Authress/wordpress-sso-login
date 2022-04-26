@@ -37,7 +37,7 @@ class Authress_Sso_Login_UsersRepo {
 	 */
 	public function update( $ID, $userinfo ) {
 
-		$user_id = Authress_Sso_Login_Users::update_user($ID, $userinfo);
+		Authress_Sso_Login_Users::update_user($ID, $userinfo);
 	}
 
 	/**

@@ -209,10 +209,11 @@ class Authress_Sso_Login_LoginManager {
 						$description = $userinfo->about;
 					}
 				}
+
+				$updater = new Authress_Sso_Login_UsersRepo( $this->a0_options );
+				$updater->update($user->data->ID, $userinfo);
 			}
 
-			$updater = new Authress_Sso_Login_UsersRepo( $this->a0_options );
-			$user_id = $updater->update($user->data->ID, $userinfo);
 			$this->users_repo->update_authress_object( $user->data->ID, $userinfo );
 			$this->do_login( $user);
 			return is_user_logged_in();
