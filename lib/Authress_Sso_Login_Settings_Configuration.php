@@ -51,25 +51,6 @@ class Authress_Sso_Login_Settings_Configuration extends Authress_Sso_Login_Admin
 	}
 
 	/**
-	 * Render form field and description for the `domain` option.
-	 * IMPORTANT: Internal callback use only, do not call this function directly!
-	 *
-	 * @param array $args - callback args passed in from add_settings_field().
-	 *
-	 * @see Authress_Sso_Login_Admin_Generic::init_option_section()
-	 * @see add_settings_field()
-	 */
-	public function render_domain( $args = [] ) {
-
-		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
-		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
-		$this->render_field_description(
-			__( 'Authress Domain, found in your Application settings in the ', 'wp-authress' ) .
-			$this->get_dashboard_link( 'applications' )
-		);
-	}
-
-	/**
 	 * Render form field and description for the `custom_domain` option.
 	 * IMPORTANT: Internal callback use only, do not call this function directly!
 	 *
@@ -83,7 +64,7 @@ class Authress_Sso_Login_Settings_Configuration extends Authress_Sso_Login_Admin
 	public function render_custom_domain( $args = [] ) {
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
 		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
-		$this->render_field_description(__( 'Your custom domain host url, found in the domain settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'domains' ));
+		$this->render_field_description(__( 'Your custom domain host url, found in the domain settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'domains', 'custom domains configuration' ));
 	}
 
 	/**
@@ -98,7 +79,7 @@ class Authress_Sso_Login_Settings_Configuration extends Authress_Sso_Login_Admin
 	public function render_access_key( $args = [] ) {
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
 		$this->render_text_field( $args['label_for'], $args['opt_name'], 'password', '', $style );
-		$this->render_field_description(__( 'Authress Service Client Access Key, found in the service client settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'clients' ));
+		$this->render_field_description(__( 'Authress Service Client Access Key, found in the service client settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'clients', 'service clients section' ));
 	}
 
 	/**
@@ -113,7 +94,7 @@ class Authress_Sso_Login_Settings_Configuration extends Authress_Sso_Login_Admin
 	public function render_application_id( $args = [] ) {
 		$style = $this->options->get( $args['opt_name'] ) ? '' : self::ERROR_FIELD_STYLE;
 		$this->render_text_field( $args['label_for'], $args['opt_name'], 'text', '', $style );
-		$this->render_field_description(__( 'Identifier for this WordPress deployment, found in your Application settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'applications' ));
+		$this->render_field_description(__( 'Identifier for this WordPress deployment, found in your Application settings in the ', 'wp-authress' ) . $this->get_dashboard_link( 'applications', 'applications configuration' ));
 	}
 
 	/**

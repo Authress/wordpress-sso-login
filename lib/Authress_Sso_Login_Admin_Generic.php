@@ -189,7 +189,7 @@ class Authress_Sso_Login_Admin_Generic {
 	 */
 	protected function render_field_description( $text ) {
 		$period = ! in_array( $text[ strlen( $text ) - 1 ], [ '.', ':' ], true ) ? '.' : '';
-		printf( '<div class="subelement"><span class="description">%s%s</span></div>', esc_attr($text), esc_attr($period) );
+		printf( '<div class="subelement"><span class="description">%s%s</span></div>', $text, esc_attr($period) );
 	}
 
 	/**
@@ -212,8 +212,8 @@ class Authress_Sso_Login_Admin_Generic {
 	 *
 	 * @return string
 	 */
-	protected function get_dashboard_link( $path = '' ) {
-		return sprintf('<a href="https://authress.io/app/#/setup?focus=%s" target="_blank">%s</a>', $path, __( 'Authress management portal', 'wp-authress' ));
+	protected function get_dashboard_link( $path = '', $name = 'management portal') {
+		return sprintf('<a href="https://authress.io/app/#/setup?focus=%s" target="_blank">%s</a>', $path, __( 'Authress ' . $name, 'wp-authress' ));
 	}
 
 	/**

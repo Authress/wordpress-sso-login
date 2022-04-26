@@ -285,19 +285,6 @@ class Authress_Sso_Login_Options {
 	}
 
 	/**
-	 * Get the authentication domain.
-	 *
-	 * @return string
-	 */
-	public function get_auth_domain() {
-		$domain = $this->get( 'customDomain' );
-		if ( empty( $domain ) ) {
-			$domain = $this->get( 'domain' );
-		}
-		return $domain;
-	}
-
-	/**
 	 * Get the authentication organization.
 	 *
 	 * @return string

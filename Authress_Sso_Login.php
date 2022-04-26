@@ -95,16 +95,19 @@ function authress_sso_login_activated_plugin_redirect( $plugin ) {
 add_action( 'activated_plugin', 'authress_sso_login_activated_plugin_redirect' );
 
 /**
- * Core WP hooks
+ * Enable wp_safe_redirect to redirect to these hosts
  * 
  * @param string $hosts
  */
 
 function authress_sso_login_add_allowed_redirect_hosts( $hosts ) {
+	authress_debug_log('=> authress_sso_login_add_allowed_redirect_hosts');
 	$hosts[] = 'authress.io';
-	$hosts[] = authress_get_configuration_data_from_key( 'domain' );
-	$hosts[] = authress_get_configuration_data_from_key( 'customDomain' );
-	$hosts[] = authress_get_configuration_data_from_key( 'authress_server_domain' );
+	$hosts[] = str_replace("https://", "", authress_get_configuration_data_from_key( 'domain' ));
+	$hosts[] = str_replace("https://", "", authress_get_configuration_data_from_key( 'customDomain' ));
+	$hosts[] = str_replace("https://", "", authress_get_configuration_data_from_key( 'authress_server_domain' ));
+
+	authress_debug_log('    Setting safe redirects:  ' . implode(",", $hosts));
 	return $hosts;
 }
 

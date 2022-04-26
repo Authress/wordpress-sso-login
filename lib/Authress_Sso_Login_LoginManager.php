@@ -278,13 +278,33 @@ class Authress_Sso_Login_LoginManager {
 	 * @link https://codex.wordpress.org/Plugin_API/Action_Reference/wp_logout
 	 */
 	public function logout() {
+		authress_debug_log('=> LoginManager.logout');
+
+		if (!isset($_COOKIE['user']) && !isset($_COOKIE['authorization'])) {
+			authress_debug_log("    User not logged in, going to login screen: " . $_COOKIE['user']);
+			wp_safe_redirect(wp_login_url());
+			exit();
+		}
+		
 		setcookie('user', '');
 		setcookie('authorization', '');
 		if ( ! authress_plugin_has_been_fully_configured() ) {
 			return;
 		}
 
-		wp_safe_redirect( home_url() );
+		$authressLoginHostUrl = $this->a0_options->get('customDomain');
+		$applicationId = $this->a0_options->get('applicationId');
+
+		$authressLogoutUrl = $authressLoginHostUrl . "/logout?" . build_query(array(
+			"redirect_uri" => rawurlencode(home_url()),
+			"client_id" => $applicationId
+		));
+
+		authress_debug_log("     Logout Redirect: " . $authressLogoutUrl);
+
+		wp_safe_redirect( $authressLogoutUrl );
+		// wp_redirect( $authressLogoutUrl );
+		exit();
 	}
 
 	/**
@@ -321,25 +341,10 @@ class Authress_Sso_Login_LoginManager {
 
 		// Log the user out completely.
 		wp_destroy_current_session();
-		wp_logout();
 		wp_clear_auth_cookie();
 		wp_set_current_user( 0 );
-		wp_safe_redirect(wp_login_url());
+		wp_logout();
 		exit;
-
-		// $html = sprintf(
-		// 	'%s: %s [%s: %s]<br><br><a href="%s">%s</a>',
-		// 	__( 'There was a problem with your log in', 'wp-authress' ),
-		// 	! empty( $msg )
-		// 		? sanitize_text_field( $msg )
-		// 		: __( 'Please see the site administrator', 'wp-authress' ),
-		// 	__( 'error code', 'wp-authress' ),
-		// 	$code ? sanitize_text_field( $code ) : __( 'unknown', 'wp-authress' ),
-		// 	$this->authress_logout_url( wp_login_url() ),
-		// 	__( '← Login', 'wp-authress' )
-		// );
-
-		// wp_die($html);
 	}
 
 	/**
@@ -349,7 +354,7 @@ class Authress_Sso_Login_LoginManager {
 	 */
 	private function decode_id_token( $id_token ) {
 		authress_debug_log('=> decode_id_token()');
-		$expectedIss = $this->a0_options->get_auth_domain();
+		$expectedIss = $this->a0_options->get('customDomain');
 
 		$config = Configuration::forUnsecuredSigner();
 		$token = $config->parser()->parse($id_token);
@@ -419,18 +424,5 @@ class Authress_Sso_Login_LoginManager {
 			unset( $id_token_obj->$attr );
 		}
 		return $id_token_obj;
-	}
-
-	/**
-	 * Generate the Authress logout URL.
-	 *
-	 * @param string|null $return_to - Site URL to return to after logging out.
-	 *
-	 * @return string
-	 *
-	 * @codeCoverageIgnore - Private method
-	 */
-	private function authress_logout_url( $return_to = null ) {
-		return sprintf('/wp-login.php?action=logout');
 	}
 }
