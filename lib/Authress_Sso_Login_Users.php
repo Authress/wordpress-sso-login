@@ -38,7 +38,9 @@ class Authress_Sso_Login_Users {
 		}
 
 		$displayName = '';
-		if ( isset( $userinfo->nickname ) ) {
+		if ( isset( $userinfo->preferred_username ) ) {
+			$displayName = $userinfo->preferred_username;
+		} elseif ( isset( $userinfo->nickname ) ) {
 			$displayName = $userinfo->nickname;
 		} elseif ( isset( $userinfo->name ) ) {
 			$displayName = $userinfo->name;
@@ -49,21 +51,19 @@ class Authress_Sso_Login_Users {
 		}
 
 		$description = '';
-
-		if ( empty( $description ) ) {
-			if ( isset( $userinfo->headline ) ) {
-				$description = $userinfo->headline;
-			}
-			if ( isset( $userinfo->description ) ) {
-				$description = $userinfo->description;
-			}
-			if ( isset( $userinfo->bio ) ) {
-				$description = $userinfo->bio;
-			}
-			if ( isset( $userinfo->about ) ) {
-				$description = $userinfo->about;
-			}
+		if ( isset( $userinfo->headline ) ) {
+			$description = $userinfo->headline;
 		}
+		if ( isset( $userinfo->description ) ) {
+			$description = $userinfo->description;
+		}
+		if ( isset( $userinfo->bio ) ) {
+			$description = $userinfo->bio;
+		}
+		if ( isset( $userinfo->about ) ) {
+			$description = $userinfo->about;
+		}
+
 		// Create the user data array for updating first- and lastname
 		$user_data = [
 			'user_email'   => $email,
@@ -95,40 +95,6 @@ class Authress_Sso_Login_Users {
 			$email = $userinfo->email;
 		}
 
-		// $firstname = '';
-		// $lastname  = '';
-
-		// if ( isset( $userinfo->name ) ) {
-		// 	// Split the name into first- and lastname
-		// 	$names = explode( ' ', $userinfo->name );
-
-		// 	if ( count( $names ) === 1 ) {
-		// 		$firstname = $userinfo->name;
-		// 	} elseif ( count( $names ) === 2 ) {
-		// 		$firstname = $names[0];
-		// 		$lastname  = $names[1];
-		// 	} else {
-		// 		$lastname  = array_pop( $names );
-		// 		$firstname = implode( ' ', $names );
-		// 	}
-		// }
-
-		// $description = '';
-		// if ( empty( $description ) ) {
-		// 	if ( isset( $userinfo->headline ) ) {
-		// 		$description = $userinfo->headline;
-		// 	}
-		// 	if ( isset( $userinfo->description ) ) {
-		// 		$description = $userinfo->description;
-		// 	}
-		// 	if ( isset( $userinfo->bio ) ) {
-		// 		$description = $userinfo->bio;
-		// 	}
-		// 	if ( isset( $userinfo->about ) ) {
-		// 		$description = $userinfo->about;
-		// 	}
-		// }
-
 		$updatedUserObject = (object) [
 			'ID' => $ID
 		];
@@ -138,15 +104,6 @@ class Authress_Sso_Login_Users {
 		}
 
 		// Should we force updating the user attributes to sync from the source? Or let the user change their name here?
-		// if ( isset( $firstname ) ) {
-		// 	$updatedUserObject->first_name = $firstname;
-		// }
-		// if ( isset( $lastname ) ) {
-		// 	$updatedUserObject->last_name = $lastname;
-		// }
-		// if ( isset( $description ) ) {
-		// 	$updatedUserObject->description = $description;
-		// }
 
 		// Update the user
 		authress_debug_log('    wp_update_user');
