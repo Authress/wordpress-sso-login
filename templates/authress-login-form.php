@@ -25,7 +25,7 @@
 		}).catch(async error => {
 			loginClickNextButton.classList.toggle('loader');
 			console.log('Failed to redirect user to SSO login:', error.code);
-			if (error.code !== 'InvalidConnection') {
+			if (error.code !== 'InvalidConnection' && error.code !== 'InvalidTenantIdentifier') {
 				return;
 			}
 			if (!connectionId) {
