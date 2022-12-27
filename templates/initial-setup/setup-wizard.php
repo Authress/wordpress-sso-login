@@ -41,7 +41,7 @@
 				<p><input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Rerun Setup', 'wp-authress' ); ?>"/></p>
 			</form>
 		<?php else : ?>
-			<p><?php esc_attr_e( "SSO Login enables Users to log in with their employee credentials through their identity provider. Using SSO Login will increase your WordPress site's security and consolidate identity data.", 'wp-authress' ); ?></p>
+			<p><?php esc_attr_e( "SSO Login enables Users to log in with their social, OIDC, or SAML credentials through their existing identity provider. Using this Authress SSO Login plugin will increase your WordPress site's security and consolidate identity data.", 'wp-authress' ); ?></p>
 		
 			<p><?php esc_attr_e( 'Once configured, this plugin replaces the WordPress login screen, by many additional features to make login easier and more secure your users.', 'wp-authress' ); ?></p>
 

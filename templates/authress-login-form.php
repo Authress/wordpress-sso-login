@@ -34,7 +34,7 @@
 			}
 
 			var connectionConfigurationWarning = document.getElementById('configurationConfigurationWarning');
-			if (connectionConfigurationWarning) {
+			if (connectionConfigurationWarning && connectionConfigurationWarning.classList.contains('hidden')) {
 				connectionConfigurationWarning.classList.toggle('hidden');
 			}
 			
@@ -72,7 +72,7 @@
 		<div style="display: flex; flex-wrap: wrap; justify-content: center;">
 			<form name="loginform-custom" id="loginform-custom" action="<?php echo esc_url(wp_login_url()); ?>?<?php echo esc_attr($loginFlowIsPassword ? 'login=' : ''); ?>" method="post" onsubmit="return loginWithSsoDomain(null, 'loginClickNextButtonLoader')">
 				<p class="login-username">
-					<label for="userLogin">Enter your email</label>
+					<label for="userLogin">Enter your username or email</label>
 					<input type="text" autocomplete="username" name="log" id="userLogin" class="input"
 						value="<?php echo isset($_GET['login']) ? esc_attr(sanitize_text_field(wp_unslash($_GET['login']))) : ''; ?>" size="20" />
 				</p>
@@ -121,7 +121,7 @@
 			</form>
 		</div>
 		<div id="configurationConfigurationWarning" class="message hidden">
-			This connection is not configuration. Navigate to <a href="https://authress.io/app/#/setup?focus=connections" target="_blank">Authress management portal</a> to enable it.
+			This connection is not yet configured. Navigate to <a href="https://authress.io/app/#/setup?focus=connections" target="_blank">Authress management portal</a> to enable it.
 		</div>
 	<?php else : ?>
 		<div></div>
