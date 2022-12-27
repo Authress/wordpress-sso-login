@@ -7,6 +7,7 @@ The SSO Login plugin for Wordpress - adds SSO html template and login buttons
 ### Development
 
 ```sh
+sudo apt install php-xmlwriter
 composer install --no-progress --prefer-dist --optimize-autoloader
 ```
 
