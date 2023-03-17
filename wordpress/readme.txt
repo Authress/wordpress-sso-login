@@ -3,7 +3,7 @@ Contributors: authress
 Tags: Login, SSO, OAuth, SAML, Single Sign-on
 Requires at least: 5.5
 Requires PHP: 7.4
-Tested up to: 6.1
+Tested up to: 6.2
 Stable tag: {{VERSION}}
 License: Apache-2.0
 License URI: https://github.com/Authress/wordpress-sso-login/blob/main/LICENSE
