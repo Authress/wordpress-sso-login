@@ -363,7 +363,8 @@ class Authress_Sso_Login_LoginManager {
 
 		$client = new GuzzleHttp\Client([
 			'base_uri' => $expectedIss,
-			'decode_content' => false
+			'decode_content' => false,
+			'headers' => [ 'User-Agent' => 'Authress SDK; WordPress; ;' ]
 		]);
 
 		$response = $client->request('GET', '/.well-known/openid-configuration/jwks');
