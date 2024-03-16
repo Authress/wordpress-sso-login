@@ -3,7 +3,7 @@ Contributors: authress
 Tags: Login, SSO, OAuth, SAML, Single Sign-on
 Requires at least: 5.5
 Requires PHP: 7.4
-Tested up to: 6.2
+Tested up to: 6.5
 Stable tag: {{VERSION}}
 License: Apache-2.0
 License URI: https://github.com/Authress/wordpress-sso-login/blob/main/LICENSE
@@ -34,7 +34,12 @@ Which includes:
 - LinkedIn
 - Salesforce
 - Twitter
-- Googl Workspace
+- Google Workspace
+- Yahoo
+- Salesforce
+- Hubspot
+- Steam
+- Slack
 - And any custom OAuth2.1, OpenID, or SAML provider
 
 With **SSO Login**, you can automatically support business and enterprise customers that have important security requirements for their users to use your site and platform.
