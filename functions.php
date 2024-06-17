@@ -42,7 +42,7 @@ function authress_user_is_currently_on_login_action( array $actions ) {
 		return false;
 	}
 
-	if (isset( $_REQUEST['force'] ) && $_REQUEST['force']) {
+	if ( isset( $_REQUEST['force'] )) {
 		return true;
 	}
 

@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.3",
         "lcobucci/jwt": "^4.1",
         "guzzlehttp/guzzle": "^7.0",
         "codercat/jwk-to-pem": "^1.1"

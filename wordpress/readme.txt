@@ -2,7 +2,7 @@
 Contributors: authress
 Tags: Login, SSO, OAuth, SAML, Single Sign-on
 Requires at least: 5.5
-Requires PHP: 7.4
+Requires PHP: 8.2
 Tested up to: 6.5
 Stable tag: {{VERSION}}
 License: Apache-2.0

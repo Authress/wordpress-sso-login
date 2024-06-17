@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d07974cc9b90ba0dce89d1329db06ed",
+    "content-hash": "908d35cafd3f3b46a98d2b262382722b",
     "packages": [
         {
             "name": "codercat/jwk-to-pem",
@@ -1462,7 +1462,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=8.3"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

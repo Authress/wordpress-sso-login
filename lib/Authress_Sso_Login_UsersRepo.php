@@ -70,8 +70,9 @@ class Authress_Sso_Login_UsersRepo {
 			if ( ! empty( $current_authress_id ) && $authress_sub !== $current_authress_id ) {
 				throw new Authress_Sso_Login_CouldNotCreateUserException( __( 'There is a user with the same email.', 'wp-authress' ) );
 			}
-		// } elseif ( ( is_multisite() ? users_can_register_signup_filter() : get_site_option( 'users_can_register' ) ) || $this->a0_options->get( 'auto_provisioning' ) ) {
 		} else {
+			// } elseif ( ( is_multisite() ? users_can_register_signup_filter() : get_site_option( 'users_can_register' ) ) || $this->a0_options->get( 'auto_provisioning' ) ) {
+
 			// WP user does not exist and registration is allowed.
 			$user_id = Authress_Sso_Login_Users::create_user( $userinfo );
 
