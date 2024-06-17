@@ -239,10 +239,6 @@ class Authress_Sso_Login_Options {
 		return $keys_only ? array_keys( $default_opts ) : $default_opts;
 	}
 
-	public function is_wp_registration_enabled() {
-		return is_multisite() ? users_can_register_signup_filter() : get_site_option( 'users_can_register' );
-	}
-
 	public function get_default( $key ) {
 		$defaults = $this->defaults();
 		return $defaults[ $key ];
@@ -392,7 +388,7 @@ class Authress_Sso_Login_Options {
             'skip_strategies'           => '',
             'remember_users_session'    => true,
             'default_login_redirection' => home_url(),
-			'auto_provisioning'         => false,
+			'auto_provisioning'         => true,
             'valid_proxy_ip'            => ''
 
 		];

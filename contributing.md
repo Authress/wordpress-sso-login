@@ -32,3 +32,15 @@ sudo apt install php-xmlwriter php-cli php-curl php-mbstring docker-compose-plug
 To test login, navigate to `http://localhost:8080/wp-login.php`
 * The default login credentials as `admin` - `admin`
 Likewise the admin menu is at: `http://localhost:8080/wp-admin.php`
+
+### WordPress related documented for custom integrations
+* [add_action / add_filter](https://developer.wordpress.org/apis/hooks/filter-reference/#redirect-rewrite-filters)
+
+### Files
+
+* /templates
+    * authress-login-form.php - UI mask for the login box
+* /lib
+    * Authress_Sso_Login_LoginManager.php - Logic for handling authentication
+* /wordpress
+    * Configuration files for the WordPress plugin on WordPress.org

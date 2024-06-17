@@ -42,6 +42,10 @@ function authress_user_is_currently_on_login_action( array $actions ) {
 		return false;
 	}
 
+	if (isset( $_REQUEST['force'] ) && $_REQUEST['force']) {
+		return true;
+	}
+
 	// Null coalescing validates input variable.
 	return in_array( wp_unslash( $_REQUEST['action'] ?? '' ), $actions, true);
 }

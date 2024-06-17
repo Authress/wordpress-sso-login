@@ -48,7 +48,6 @@ class Authress_Sso_Login_UsersRepo {
 	 * @return int|null|WP_Error
 	 *
 	 * @throws Authress_Sso_Login_CouldNotCreateUserException - When the user could not be created.
-	 * @throws Authress_Sso_Login_RegistrationNotEnabledException - When registration is not turned on for this site.
 	 */
 	public function create( $userinfo ) {
 
@@ -71,7 +70,8 @@ class Authress_Sso_Login_UsersRepo {
 			if ( ! empty( $current_authress_id ) && $authress_sub !== $current_authress_id ) {
 				throw new Authress_Sso_Login_CouldNotCreateUserException( __( 'There is a user with the same email.', 'wp-authress' ) );
 			}
-		} elseif ( $this->a0_options->is_wp_registration_enabled() || $this->a0_options->get( 'auto_provisioning' ) ) {
+		// } elseif ( ( is_multisite() ? users_can_register_signup_filter() : get_site_option( 'users_can_register' ) ) || $this->a0_options->get( 'auto_provisioning' ) ) {
+		} else {
 			// WP user does not exist and registration is allowed.
 			$user_id = Authress_Sso_Login_Users::create_user( $userinfo );
 
@@ -82,9 +82,6 @@ class Authress_Sso_Login_UsersRepo {
 				// Registration failed for another reason.
 				throw new Authress_Sso_Login_CouldNotCreateUserException();
 			}
-		} else {
-			// Signup is not allowed.
-			throw new Authress_Sso_Login_RegistrationNotEnabledException();
 		}
 
 		$this->update_authress_object( $user_id, $userinfo );

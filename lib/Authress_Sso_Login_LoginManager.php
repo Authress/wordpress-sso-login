@@ -62,6 +62,11 @@ class Authress_Sso_Login_LoginManager {
 			return false;
 		}
 
+		// Do not redirect anywhere if the force action is set
+		if ( authress_user_is_currently_on_login_action( [ 'force' ] ) ) {
+			return false;
+		}
+
 		// Do not redirect login page override.
 		if ( authress_show_user_wordpress_login_form() ) {
 			return false;
@@ -94,6 +99,7 @@ class Authress_Sso_Login_LoginManager {
 
 		// Not an Authress login process or settings are not configured to allow logins.
 		if ( ! authress_plugin_has_been_fully_configured() ) {
+			authress_debug_log('    Plugin has not been loaded yet.');
 			return false;
 		}
 
@@ -110,7 +116,7 @@ class Authress_Sso_Login_LoginManager {
 		}
 
 		// No need to process a login if the user is already logged in and there is no error.
-		if ( is_user_logged_in() ) {
+		if (is_user_logged_in()) {
 			authress_debug_log('    returning without further setup');
 			return true;
 		}
@@ -145,7 +151,7 @@ class Authress_Sso_Login_LoginManager {
 	 */
 	public function handle_login_redirect() {
 		setcookie('authress-authorization-step', 'parse');
-		authress_debug_log('=> handle_login_redirect');
+		authress_debug_log('=> handle_login_redirect()');
 		$access_token = sanitize_text_field(isset($_COOKIE['authorization']) ? wp_unslash($_COOKIE['authorization']) : '');
 		if (!isset($_COOKIE['authorization']) && isset($_REQUEST['access_token'])) {
 			$access_token = sanitize_text_field(wp_unslash($_REQUEST['access_token']));
@@ -234,10 +240,6 @@ class Authress_Sso_Login_LoginManager {
 		} catch ( Authress_Sso_Login_CouldNotCreateUserException $e ) {
 
 			throw new Authress_Sso_Login_LoginFlowValidationException( $e->getMessage() );
-		} catch ( Authress_Sso_Login_RegistrationNotEnabledException $e ) {
-
-			$msg = __( 'Could not create user. The registration process is not available. Please contact your site’s administrator.', 'wp-authress' );
-			throw new Authress_Sso_Login_LoginFlowValidationException( $msg );
 		}
 		return is_user_logged_in();
 	}

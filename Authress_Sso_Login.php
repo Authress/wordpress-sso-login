@@ -272,7 +272,7 @@ function authress_sso_login_init() {
 add_action( 'init', 'authress_sso_login_init');
 
 function check_for_user_logged_in() {
-	authress_debug_log('=> check_for_user_logged_in');
+	authress_debug_log('=> check_for_user_logged_in()');
 	
 	if (!is_user_logged_in() && isset($_REQUEST['nonce'])) {
 		$users_repo    = new Authress_Sso_Login_UsersRepo( Authress_Sso_Login_Options::Instance() );

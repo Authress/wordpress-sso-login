@@ -23,7 +23,7 @@ class Authress_Sso_Login_Lock {
 	 * @param array $specialSettings - Additional settings from widget or shortcode.
 	 */
 	public static function render( $canShowLegacyLogin = true, $specialSettings = [] ) {
-		if (is_user_logged_in() ) {
+		if (is_user_logged_in() && ! isset($_REQUEST['force'])) {
 			return;
 		}
 
