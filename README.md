@@ -14,7 +14,7 @@ The SSO Login plugin for Wordpress - adds SSO html template and login buttons
 
 ![Customizable Login Box](./wordpress/screenshot-1.png)
 
-## installation
+## Installation
 [Install the SSO Plugin](https://wordpress.com/plugins/authress)
 
 ### Customizing the SSO Login plugin
