@@ -6,7 +6,7 @@
   "scripts": {
     "install": "./composer.phar install --prefer-dist --optimize-autoloader",
     "build": "./composer.phar install --prefer-dist --optimize-autoloader",
-    "copy-libs": "cp node_modules/authress-login/dist/authress.min.js templates/assets/js/authress-login-sdk.min.js",
+    "copy-libs": "cp node_modules/@authress/login/dist/authress.min.js templates/assets/js/authress-login-sdk.min.js",
     "start": "sudo docker-compose up",
     "lint": "./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .",
     "kill": "sudo docker-compose rm --stop --force",
@@ -16,10 +16,10 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "authress-login": "^1.2.101"
+    "@authress/login": "^2.5"
   },
   "devDependencies": {
-    "authress-sdk": "^1",
+    "@authress/sdk": "^2.3.6",
     "base64url": "^3.0.1",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",

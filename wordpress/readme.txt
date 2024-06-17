@@ -50,6 +50,7 @@ This plugin requires an [Authress account](https://authress.io).
 
 1. [Sign up here](https://authress.io/app/#/signup).
 2. Follow the installation instructions the WordPress plugin during installation.
+3. Navigate to the `Plugins` WordPress menu tab, select `Authress` and click `Activate`.
 
 == Technical Notes ==
 By using this plugin you are delegating the site authentication and profile handling to Authress. That means that you won't need to use the WordPress database to authenticate users and the default WordPress login forms will be upgraded to support the new SSO Login flow.
@@ -79,7 +80,9 @@ No problem, you can directly connect with the Authress development team in our [
 
 == Screenshots ==
 
-1. Enable your users to login with their email for any domain.
+1. Authress managed login page.
+2. Enable your users to login with their email for any domain.
+3. Support security keys for Passkeys and MFA.
 
 == How to customize this plugin ==
 

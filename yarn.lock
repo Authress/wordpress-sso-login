@@ -2,6 +2,24 @@
 # yarn lockfile v1
 
 
+"@authress/login@*", "@authress/login@^2.5":
+  version "2.5.321"
+  resolved "https://registry.yarnpkg.com/@authress/login/-/login-2.5.321.tgz#cc5280cad9decbd14a562fe6362aa44d25807352"
+  integrity sha512-QqhowmL91XLQ/Gqh+Z3jnE5amTMtYDs+kdZ5CwCXCt+ok/eR0//GHap6zdnU7vWpsTVfZzniQO7pSASFztI7hA==
+  dependencies:
+    cookie "^0.5.0"
+    lodash.take "^4.1.1"
+
+"@authress/sdk@^2.3.6":
+  version "2.3.136"
+  resolved "https://registry.yarnpkg.com/@authress/sdk/-/sdk-2.3.136.tgz#a4e44081d7add18562e5e1ef21d2199c0947a339"
+  integrity sha512-M2H0/h+PnobVN8XF2uTjdcfVy/OxDCI6jLd434h07c2v3seXaW4vg3NFmQSYHrLsA8RupB6WoPdQtPk8age7HA==
+  dependencies:
+    "@authress/login" "*"
+    axios "^0.21"
+    base64url "^3.0.1"
+    jose "^4.8.3"
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -58,24 +76,6 @@ array-flatten@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-1.1.1.tgz#9a5f699051b1e7073328f2a008968b64ea2955d2"
   integrity sha1-ml9pkFGx5wczKPKgCJaLZOopVdI=
-
-authress-login@^1.2.101:
-  version "1.2.101"
-  resolved "https://registry.yarnpkg.com/authress-login/-/authress-login-1.2.101.tgz#4d99c2d1677915577e83eea7b99b2af108e7e89b"
-  integrity sha512-IYG7P1idqTAVGtd7x0oQnDXJKSU4vhVaEI9GZXwzymaJTEmoKlzXPp5D+Icoxn4Q7QxJuXaghdLluR+O5L1dRg==
-  dependencies:
-    axios "^0.21"
-    base64url "^3.0.1"
-    cookie "^0.4.1"
-
-authress-sdk@^1:
-  version "1.2.17"
-  resolved "https://registry.yarnpkg.com/authress-sdk/-/authress-sdk-1.2.17.tgz#19ccb1a4f7f7fdb50aa51737f081d29c20feef12"
-  integrity sha512-1CNNKIHekwwd9p8I/p11NLXqBNffYE84UKTD1vdTuPx53Lkku5kMmvk11A8/gbAOSAMWWs55BJfIgC4TlGZRPg==
-  dependencies:
-    axios "^0.21"
-    base64url "^3.0.1"
-    jose "^3.6.2"
 
 axios@^0.21:
   version "0.21.4"
@@ -260,10 +260,15 @@ cookie-signature@1.0.6:
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
   integrity sha1-4wOogrNCzD7oylE6eZmXNNqzriw=
 
-cookie@0.4.2, cookie@^0.4.1:
+cookie@0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.2.tgz#0e41f24de5ecf317947c82fc789e06a884824432"
   integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
+
+cookie@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
+  integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -638,10 +643,10 @@ is-yarn-global@^0.3.0:
   resolved "https://registry.yarnpkg.com/is-yarn-global/-/is-yarn-global-0.3.0.tgz#d502d3382590ea3004893746754c89139973e232"
   integrity sha512-VjSeb/lHmkoyd8ryPVIKvOCn4D1koMqY+vqyjjUfc3xyKtP4dYOxM44sZrnqQSzSds3xyOrUTLTC9LVCVgLngw==
 
-jose@^3.6.2:
-  version "3.20.3"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-3.20.3.tgz#a074f684b07e49b35c075d97561883e3c637abf2"
-  integrity sha512-Z4a5Nl4pmGivdSgaq+a5EbNjrvSO4vtBTmVy5C3HNxWfJ92aG8DTNZrQywowxyOlSqdX/BmCPAy/ieElXDM3pw==
+jose@^4.8.3:
+  version "4.15.5"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.15.5.tgz#6475d0f467ecd3c630a1b5dadd2735a7288df706"
+  integrity sha512-jc7BFxgKPKi94uOvEmzlSWFFe2+vASyXaKUpdQKatWAESU2MWjDfFf0fdfc83CDKcA5QecabZeNLyfhe3yKNkg==
 
 json-buffer@3.0.0:
   version "3.0.0"
@@ -666,6 +671,11 @@ latest-version@^5.1.0:
   integrity sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==
   dependencies:
     package-json "^6.3.0"
+
+lodash.take@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.take/-/lodash.take-4.1.1.tgz#0b4146dcb7a70c6153495187fc10b12b71fefadf"
+  integrity sha512-3T118EQjnhr9c0aBKCCMhQn0OBwRMz/O2WaRU6VH0TSKoMCmFtUpr0iUp+eWKODEiRXtYOK7R7SiBneKHdk7og==
 
 lodash@^4.17.21:
   version "4.17.21"
