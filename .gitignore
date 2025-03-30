@@ -8,3 +8,6 @@ vendor
 *.sqlite
 
 authress.zip
+
+# Do not commit the yarn lock so that we always get the latest version of the Authress SDK pulled in.
+yarn.lock
