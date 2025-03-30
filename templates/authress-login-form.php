@@ -20,7 +20,7 @@
 
 		const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
 		const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
-		const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
+		const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId, retainUserCookie: true });
 		
 		// const redirectUrl = 'http://localhost:8081';
 		const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.href;
@@ -55,7 +55,7 @@
 
 		const authressLoginHostUrl = "<?php echo esc_attr($authress_options->get('customDomain')); ?>";
 		const applicationId = "<?php echo esc_attr($authress_options->get('applicationId')); ?>";
-		const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId });
+		const loginClient = new authress.LoginClient({ authressLoginHostUrl, applicationId, retainUserCookie: true });
 		const currentUrl = new URL(window.location.href);
 		const redirectUrl = currentUrl.searchParams.get('redirect_to') ? decodeURIComponent(currentUrl.searchParams.get('redirect_to')) : window.location.origin;
 

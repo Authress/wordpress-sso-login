@@ -6,7 +6,6 @@
   "scripts": {
     "install": "./composer.phar install --prefer-dist --optimize-autoloader",
     "build": "./composer.phar install --prefer-dist --optimize-autoloader",
-    "copy-libs": "cp node_modules/@authress/login/dist/authress.min.js templates/assets/js/authress-login-sdk.min.js",
     "start": "sudo docker-compose up",
     "lint": "./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .",
     "kill": "sudo docker-compose rm --stop --force",
