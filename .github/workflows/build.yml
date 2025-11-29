@@ -37,7 +37,9 @@ jobs:
         coverage: xdebug
 
     - name: Install Composer dependencies
-      run: ./composer.phar install --prefer-dist --optimize-autoloader
+      run: |
+        ./composer.phar config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+        ./composer.phar install --prefer-dist --optimize-autoloader
 
     - name: Run Lint
       run: ./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .
@@ -70,7 +72,7 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v2.4.2
       with:
-        token: ${{ secrets.RHOSYS_SERVICE_ACCOUNT_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ env.VERSION }}
         name: Release ${{ env.VERSION }}
         draft: false
