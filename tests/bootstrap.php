@@ -17,3 +17,21 @@ function sanitize_text_field( $value ) {
 function wp_unslash( $value ) {
 	return $value;
 }
+
+function authress_debug_log( $message ) {
+}
+
+function wp_json_encode( $value ) {
+	return json_encode( $value );
+}
+
+function wp_parse_url( $url, $component = -1 ) {
+	return parse_url( $url, $component );
+}
+
+function __( $text ) {
+	return $text;
+}
+
+require_once __DIR__ . '/ErrorLogStub.php';
+require_once __DIR__ . '/JwksStubLoginManager.php';

@@ -12,6 +12,7 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Validation\Constraint;
+use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Lcobucci\JWT\Signer\Key\InMemory;
 
  /**
@@ -355,22 +356,15 @@ class Authress_Sso_Login_LoginManager {
 	 * @return object
 	 * @throws Authress_Sso_Login_InvalidIdTokenException - Token was not valid.
 	 */
-	private function decode_id_token( $id_token ) {
+	public function decode_id_token( $id_token ) {
 		authress_debug_log('=> decode_id_token()');
-		$expectedIss = $this->a0_options->get('customDomain');
+		$configured_issuer = rtrim( (string) $this->a0_options->get('customDomain'), '/' );
 
 		$config = Configuration::forUnsecuredSigner();
 		$token = $config->parser()->parse($id_token);
 		$keyId = $token->headers()->get('kid');
 
-		$client = new GuzzleHttp\Client([
-			'base_uri' => $expectedIss,
-			'decode_content' => false,
-			'headers' => [ 'User-Agent' => 'Authress SDK; WordPress; ;' ]
-		]);
-
-		$response = $client->request('GET', '/.well-known/openid-configuration/jwks');
-		$keys = json_decode($response->getBody()->getContents())->keys;
+		$keys = $this->fetch_jwks( $configured_issuer );
 
 		$jwk = null;
 		$signer = null;
@@ -394,9 +388,11 @@ class Authress_Sso_Login_LoginManager {
 			throw new Authress_Sso_Login_InvalidIdTokenException();
 		}
 
-		$config->setValidationConstraints(new Constraint\LooseValidAt(SystemClock::fromUTC()));
-		$config->setValidationConstraints(new Constraint\IssuedBy($expectedIss));
-		$config->setValidationConstraints(new Constraint\SignedWith($signer, $jwk));
+		$config->setValidationConstraints(
+			new Constraint\LooseValidAt(SystemClock::fromUTC()),
+			new Constraint\IssuedBy(...$this->get_allowed_issuers( $configured_issuer )),
+			new Constraint\SignedWith($signer, $jwk)
+		);
 		$constraints = $config->validationConstraints();
 
 		try {
@@ -404,14 +400,42 @@ class Authress_Sso_Login_LoginManager {
 			$userObject = (object) $token->claims()->all();
 			return $userObject;
 		} catch (RequiredConstraintsViolated $e) {
-			authress_debug_log('   Invalid user authentication token. Error:' . $e->violations());
-			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Invalid user authentication token:', 'wp-authress' ) . $e->violations());
+			authress_debug_log('   Invalid user authentication token. Error:' . $e->getMessage());
+			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Invalid user authentication token:', 'wp-authress' ) . $e->getMessage());
 			throw new Authress_Sso_Login_InvalidIdTokenException($e);
 		} catch (Exception $e) {
 			authress_debug_log('   Invalid user authentication token. Error:' . $e->getMessage());
 			Authress_Sso_Login_ErrorLog::insert_error( __METHOD__, __( 'Failed to verify authentication token:', 'wp-authress' ) . $e->getMessage());
 			throw new Authress_Sso_Login_InvalidIdTokenException($e);
 		}
+	}
+
+	protected function fetch_jwks( $issuer ) {
+		$client = new GuzzleHttp\Client([
+			'base_uri' => $issuer,
+			'decode_content' => false,
+			'headers' => [ 'User-Agent' => 'Authress SDK; WordPress; ;' ]
+		]);
+
+		$response = $client->request('GET', '/.well-known/openid-configuration/jwks');
+		return json_decode($response->getBody()->getContents())->keys;
+	}
+
+	/**
+	 * Authress accounts are reachable on both their login and api hosts, so ID tokens issued from either host are valid for the configured account domain.
+	 *
+	 * @param string $configured_issuer - The configured custom domain without trailing slashes.
+	 *
+	 * @return string[]
+	 */
+	public function get_allowed_issuers( $configured_issuer ) {
+		$issuers = [ $configured_issuer ];
+		$host = wp_parse_url( $configured_issuer, PHP_URL_HOST );
+		if ( is_string( $host ) && preg_match( '/^([a-z0-9-]+)\.[a-z0-9-]+\.authress\.io$/', $host, $account ) ) {
+			$issuers[] = "https://{$account[1]}.login.authress.io";
+			$issuers[] = "https://{$account[1]}.api.authress.io";
+		}
+		return array_values( array_unique( $issuers ) );
 	}
 
 	/**
