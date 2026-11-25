@@ -74,9 +74,9 @@ jQuery(document).ready(function($) {
     var currentTab;
     if ( window.location.hash ) {
         currentTab = window.location.hash.replace( '#', '' );
-    } else if ( localStorageAvailable() && window.localStorage.getItem( 'Auth0WPSettingsTab' ) ) {
+    } else if ( localStorageAvailable() && window.localStorage.getItem( 'AuthressWPSettingsTab' ) ) {
         // Previous tab being used
-        currentTab = window.localStorage.getItem( 'Auth0WPSettingsTab' );
+        currentTab = window.localStorage.getItem( 'AuthressWPSettingsTab' );
     } else {
         // Default tab if no saved tab was found
         currentTab = 'features';
@@ -97,7 +97,7 @@ jQuery(document).ready(function($) {
         $settingsForm.attr( 'data-tab-showing', tabName );
 
         if ( localStorageAvailable() ) {
-            window.localStorage.setItem( 'Auth0WPSettingsTab', tabName );
+            window.localStorage.setItem( 'AuthressWPSettingsTab', tabName );
         }
 
         togglePanelVisibility(tabName);
@@ -125,7 +125,7 @@ jQuery(document).ready(function($) {
     /*
     Clear cache button on Basic settings page
      */
-    var deleteCacheId = 'auth0_delete_cache_transient';
+    var deleteCacheId = 'authress_delete_cache_transient';
     var $deleteCacheButton = $( '#' + deleteCacheId );
     $deleteCacheButton.click( function(e) {
         e.preventDefault();
@@ -143,7 +143,7 @@ jQuery(document).ready(function($) {
     /*
     Generate new migration token button on Advanced settings page
      */
-    var rotateTokenId = 'auth0_rotate_migration_token';
+    var rotateTokenId = 'authress_rotate_migration_token';
     var $rotateTokenButton = $( '#' + rotateTokenId );
     $rotateTokenButton.click( function(e) {
         e.preventDefault();
@@ -158,7 +158,7 @@ jQuery(document).ready(function($) {
             '_ajax_nonce': wpa0.rotate_token_nonce
         };
         $.post(wpa0.ajax_url, postData, function() {
-            $( '#auth0_migration_token' ).text(wpa0.refresh_prompt);
+            $( '#authress_migration_token' ).text(wpa0.refresh_prompt);
             $rotateTokenButton.remove();
         }, 'json');
     } );
@@ -186,7 +186,7 @@ jQuery(document).ready(function($) {
      */
     function localStorageAvailable() {
         try {
-            var x = '__Auth0_localStorage_assertion__';
+            var x = '__Authress_localStorage_assertion__';
             window.localStorage.setItem(x, x);
             window.localStorage.removeItem(x);
             return true;
