@@ -43,6 +43,9 @@ class Authress_Sso_Login_InitialSetup {
 		$setup = [];
 		foreach ( self::SETUP_SETTINGS as $setting ) {
 			$setup[ $setting ] = sanitize_text_field( wp_unslash( isset( $source[ $setting ] ) ? $source[ $setting ] : '' ) );
+			if ( 'customDomain' === $setting ) {
+				$setup[ $setting ] = rtrim( $setup[ $setting ], '/' );
+			}
 			if ( '' === $setup[ $setting ] ) {
 				return null;
 			}

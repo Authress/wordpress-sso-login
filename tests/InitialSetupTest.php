@@ -35,6 +35,14 @@ class InitialSetupTest extends TestCase {
 		$this->assertSame( 'authress.company.com', $setup['customDomain'] );
 	}
 
+	public function testReturnedCustomDomainTrailingSlashesAreRemoved() {
+		$options = $this->createMock( Authress_Sso_Login_Options::class );
+
+		$setup = $this->newSetup( $options )->read_setup_values( array_merge( self::RETURN_QUERY, [ 'customDomain' => 'https://authress.company.com//' ] ) );
+
+		$this->assertSame( 'https://authress.company.com', $setup['customDomain'] );
+	}
+
 	public function testReturnWithAMissingValueIsIncomplete() {
 		$options = $this->createMock( Authress_Sso_Login_Options::class );
 

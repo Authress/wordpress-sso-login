@@ -103,7 +103,6 @@ add_action( 'activated_plugin', 'authress_sso_login_activated_plugin_redirect' )
 function authress_sso_login_add_allowed_redirect_hosts( $hosts ) {
 	authress_debug_log('=> authress_sso_login_add_allowed_redirect_hosts');
 	$hosts[] = 'authress.io';
-	$hosts[] = str_replace("https://", "", authress_get_configuration_data_from_key( 'domain' ));
 	$hosts[] = str_replace("https://", "", authress_get_configuration_data_from_key( 'customDomain' ));
 	$hosts[] = str_replace("https://", "", authress_get_configuration_data_from_key( 'authress_server_domain' ));
 

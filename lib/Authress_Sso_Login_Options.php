@@ -14,7 +14,7 @@ class Authress_Sso_Login_Options {
 	 *
 	 * @var null|array
 	 */
-	private $cached_opts = null;
+	private $cached_opt = null;
 
 	/**
 	 * Array of options overridden by constants.
@@ -138,7 +138,19 @@ class Authress_Sso_Login_Options {
 	public function get( $key, $default = null ) {
 		$options = $this->get_options();
 		$value   = isset( $options[ $key ] ) ? $options[ $key ] : $default;
-		return $value;
+		return $this->without_trailing_slashes_for_domains( $key, $value );
+	}
+
+	/**
+	 * The custom domain is concatenated with paths and compared with token issuers, so a trailing slash entered by the administrator or returned by setup must never reach those uses.
+	 *
+	 * @param string $key - Settings key of the value.
+	 * @param mixed  $value - Value to normalize.
+	 *
+	 * @return mixed
+	 */
+	private function without_trailing_slashes_for_domains( $key, $value ) {
+		return 'customDomain' === $key && is_string( $value ) ? rtrim( $value, '/' ) : $value;
 	}
 
 	/**
@@ -159,7 +171,7 @@ class Authress_Sso_Login_Options {
 		}
 
 		$options         = $this->get_options();
-		$options[ $key ] = $value;
+		$options[ $key ] = $this->without_trailing_slashes_for_domains( $key, $value );
 		$this->cached_opt     = $options;
 
 		// No database update so process completed successfully.
@@ -266,80 +278,6 @@ class Authress_Sso_Login_Options {
 	}
 
 	/**
-	 * Get the main site URL for Authress processing
-	 *
-	 * @param string|null $protocol - forced URL protocol, use default if empty
-	 *
-	 * @return string
-	 */
-	public function get_authress_sso_login_url( $protocol = null ) {
-		if ( is_null( $protocol ) && $this->get( 'force_https_callback' ) ) {
-			$protocol = 'https';
-		}
-		$site_url = site_url( 'index.php', $protocol );
-		return add_query_arg( 'authress', 1, $site_url );
-	}
-
-	/**
-	 * Get the authentication organization.
-	 *
-	 * @return string
-	 */
-	public function get_auth_organization() {
-		return $this->get( 'organization', '' );
-	}
-
-	/**
-	 * Get lock_connections as an array of strings
-	 *
-	 * @return array
-	 */
-	public function get_lock_connections() {
-		$connections = $this->get( 'lock_connections' );
-		$connections = empty( $connections ) ? [] : explode( ',', $connections );
-		return array_map( 'trim', $connections );
-	}
-
-	/**
-	 * Add a new connection to the lock_connections setting
-	 *
-	 * @param string $connection - connection name to add
-	 */
-	public function add_lock_connection( $connection ) {
-		$connections = $this->get_lock_connections();
-
-		// Add if it doesn't exist already
-		if ( ! array_key_exists( $connection, $connections ) ) {
-			$connections[] = $connection;
-			$connections   = implode( ',', $connections );
-			$this->set( 'lock_connections', $connections );
-		}
-	}
-
-	/**
-	 * Check if provided strategy is allowed to skip email verification.
-	 * Useful for Enterprise strategies that do not provide a email_verified profile value.
-	 *
-	 * @param string $strategy - Strategy to check against saved setting.
-	 *
-	 * @return bool
-	 *
-	 * @since 3.8.0
-	 */
-	public function strategy_skips_verified_email( $strategy ) {
-		$skip_strategies = trim( $this->get( 'skip_strategies' ) );
-
-		// No strategies to skip.
-		if ( empty( $skip_strategies ) ) {
-			return false;
-		}
-
-		$skip_strategies = explode( ',', $skip_strategies );
-		$skip_strategies = array_map( 'trim', $skip_strategies );
-		return in_array( $strategy, $skip_strategies, true);
-	}
-
-	/**
 	 * Default settings when plugin is installed or reset
 	 *
 	 * @return array
@@ -347,50 +285,14 @@ class Authress_Sso_Login_Options {
 	protected function defaults() {
 		return [
 			// System
-			'version' => 1,
 			'applicationId' => '',
 			'customDomain' => '',
 			'accessKey' => '',
 			'default_login_redirection' => home_url(),
 			'authress_server_domain' => 'authress.io',
 
-            'last_step'                 => 1,
-            'db_connection_name'        => '',
-
-            // Basic
-            'domain'                    => '',
-            'client_secret'             => '',
-            'organization'              => '',
-            'cache_expiration'          => 1440,
-            'wordpress_login_enabled'   => 'link',
-            'wle_code'                  => '',
-
-            // Features
-            // AutoLogin means automatically redirect the user to a login location, but we actually don't want that, we want to check if the user logged
-			'auto_login'                => true,
-            'auto_login_method'         => '',
-            'singlelogout'              => true,
-            'override_wp_avatars'       => true,
-
-            // Embedded
-            'passwordless_enabled'      => false,
-            'icon_url'                  => '',
-            'form_title'                => 'SSO Login',
-            'gravatar'                  => true,
-            'username_style'            => '',
-            'primary_color'             => '',
-            'extra_conf'                => '',
-            'custom_cdn_url'            => false,
-            'lock_connections'          => '',
-
-            // Advanced
-            'requires_verified_email'   => true,
-            'skip_strategies'           => '',
-            'remember_users_session'    => true,
-            'default_login_redirection' => home_url(),
-			'auto_provisioning'         => true,
-            'valid_proxy_ip'            => ''
-
+			'override_wp_avatars' => true,
+			'remember_users_session' => true,
 		];
 	}
 }
