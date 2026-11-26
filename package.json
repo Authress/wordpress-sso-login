@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install": "./composer.phar install --prefer-dist --optimize-autoloader",
-    "build": "./composer.phar install --prefer-dist --optimize-autoloader",
+    "install": "./scripts/composer.sh install --prefer-dist --optimize-autoloader",
+    "build": "./scripts/composer.sh install --prefer-dist --optimize-autoloader",
     "start": "sudo docker-compose up",
     "lint": "./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .",
     "test": "./vendor/bin/phpunit",

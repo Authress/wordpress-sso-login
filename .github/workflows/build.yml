@@ -38,8 +38,7 @@ jobs:
 
     - name: Install Composer dependencies
       run: |
-        ./composer.phar config github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
-        ./composer.phar install --prefer-dist --optimize-autoloader
+        ./scripts/composer.sh install --prefer-dist --optimize-autoloader
 
     - name: Run Lint
       run: ./vendor/bin/phpcs -i && ./vendor/bin/phpcs -s .
@@ -47,7 +46,7 @@ jobs:
       run: ./vendor/bin/phpunit
 
     - name: Clean workspace
-      run: ./composer.phar install --prefer-dist --optimize-autoloader --no-dev
+      run: ./scripts/composer.sh install --prefer-dist --optimize-autoloader --no-dev
 
     - name: Set package versioning
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'

@@ -15,4 +15,5 @@ docker-compose.yml
 yarn.lock
 package.json
 /tests
+/scripts
 phpunit.xml.dist

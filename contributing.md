@@ -10,7 +10,7 @@ sudo snap install docker
 2. install PHP
 ```sh
 sudo apt install php-xmlwriter php-cli php-curl php-mbstring docker-compose-plugin
-./composer.phar install --prefer-dist --optimize-autoloader
+./scripts/composer.sh install --prefer-dist --optimize-autoloader
 ```
 
 
