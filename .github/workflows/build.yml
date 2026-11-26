@@ -18,9 +18,9 @@ jobs:
     steps:
     - name: Set env
       run: echo "VERSION=${GITHUB_REF/refs\/heads\/release\//}.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Set up Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version: 22
         registry-url: 'https://registry.npmjs.org'
@@ -72,7 +72,7 @@ jobs:
     - name: Create Release
       if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.event_name == 'push'
       id: create_release
-      uses: softprops/action-gh-release@v2.4.2
+      uses: softprops/action-gh-release@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ env.VERSION }}
