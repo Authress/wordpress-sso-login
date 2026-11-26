@@ -9,7 +9,7 @@
    <exclude-pattern>assets/*</exclude-pattern>
  
    <!-- Configs -->
-   <config name="minimum_supported_wp_version" value="7.3" />
+   <config name="minimum_supported_wp_version" value="5.5" />
    <config name="testVersion" value="8.3-" />
  
    <!-- Rules -->
